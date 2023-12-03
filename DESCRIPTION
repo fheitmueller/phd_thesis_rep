@@ -16,3 +16,5 @@ Imports:
     dplyr,
     tidyr,
     countrycode
+URL: https://github.com/fheitmueller/phd_thesis_rep
+BugReports: https://github.com/fheitmueller/phd_thesis_rep/issues
