@@ -1,0 +1,1044 @@
+---
+title: "Edit MAP profiles"
+author: "Frederik Heitmüller"
+date: "2022-12-15"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+devtools::load_all()
+```
+
+# load additional datasets
+
+These are used for grouping countries etc.
+
+```{r load datasets}
+
+tables <- read_csv(here("data-created/map_profiles.csv"), show_col_types = FALSE)
+```
+
+
+
+# Cleaning (language etc.)
+
+```{r merge categories of MAP profiles}
+
+tables %<>% mutate(year = lubridate::year(date))
+# remove unnecessary whitespace
+tables %<>% mutate(across(c("question", "response", "detailed_explanation"), str_squish))
+tables %<>% mutate(response = str_replace_all(response, "\\.", ""))
+tables$response %<>% tolower()
+tables %<>% mutate(response = case_when(
+  response %in% c("-", "non applicable", "n/a", "na") ~ "n/a",
+  response %in% c("no", "n o", "non", "non no", "non/ no", "non/no", "not yet") ~ "no",
+  response %in% c("y es", "yes", "lyes", "oui", "oui/yes", "yes-", "yes na", "yes see detailed explanation", "yes to the extent anti-abuse provisions are also contained in the respective tax treaty/convention") ~ "yes",
+  str_detect(response, "expl|rép|information|profile") ~ "detailed_explanation",
+  TRUE ~ response))
+
+
+```
+
+
+
+```{r add information for analysis}
+short_codes <- c(
+  "1" = "publication_map_general_nature", 
+  "2" = "bil_apa_available",
+  "3" = "bil_apa_roll_back",
+  "4" = "bil_apa_timeline",
+  "5" = "bil_apa_info_available",
+  "6" = "bil_apa_fees",
+  "7" = "bil_apa_statistics",
+  "8" = "training_officials",
+  "9" = "other_info_available",
+  "10" = "access_tp",
+  "11" = "access_anti_abuse_treaty",
+  "12" = "access_anti_abuse_domestic",
+  "13" = "access_audit_settlement",
+  "14" = "access_taxpayer_adjustment",
+  "15" = "access_other",
+  "16" = "access_domestic_remedies",
+  "17" = "access_domestic_decision",
+  "18" = "access_info_public",
+  "19" = "access_timeline",
+  "20" = "guidance_multilateral_map",
+  "21" = "tax_collection_suspended",
+  "22" = "access_fees",
+  "23" = "access_other_info",
+  "24" = "resolution_timeframes",
+  "25" = "map_statistics",
+  "26" = "interest_penalties",
+  "27" = "roles_public",
+  "28" = "arbitration_any_treaty",
+  "29" = "arbitration_constitutional_limit",
+  "30" = "arbitration_treaty_policy",
+  "31" = "domestic_remedies_info",
+  "32" = "domestic_remedies_binding_info",
+  "33" = "multi_year_resolution",
+  "34" = "corresponding_adjustment_all_treaties",
+  "35" = "resolution_other_info",
+  "36" = "additional_tax_timeframe_info",
+  "37" = "refund_timeframe_info",
+  "38" = "implementation_notwithstanding_time",
+  "39" = "implementation_other_info"
+  )
+
+# merge into table
+tables$short_codes <- short_codes[tables$new_row]
+
+```
+
+# Manual corrections
+
+To do: Investigate more closely: Suspension of collection, timeline for filing, article 9(2) in number of treaties
+
+## audit settlement
+In some cases, the response given is ambiguous. For example, for the question "Are issues where there is already an audit settlement between the tax authority and the taxpayer covered within the scope of MAP?", some tax authorities responded with "no", because audit settlements are not available under domestic law. However, with respect to compliance with BEPS Action 14, it is more important to assess whether taxpayers are precluded from accessing MAP in the context if an audit settlement has been reached. In the aforementioned cases, the answer to that question would also be "no" or it would be "not applicable". 
+
+With regards to topics that are not applicable within a certain jurisdiction, one could imagine two ways in which the topic is not applicable and which have different meanings with respect to compliance: One could be that MAP is generally not available or one overarching topic of MAP dispute resolution (such as bilateral APA) is not available (in which case cannot mean meeting the minimum standard). Another one could be that the underlying issue is not available, which would be neutral or advantageous to the taxpayer and could still mean (for example, transfer pricing regulation or audit settlement or absence of an income tax).
+
+
+```{r correction audit settlements}
+
+tables %<>% mutate(response = case_when(new_row == 13 & 
+                                          response != "yes" & 
+                                          iso3c %in% c("ARG",
+                                            "BRB",
+                                            "BRA",
+                                            "BGR",
+                                            "BFA",
+                                            "CYM",
+                                            "CHL",
+                                            "CHN",
+                                            "COD",
+                                            "FIN",
+                                            "HUN",
+                                            "JPN",
+                                            "KAZ",
+                                            "KOR",
+                                            "LVA",
+                                            "LTU",
+                                            "LUX",
+                                            "PRY",
+                                            "PER",
+                                            "SVN",
+                                            "CHE",
+                                            "THA",
+                                            "TUR",
+                                            "ARE") ~ "n/a",
+                                        new_row == 13 & iso3c %in% c("COL", "MEX") ~ "no",
+                                        new_row == 13 & iso3c %in% c("GRC", "SRB") ~ "yes",
+                                        new_row == 13 & iso3c == "IDN" & year == 2016 ~ "yes",
+                                        new_row == 13 & iso3c == "IND" & year == 2019 ~ "yes",
+                                        new_row == 13 & iso3c == "IND" & year == 2021 ~ "no",
+                                        new_row == 13 & iso3c %in% c("AND", "PAN") ~ NA_character_,
+                                        detailed_explanation %in% c("MAP is not regulated by Domestic Law.") ~ "no",
+                                        TRUE ~ response))
+
+
+
+```
+
+
+## Hand coding the detailed explanations
+
+Often the detailed explanation clarifies that the given practice has not yet been implemented simply because the occasion has not presented itself yet, but that if it presented itself the practice would be implemented (e.g., MAPs of general nature will be published, however, until the date of publication of the MAP profile no MAPs of general nature have been concluded). For similar situations, the Action 14 Peer Review report usually does not state that improvements are necessary, but only states as recommendation that the intention should be maintained in the future, when there are MAP cases. Hence, I will consider the stated intention to do comply as compliant, even if actual compliance could not yet be assessed.  
+
+When it is merely stated that the situation has not yet arisen, but no response is given as to whether the requirement will be complied with should the situation arise, the detailed response is coded as "n/a". 
+
+### Publication MAP general nature
+When it is stated that in general agreements of general nature would be published, but not if it might comprise anonymity, this would still be coded as "yes". If the response says that they might not be published if they concern a small number of taxpayers, this is coded as "no". When it is stated that so far no such agreements have been concluded but that they would be published in case they are concluded, that is coded as "yes".
+
+```{r publication MAP general nature}
+
+tables %<>% mutate(response = case_when(new_row == 1 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "BHR", "COL", "CRI", "FIN", "GGY", "HRV", "HUN", "IND", "IRL", "KOR", "MLT", "PAK", "POL", "PRT", "SVN") ~ "yes",
+                                        new_row == 1 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GIB") ~ "no",
+                                        new_row == 1 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU", "COD", "ISR", "MCO", "NGA", "PAN", "SRB") ~ "n/a",
+                                        TRUE ~ response))
+
+
+
+```
+
+
+### Bilateral APA programs
+Question 2 relating to bilateral APA programs is ambiguous since it asks whether "Bilateral APA programmes are _implemented_". If read narrowly it could be interpreted as asking whether concluding bilateral APAs is legally possible (e.g., if it considered as being covered by tax treaties that include article 25(3)). However, it could also be read as asking whether there is an active programme by the administration for implementing APAs. In the MAP profiles, one can see that countries have interpreted this sometimes differently. For example, according to additional explanations given in the MAP profile, both Denmark and Costa Rica consider that concluding bilateral APAs is legally possible, however, both do not have a formal program. Yet, Denmark gave the response "yes", and Costa Rica "no".   
+For the detailed explanation, the difference is coded.
+
+```{r bilateral APAs}
+
+tables %<>% mutate(response = case_when(new_row == 2 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("FIN", "ISR", "MDV", "MLT", "NGA") ~ "yes (formal)",
+                                         new_row == 2 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COD", "SRB") ~ "no",
+                                         new_row == 2 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BHR", "BMU", "PAK") ~ "n/a",
+                                        TRUE ~ response))
+
+```
+
+
+
+### Rollback bilateral APAs
+```{r rollback bilateral APAs}
+tables %<>% mutate(response = case_when(new_row == 3 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("FIN", "IND", "QAT", "SVN") ~ "yes",
+                                         new_row == 3 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BRN", "SRB", "NGA") ~ "n/a",
+                                        TRUE ~ response))
+```
+
+### Bilateral APA timeline
+The timeline question is not further analyzed, since in principle there is some kind of timeline for all countries that have a bilateral APA program. There only is some variation in the degree of specificity. 
+
+### Public info on bilateral APAs
+
+```{r public info bilateral APAs}
+
+tables %<>% mutate(response = case_when(new_row == 5 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("HRV", "HUN", "IND", "ISR", "LTU") ~ "yes",
+                                        new_row == 5 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("QAT") ~ "no",
+                                         new_row == 5 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BRN", "SRB") ~ "n/a",
+                                        TRUE ~ response))
+
+
+```
+
+### Bilateral APA fees
+```{r bilateral APA fees}
+tables %<>% mutate(response = case_when(new_row == 6 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("HRV", "IND") ~ "yes",
+                                        new_row == 6 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("MYS") ~ "no",
+                                         new_row == 6 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BRN", "SRB") ~ "n/a",
+                                        TRUE ~ response))
+
+
+```
+
+
+### bilateral APA statistics
+
+```{r bilateral APA statistics}
+tables %<>% mutate(response = case_when(new_row == 7 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COL", "FIN", "TUR") ~ "yes",
+                                        new_row == 7 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("IDN") ~ "no",
+                                         new_row == 7 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BRN", "SRB", "LTU", "NGA") ~ "n/a",
+                                        TRUE ~ response))
+
+
+```
+
+### Training officials
+
+```{r training officials}
+tables %<>% mutate(response = case_when(new_row == 8 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BEL", "CHE", "QAT", "RUS", "VGB") ~ "yes",
+                                         new_row == 8 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU") ~ "n/a",
+                                        TRUE ~ response))
+```
+
+### Other info available
+question not coded since not directly relevant to assessing the degree to which a country is dispute resolution friendly.
+
+### TP within scope
+
+A "partial" is coded if the explanation says that not all treaties cover MAP for transfer pricing cases
+
+```{r TP within scope}
+tables %<>% mutate(response = case_when(new_row == 10 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("SRB", "SVN") ~ "yes",
+                                       new_row == 10 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GBR", "MYS", "PER") ~ "partial", 
+                                         new_row == 10 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COD") ~ "n/a",
+                                        TRUE ~ response))
+```
+
+### Access in case of treaty anti abuse
+
+If not yet decided, marked as "n/a". If stated intention marked as "yes". In the case of Greenland, answer is unclear, therefore coded as "n/a".
+```{r access treaty anti abuse}
+tables %<>% mutate(response = case_when(new_row == 11 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CAN", "FIN", "GEO", "GIB", "IMN", "ITA", "PER", "SRB") ~ "yes",
+                                         new_row == 11 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COD", "GRL", "PAN") ~ "n/a",
+                                        TRUE ~ response))
+```
+
+### domestic anti abuse
+
+Canada indicates that discussion would be limited to seeking relief from foreign authority. The Peer Review report coded that as compliant, therefore it will be considered as compliant here as well. Where there is no domestic anti abuse rule, it is coded as "n/a".
+
+```{r access domestic anti abuse}
+tables %<>% mutate(response = case_when(new_row == 12 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "CAN", "CHE", "FIN", "GEO", "GIB", "HKG", "IMN", "IND", "ITA", "PER", "SRB", "SVN") ~ "yes",
+                                         new_row == 12 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COD", "PAN", "SEN") ~ "n/a",
+                                        TRUE ~ response))
+```
+
+### Access bona fide foreign adjustments
+
+
+```{r access bona fide foreign adjustments}
+tables %<>% mutate(response = case_when(new_row == 14 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COL", "DOM", "ESP", "JPN", "SRB") ~ "yes",
+                                         new_row == 14 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU", "PAN", "PER") ~ "n/a",
+                                        new_row == 14 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "CHL", "COD") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+### Other treaty issues not in scope of MAP
+
+In the case of Serbia, the answer is unclear
+```{r other issues not in scope}
+tables %<>% mutate(response = case_when(new_row == 15 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("DEU", "ESP", "ISR") ~ "yes",
+                                        new_row == 15 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GRC", "IND", "LKA", "PAK", "RUS") ~ "no",
+                                        new_row == 15 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "PAN", "SRB") ~ NA_character_,
+                                        TRUE ~ response))
+```
+### Access where judicial remedies have been sought
+Response by Serbia is unclear
+
+```{r access case under dispute domestically}
+tables %<>% mutate(response = case_when(new_row == 16 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BGR", "CRI", "HUN", "IND", "LKA") ~ "yes",
+                                        new_row == 16 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("TUR") ~ "no",
+                                        new_row == 16 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "CHN", "PAN", "SRB") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+### Access in case of judicial decision
+If access is only available after an administrative decision but not after the decision of an independent court, the response is coded as "partial". 
+
+```{r access in case of judicial decision}
+tables %<>% mutate(response = case_when(new_row == 17 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GAB") ~ "yes",
+                                        new_row == 17 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BEL", "BGR", "CRI", "ESP", "GRC", "HUN", "IDN", "ISR", "KOR", "ROU", "SMR", "SVN", "TUR") ~ "partial",
+                                        new_row == 17 & 
+                                          year <= 2022 &
+                                          iso3c == "ZAF" ~ "partial",
+                                        new_row == 17 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("IND") ~ "no",
+                                        new_row == 17 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "CHN", "PAN", "SRB") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+
+
+
+### Guidelines on access publicly available
+Coded partial if only rules are availble, but no guidance on procedure
+
+```{r access guidelines public}
+tables %<>% mutate(response = case_when(new_row == 18 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BEL", "BGR", "PAK") ~ "yes",
+                                        new_row == 18 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CZE", "IND", "NGA") ~ "partial",
+                                        new_row == 18 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GRL", "QAT") ~ "no",
+                                        new_row == 18 & 
+                                          response == "guidelines will shortly be published" ~ "no",
+                                        new_row == 18 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND") ~ NA_character_,
+                                        TRUE ~ response))
+
+
+# From the detailed explanation given by Saudi Arabia, it seems the response is rather no.
+tables %<>% mutate(response = case_when(new_row == 18 & 
+                                          response == "yes" & 
+                                          year == 2019 &
+                                          iso3c %in% c("SAU") ~ "no",
+                                        TRUE ~ response))
+
+```
+
+### Timeline for filing
+For  the timeline to file a MAP request, it should be coded how long these timeline is, since usually there will be a timeline.
+
+### Guidance multilateral MAPs
+Where a reference to code of conduct of EU Arbitration convention is made, this is coded as yes. Where there is no multilateral MAP program, "n/a" is coded. Where the jurisdiction explains that there is no distinction in the procedure between multilateral and bilateral MAPs, this is coded as yes.
+
+```{r timeline for filing}
+tables %<>% mutate(response = case_when(new_row == 20 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU", "DEU", "ESP", "MEX") ~ "yes",
+                                        new_row == 20 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("LTU", "QAT") ~ "no",
+                                        new_row == 20 & 
+                                          response == "shortly be published" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("ABW") ~ "no",
+                                         new_row == 20 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("IDN") ~ "n/a",
+                                        TRUE ~ response))
+
+
+```
+
+### Suspension of tax collection
+
+Coded as partial, if part of the sum is suspended, if only available for some jurisdictions (such as India) or if suspension does not apply to all taxpayers (as in Canada). If there is only a reference to domestic law, that is coded as yes.
+If only suspended against collateral still coded as yes. However, that should be more closely investigated. One could further categorize with regard to whether suspension is automatic, or whether needs to be separately requested, 
+
+```{r suspension of tax collection}
+tables %<>% mutate(response = case_when(new_row == 21 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CHE", "CHL", "DEU", "DNK", "GGY", "GIB", "HKG", "HUN", "IRL", "ISR", "MAC", "MUS", "PAK", "PAN", "QAT", "RUS", "SMR", "SVN") ~ "yes",
+                                        new_row == 21 & 
+                                          response == "yes/no" & 
+                                          year <= 2022 &
+                                          iso3c == "DNK" ~ "yes",
+                                        new_row == 21 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CAN", "IND", "LKA") ~ "partial",
+                                        new_row == 21 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BGR") ~ "no",
+                                         new_row == 21 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU") ~ "n/a",
+                                        new_row == 21 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "COD", "PRT") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+
+### Fees for MAP request
+If there is an indication that travel costs have to be paid, it is coded as yes.
+
+
+```{r fees MAP request}
+tables %<>% mutate(response = case_when(new_row == 22 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CMR") ~ "yes",
+                                        new_row == 22 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("MEX") ~ "no",
+                                        new_row == 22 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "PAN") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+### Reference to other info on access
+is not further analyzed since not directly relevant.
+
+### Existence of model timeframes
+If there is a reference that Action 14 or MEMAP is followed, this is coded as yes.
+Should still be further analyzed to categorize the precise timeframe.
+
+
+```{r model time frames}
+tables %<>% mutate(response = case_when(new_row == 24 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CAN", "CRI", "HKG", "HRV", "HUN", "IND", "ISR", "NGA", "QAT") ~ "yes",
+                                        new_row == 24 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("JPN") ~ "no",
+                                        new_row == 24 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COD", "PAN") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+### Publication resolution time statistics
+
+
+
+```{r publication resultion time}
+tables %<>% mutate(response = case_when(new_row == 25 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BEL", "BGR", "HUN", "IND", "LKA") ~ "yes",
+                                        new_row == 25 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CHE", "CHL", "IDN") ~ "no",
+                                         new_row == 25 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BHR", "COL", "GGY", "KNA") ~ "n/a",
+                                        TRUE ~ response))
+```
+
+### Interest/penalty waiver
+Statements of intention in case where no MAP has yet been received is coded as yes. If only related to transfer pricing cases, still coded as yes, since transfer pricing cases are likely to be the majority of cases. Where the waiver is not automatic but could be dealt with, this is coded as yes. Where generally no penalties are charged, coded as "n/a".
+
+```{r interest penalty waiver}
+tables %<>% mutate(response = case_when(new_row == 26 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BHR", "CHE", "COL", "CRI", "CZE", "DEU", "GGY", "GIB", "GRC", "IDN", "IND", "IRL", "ISR", "ISL", "KAZ", "KNA", "KOR", "LKA", "LTU", "LVA", "MDV", "NLD", "PAK", "SRB") ~ "yes",
+                                        new_row == 26 & 
+                                          response == "not automatically" & 
+                                          year <= 2022 &
+                                          iso3c == "BRB" ~ "yes",
+                                        new_row == 26 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BGR", "MEX", "MUS", "PRT") ~ "no",
+                                         new_row == 26 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU", "HKG") ~ "n/a",
+                                        new_row == 26 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "DOM", "FIN", "NGA", "PAN") ~ NA_character_,
+                                        new_row == 26 & 
+                                          response == "detailed_explanation" & 
+                                          year == 2018 &
+                                          iso3c %in% c("HUN") ~ "yes",
+                                        new_row == 26 & 
+                                          response == "detailed_explanation" & 
+                                          year %in% c(2019:2022) &
+                                          iso3c %in% c("HUN") ~ "no",
+                                        TRUE ~ response))
+```
+### Roles and responsibilites of MAP office
+In case of no office  because of no receipt of MAP requests, still coded as no.
+```{r roles and responsibilities MAP office}
+tables %<>% mutate(response = case_when(new_row == 27 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BGR", "HUN", "IMN", "IND", "ISR", "MYS") ~ "yes",
+                                        new_row == 27 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GGY", "GIB", "PAN", "QAT") ~ "no",
+                                        TRUE ~ response))
+```
+
+### Availabiliy of MAP arbitration
+
+Where available under EU arbitration convention still coded as no, since would not govern the tax treaty dispute. (check this)
+Where it is stated that arbitration would be available even when there is no clause in treaty, coded as yes.
+If an exchange of notes is necessary to activate procedure and has not yet been undertaken, is coded as no.
+
+```{r MAP arbiration available}
+tables %<>% mutate(response = case_when(new_row == 28 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU", "BRB", "ESP", "HRV", "IDN", "MYS", "SGP") ~ "yes",
+                                        new_row == 28 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "BGR", "COL", "HUN", "MEX", "PER") ~ "no",
+                                        TRUE ~ response))
+```
+
+### Legal limitations to arbitration
+
+
+```{r legal limitations to arbitration}
+tables %<>% mutate(response = case_when(new_row == 29 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("COL", "ISR", "NGA") ~ "yes",
+                                        new_row == 29 & 
+                                          response == "see point 23" & 
+                                          year <= 2022 &
+                                          iso3c == "FRO" ~ "yes",
+                                        new_row == 29 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GRL", "IND", "LKA", "PAN") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+### Inclusion of MAP clause allowed by treaty policy
+
+
+```{r arbitration treaty policy}
+tables %<>% mutate(response = case_when(new_row == 30 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BGR", "COL", "HUN") ~ "no",
+                                        new_row == 30 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("GEO", "PAN") ~ NA_character_,
+                                        TRUE ~ response))
+```
+### Domestic remedies info
+
+```{r domestic remedies info}
+tables %<>% mutate(response = case_when(new_row == 31 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("FIN") ~ "yes",
+                                        new_row == 31 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("PAN") ~ "no",
+                                        TRUE ~ response))
+```
+
+### Domestic remedies guideline addressing whether CA follows domestic court
+
+```{r remedies guideline about CA following court}
+tables %<>% mutate(response = case_when(new_row == 32 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("ESP", "QAT") ~ "yes",
+                                        new_row == 32 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BRN", "GRC", "IMN") ~ "no",
+                                        TRUE ~ response))
+```
+
+### Multi-year resolution
+
+
+
+```{r multi year resolution}
+tables %<>% mutate(response = case_when(new_row == 33 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("DOM", "ESP", "GGY", "HRV", "IND", "JPN", "KOR", "MAR", "QAT", "RUS", "SRB", "SVN") ~ "yes",
+                                        new_row == 33 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "COL", "MDV", "PAN") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+### Para 9.2 in all tax treaties
+All detailed explanations contain explanation that one or more treaties do not contain the clause hence it is coded as no. However, more detailed analysis of the number of treaties should be made.
+
+```{r para 9.2 in all tax treaties}
+tables %<>% mutate(response = case_when(new_row == 34 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022  ~ "no",
+                                        TRUE ~ response))
+```
+
+
+
+### other info on resolution
+not considered relevant
+
+
+### info on payment of additional tax
+
+
+```{r next chunk}
+tables %<>% mutate(response = case_when(new_row == 36 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BHR", "DEU", "ESP", "GGY", "GIB", "IDN", "MLT", "PAK", "RUS", "SGP", "SVN", "TUR") ~ "yes",
+                                        new_row == 36 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "PAN") ~ "no",
+                                        TRUE ~ response))
+```
+
+### info on timeframe for refund
+```{r info timeframe refund}
+tables %<>% mutate(response = case_when(new_row == 37 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("DEU", "GGY", "IDN", "MEX", "MLT", "NGA", "PAK", "SGP", "SVN") ~ "yes",
+                                        new_row == 37 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "BHR", "PAN") ~ "no",
+                                         new_row == 37 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("BMU") ~ "n/a",
+                                        TRUE ~ response))
+```
+### Implementation notwithstanding timelimits
+If not always (depending on DTT), then coded as no
+Indonesia's response not clear.
+Would be good to check other responses as well.
+
+```{r implementation notwithstanding time limits}
+tables %<>% mutate(response = case_when(new_row == 38 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("DEU", "GRC", "GRL", "LTU") ~ "yes",
+                                        new_row == 38 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("CZE", "HRV", "ITA", "KNA", "PER", "SVN") ~ "no",
+                                        new_row == 38 & 
+                                          response == "detailed_explanation" & 
+                                          year <= 2022 &
+                                          iso3c %in% c("AND", "BHR", "DOM", "IDN", "PAN") ~ NA_character_,
+                                        TRUE ~ response))
+```
+
+
+
+
+
+```{r more detailed analysis of detailed explanations}
+
+details <- tables %>% filter(response == "detailed_explanation")
+details %<>% filter(!new_row %in% c(4, 9, 19, 23, 35))
+details %<>% arrange(new_row, iso3c, year)
+
+
+```
+
+
+# Recoding based on external data
+
+If no MAP request has been received or finalized, certain aspects should be set to "n/a" and subsequently considered as compliant.
+
+If country does not have a tax treaty should be considered as "n/a" with respect to all aspects that relate to MAP. 
+
+
+
+
+## Identify minimum standards and best practices
+Some of the issues asked are minimum standards or best practices in BEPS Action 14. These are coded here.
+
+Some are a bit more complex:
+The roll-back of bilateral APAs should be allowed (but only where bilateral APAs are available)
+
+For the provisions with respect to arbitration, what is part of the minimum standard is only the fact that the information is made public, not that arbitration is accepted.
+
+
+
+```{r calculate additional variables for Action 14 compliance measurement}
+
+
+#calculate additional variable: arbitration position.
+arb_position <- tables %>% 
+  filter(new_row %in% c(28, 29, 30)) %>% 
+  select(iso3c, new_row, response, date, year) %>% 
+  pivot_wider(names_from = "new_row", values_from = "response") %>%
+  mutate(response = case_when(`29` %in% c(NA_character_, "n/a") & 
+                                `30`%in% c(NA_character_, "n/a") &
+                                `28` != "yes" ~ "no",
+                              (`29` %in% c(NA_character_, "n/a") | `30` %in% c(NA_character_, "n/a")) &
+                                `28` != "yes" ~ "partial",
+                              TRUE ~ "yes")) %>%
+  select(-c("28", "29", "30")) %>% 
+  mutate(short_codes = "arbitration_position_available",
+         new_row = 40,
+         detailed_explanation = NA,
+         links = NA)
+
+# calculate additional variable: info on interest and penalties
+penalty_info <- tables %>% 
+  filter(new_row == 26) %>% 
+  select(iso3c, new_row, response, date, year) %>% 
+  pivot_wider(names_from = "new_row", values_from = "response") %>%
+  mutate(response = ifelse(`26` == "n/a", "no", "yes")) %>% 
+  select(-c("26")) %>% 
+  mutate(short_codes = "interest_penalty_info",
+         new_row = 41,
+         detailed_explanation = NA,
+         links = NA)
+
+
+# calculate additional variable: APA roll-back allowed in case bilateral APA is generally allowed
+
+roll_back_min_std <- tables %>% 
+  filter(new_row %in% c(2, 3)) %>% 
+  select(iso3c, new_row, response, date, year) %>% 
+  pivot_wider(names_from = "new_row", values_from = "response") %>%
+  mutate(response = case_when(`2` == "yes" & `3` == "yes" ~ "yes",
+                              `2` == "yes" & `3` == "no" ~ "no",
+                              `2` == "no" ~ "n/a")) %>% 
+  select(-c("2", "3")) %>% 
+  mutate(short_codes = "roll_back_min_std",
+         new_row = 42,
+         detailed_explanation = NA,
+         links = NA)
+# additional variable: access for cases of both domestic and treaty antiabuse rule
+
+access_both_anti_abuse <- tables %>% 
+  filter(new_row %in% c(11, 12)) %>% 
+  select(iso3c, new_row, response, date, year) %>% 
+  pivot_wider(names_from = "new_row", values_from = "response") %>%
+  mutate(response = case_when(`11` == "n/a" & `12` == "n/a" ~ "n/a",
+                              `11` %in% c("yes", "n/a") & `12` %in% c("yes", "n/a") ~ "yes",
+                              `11` %in% c("yes", "n/a") |`12` %in% c("yes", "n/a") ~ "partial",
+                              TRUE ~ "no")) %>% 
+  select(-c("11", "12")) %>% 
+  mutate(short_codes = "access_both_anti_abuse",
+         new_row = 43,
+         detailed_explanation = NA,
+         links = NA)
+
+
+tables %<>% select(-c(rownumber, question))
+tables %<>% rbind(arb_position)
+tables %<>% rbind(penalty_info)
+tables %<>% rbind(roll_back_min_std)
+tables %<>% rbind(access_both_anti_abuse)
+
+```
+
+
+
+## Coding taxpayer friendly answers
+It is possible to code most of the different questions with regards to what response would be "taxpayer friendly", in terms of enhancing legal certainty or lowering procedural barriers.
+
+Where there is not a "yes/no" answer but a detailed response, this is counted as a middle ground, since in most of the cases it means that the respective treatment can be obtained but under specific conditions.
+
+Still to be done: those cases where there is more than one taxpayer friendly answer (e.g. "yes" and "n/a")
+
+```{r coding taxpayer friendly answers}
+taxpayer_friendly_answers <- c(
+  "1" = "yes",
+  "2" = "yes",
+  "3" = "yes",
+  "4" = "no",
+  "5" = "yes",
+  "6" = "no",
+  "7" = "yes",
+  "8" = "yes",
+  "9" = "neutral",
+  "10" = "yes",
+  "11" = "yes",
+  "11" = "n/a",
+  "12" = "yes", 
+  "12" = "n/a",
+  "13" = "yes",
+  "13" = "n/a",
+  "14" = "yes",
+  "15" = "no",
+  "16" = "yes",
+  "17" = "yes",
+  "18" = "yes",
+  "19" = "no", #Take out since no probably only means that the timeline varies between treaties
+  "20" = "yes",
+  "21" = "yes",
+  "22" = "no",
+  "23" = "neutral",
+  "24" = "yes",
+  "25" = "yes",
+  "25" = "n/a",
+  "26" = "yes",
+  "26" = "n/a",
+  "27" = "yes",
+  "28" = "yes",
+  "29" = "no",
+  "30" = "yes",
+  "31" = "yes",
+  "32" = "yes",
+  "33" = "yes",
+  "34" = "yes",
+  "35" = "neutral",
+  "36" = "yes",
+  "37" = "yes",
+  "38" = "yes",
+  "39" = "neutral",
+  "40" = "yes",
+  "41" = "yes",
+  "42" = "yes",
+  "43" = "yes",
+  "43" = "n/a"
+  )
+
+taxpayer_friendly_answers <- data.frame(enframe(taxpayer_friendly_answers))
+taxpayer_friendly_answers %<>% group_by(name) %>% summarize(value = list(value))
+names(taxpayer_friendly_answers) <- c("new_row", "taxpayer_friendly_answers")
+taxpayer_friendly_answers$new_row %<>% as.numeric()
+tables %<>% left_join(taxpayer_friendly_answers, by = "new_row")
+
+
+```
+
+```{r add info on minimum standards}
+
+action_14 <- c(
+  "roll_back_min_std" = "min_std",
+  "bil_apa_available" = "bp",
+  "publication_map_general_nature" = "bp",
+  "bil_apa_info_available" = "bp",
+  "training_officials" = "bp",
+  "access_tp" = "min_std",
+  "access_both_anti_abuse" = "min_std",
+  "access_audit_settlement" = "min_std_mod",
+  "access_info_public" = "min_std",
+  "access_taxpayer_adjustment" = "bp",
+  "guidance_multilateral_map" = "bp",
+  "tax_collection_suspended" = "bp_mod",
+  "resolution_timeframes" = "min_std",
+  "arbitration_position_available" = "min_std",
+  "multi_year_resolution" = "bp",
+  "domestic_remedies_info" = "bp",
+  "interest_penalty_info" = "bp",
+  "corresponding_adjustment_all_treaties" = "bp",
+  "implementation_notwithstanding_time" = "min_std_mod"
+)
+
+tables$action_14 <- action_14[tables$short_codes]
+
+action_14_numbers <- c(
+  "roll_back_min_std" = "[A.2]",
+  "bil_apa_available" = "[B.P.1]",
+  "publication_map_general_nature" = "[B.P.2]",
+  "bil_apa_info_available" = "[B.P.3]",
+  "training_officials" = "[B.P.4]",
+  "access_tp" = "[B.3]",
+  "access_both_anti_abuse" = "[B.4]",
+  "access_audit_settlement" = "[B.5]",
+  "access_info_public" = "[B.6]",
+  "access_taxpayer_adjustment" = "[B.P.6]",
+  "guidance_multilateral_map" = "[B.P.7]",
+  "arbitration_position_available" = "[C.6]",
+  "multi_year_resolution" = "[B.P.9]",
+  "domestic_remedies_info" = "[B.P.10]",
+  "interest_penalty_info" = "[B.P.11]",
+  "corresponding_adjustment_all_treaties" = "[B.P.12]"
+)
+tables$action_14_numbers <- action_14_numbers[tables$short_codes]
+
+```
+
+
+```{r categories}
+
+tables %<>% mutate(category = case_when(new_row %in% c(1:9, 42) ~ "preventing_disputes",
+                                        new_row %in% c(10:23, 43) ~ "availability_access",
+                                        new_row %in% c(24:35, 40, 41) ~ "resolution",
+                                        new_row %in% c(36:39) ~ "implementation"))
+
+
+```
+
+
+
+
+```{r save}
+write_rds(tables, here("data-created/map_profiles_edited.rds"))
+```
+

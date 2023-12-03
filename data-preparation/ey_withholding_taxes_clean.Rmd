@@ -1,0 +1,814 @@
+---
+title: "withholding_taxes"
+author: "Frederik Heitmüller"
+date: "2022-10-11"
+output: html_document
+---
+
+```{r setup, echo=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('purrr')) install.packages('purrr'); library('purrr') 
+if (!require('stringr')) install.packages('stringr'); library('stringr') 
+if (!require('forcats')) install.packages('forcats'); library('forcats') 
+
+devtools::load_all()
+
+# defining for which data years the script should run
+years <- c(2004:2021)
+
+```
+
+# Primary categorization
+
+The designation of different taxes sometimes varies among countries. For example, most countries have a "Corporate Income Tax", but some have a "Corporate Profit Tax" and some have a "Business Income Tax Rate", among others. In the next step these designation will be harmonized. The assumption is that different designations that are lumped together refer roughly to the same concept. Surtaxes are also re-categorized under "corporate income tax", but they will be dealt with later on, since their rates typically need to be added to the standard rate.
+
+
+```{r putting rates in different baskets}
+
+whole_table <- read_csv(here("data-created/eyextract.csv"))
+whole_table$cat_1 %<>% as_factor
+whole_table %<>% mutate(rate1 = str_replace_all(rate1, "–", "0"))
+
+categories <- whole_table %>% group_by(cat_1) %>% summarise(no_rows = length(cat_1))
+whole_table %<>% mutate(cat_1_simpl = case_when(cat_1 %in% c("Corporate Income Tax Rate (%)",
+                                                             "Corporate Profits Tax Rate (%)",
+                                                             "Domestic Company Income Tax Rate (%)",
+                                                             "Corporate Profit Tax Rate (%)",
+                                                             "Corporate Tax Rate (%)",
+                                                             "Federal Corporate Income Tax Rate (%)",
+                                                             "Business Income Tax Rate (%)",
+                                                             "Tax on Profit Rate (%)",
+                                                             "Profit Tax",
+                                                             "Regime on Profits from Business Activities",
+                                                             "Business Receipts Tax Rate (%)",
+                                                             "Corporate Income Tax Rates",
+                                                             "Enterprise Income Tax Rate (%)",
+                                                             "National Corporate Income Tax Rate (%)",
+                                                             "Local Corporate Income Tax Rate (%)",
+                                                             "Corporate Income Tax for Equality Rate (%)",
+                                                             "Solidarity Surcharge Rate (%)",
+                                                             "Tax on Income Rate (%)",
+                                                             "Tax Rate (%)",
+                                                             "Secondary Tax on Companies (%)",
+                                                             "Corporate Income Tax for Equality Surtax (%)",
+                                                             "Corporate Income Tax Surtax (%)",
+                                                             "Corporate Tax Rate",
+                                                             "Secondary tax on companies (%)",
+                                                             "Resident Company Income Tax Rate (%)",
+                                                             "Resident Corporation Income Tax Rate (%)",
+                                                             "Trade Tax Rate (Average Rate) (%)",
+                                                             "Capital Income Tax Rate (%)",
+                                                             "Yield Tax Rate (%)",
+                                                             "Fairness Tax Rate (%)") ~ "Corporate Income Tax Rate (%)",
+                                                cat_1 %in% c("Branch Tax Rate (%)",
+                                                             "Branch Income Tax Rate (%)",
+                                                             "Branch Profits Tax Rate (Additional Tax) (%)",
+                                                             "Permanent Representation Tax Rate (%)",
+                                                             "Permanent Establishment Tax Rate (%)",
+                                                             "Branch Remittance Tax",
+                                                             "Branch of Nonresident Corporation (%)",
+                                                             "Nonresident Corporate Income Tax Rate (%)",
+                                                             "Branch of Nonresident Corporation Tax Rate (%)",
+                                                             "Representative Office Tax Rate (%)",
+                                                             "Branch Income Tax Rate",
+                                                             "Branch Profit Tax Rate (%)") ~ "Branch Tax Rate (%)",
+                                                cat_1 %in% c("Capital Gains Tax Rate (%)",
+                                                             "Capital Gains Tax (%)",
+                                                             "Short-Term Capital Gains Tax Rate (%)",
+                                                             "Capital Gains Withholding Tax Rate (%)",
+                                                             "Federal Capital Gains Tax Rate (%)",
+                                                             "Real Property Gains Tax Rate (%)",
+                                                             "Corporate Capital Gains Tax Rate (%)",
+                                                             "Real Estate Tax Rate (%)",
+                                                             "Capital Gain Tax Rate (%)",
+                                                             "Land Sales Tax Rate (%)",
+                                                             "Capital Gains Tax Rate") ~ "Capital Gains Tax Rate (%)",
+                                                cat_1 %in% c("Net Operating Losses (Years)",
+                                                             "Carryback",
+                                                             "Carryforward",
+                                                             "Net Operating Losses") ~ "Net Operating Losses (Years)",
+                                                cat_1 %in% c("Withholding Tax (%)",
+                                                             "International Communications",
+                                                             "Withholding Tax",
+                                                             "Business",
+                                                             "Construction Planning and Supervision",
+                                                             "Dividends and Nondeductible Expenses",
+                                                             "Know-how, etc.",
+                                                             "Construction, installation or assembly",
+                                                             "That Are Made to Residents of Non-cooperative",
+                                                             "Royalties",
+                                                             "Remittances",
+                                                             "Fees",
+                                                             "Contract Payments",
+                                                             "Interest",
+                                                             "Other Payments to Nonresidents",
+                                                             "Received by Nonresidents",
+                                                             "Specific Payments to Resident Individuals",
+                                                             "Foreign Performance Fees (for Artists, Entertainers",
+                                                             "Dividends",
+                                                             "Royalties from Know-how and Technical",
+                                                             "Lottery Prizes and Other Prize Winnings",
+                                                             "Other Payments Made to Nonresidents",
+                                                             "Royalties from Patents,",
+                                                             "Payments for Services",
+                                                             "Construction Contracting Services",
+                                                             "Payments for Services and Goods",
+                                                             "Nonresident Entertainers and Sports Persons",
+                                                             "Withholding Tax Rate (%)") ~ "Withholding Tax (%)",
+                                                TRUE ~ "Other"))
+
+
+
+
+```
+
+# Withholding taxes
+
+Afterwards, the table is further segregated. Among all withholding taxes in the report, there are a total of 697 designations. The next challenge therefore is to identify concepts that can be considered identical and identify those that can be compared to restrictions in tax treaties. 
+
+I attempt to reproduce the main categories that are also present in tax treaties and that are coded in the ICTD Tax Treaty Dataset.
+For dividend withholding the categories qualifying and portfolio dividends are extracted.
+For interest, a standard category and a category for financial institutions is extracted.
+Royalties are segregated into 1) standard rate, 2) copyright of literary, artistic or scientific work, and 3) industrial, commercial or scientific equipment.
+For technical services fees only a standard rate is retained.
+If several rates are potentially the standard rate, I choose the maximum rate.
+Sometimes, country tables include a generic category (such as simply "Withholding tax %", most often with the value 0 to display that no withholding tax whatsoever is levied) or a residual category such as for example "Other payments to non-residents". These categories are important, since if a country for example has a withholding tax only on a very specific type of payments, such as "interest paid to banks", then other interest payments likely fall under the residual category.
+I exclude withholding taxes, which apply exclusively to residents. These are not of interest for this study since tax treaties only restrict the application of withholding taxes imposed on payments to non-residents.
+Where a country differentiates between dividends paid to individuals and dividends paid to companies, individuals is equated with portfolio income and companies with income from substantial shareholdings, as this will most likely most often be the case. 
+
+```{r break withholding tax table into first level categories}
+
+withholding_tax <- whole_table %>% filter(cat_1_simpl == "Withholding Tax (%)")
+# fixing errors
+## France Jamaica 
+withholding_tax$rate1 %<>% str_remove_all("\002    ")
+withholding_tax$rate1 %<>% str_remove_all("\002   ")
+withholding_tax$rate1 %<>% str_remove_all("\002")
+
+# Decimal points not extracted
+withholding_tax$rate3[which(withholding_tax$iso3c == "ARG")] %<>% str_replace_all("315", "31.5")
+withholding_tax$rate3[which(withholding_tax$iso3c == "HKG")] %<>% str_replace_all("155", "15.5")
+withholding_tax$rate3[which(withholding_tax$iso3c == "FIN")] %<>% str_replace_all("245", "24.5")
+withholding_tax$rate3[which(withholding_tax$iso3c == "ABW")] %<>% str_replace_all("75", "7.5")
+withholding_tax$rate3[which(withholding_tax$iso3c %in% c("ITA", "PAK"))] %<>% str_replace_all("125", "12.5")
+
+
+withholding_tax %<>% mutate(across(.cols = c("rate1", "rate2", "rate3", "rate4", "rate5", "rate6"), as.numeric))
+withholding_tax %<>% mutate(max_rate = pmax(rate1, rate2, rate3, rate4, rate5, rate6, na.rm = TRUE))
+withholding_tax %<>% mutate(min_rate = pmin(rate1, rate2, rate3, rate4, rate5, rate6, na.rm = TRUE))
+
+
+
+categories <- withholding_tax %>% group_by(designation) %>% summarise(no_rows = length(designation))
+
+# exclude all withholding taxes that apply exclusively to payments made to residents
+
+withholding_tax %<>% filter(!str_detect(designation, " Resident") &
+                              !str_detect(designation, "Domestic Companies") &
+                              !str_detect(designation, " Domiciled Companies") &
+                              designation != "Residents Dividends" |
+                              str_detect(designation, "Domestic and Nonresident"))
+
+
+
+withholding_tax %<>% mutate(dividends = ifelse(str_detect(designation, regex("dividend", ignore_case = TRUE)), "yes", NA),
+                            companies = ifelse(!str_detect(designation, regex("individual|bearer|Other than Companies", 
+                                                                         ignore_case = TRUE)) |
+                                                 str_detect(designation, "Corporations and Individuals"), "yes", NA),
+                            individuals = ifelse(!str_detect(designation, regex("compan|corporation", ignore_case = TRUE))  |
+                                                   str_detect(designation, regex("Other than Companies|Corporations and Individuals", ignore_case = TRUE)), "yes", NA), 
+                            directors_fees = ifelse(str_detect(designation, regex("Directors’ Fees", ignore_case = TRUE)), "yes", NA),
+                            services = ifelse(str_detect(designation, regex("fees", ignore_case = TRUE))  |
+                                                              str_detect(designation, regex("service", ignore_case = TRUE)) |
+                                                              str_detect(designation, regex("assistance", ignore_case = TRUE)) |
+                                                              str_detect(designation, regex("advice", ignore_case = TRUE)), "yes", NA),
+                            technical = ifelse(str_detect(designation, regex("management", ignore_case = TRUE)) |
+                                                                   str_detect(designation, regex("technical", ignore_case = TRUE)), "yes", NA),
+                            interest = ifelse(str_detect(designation, regex("interest|Shareholders’ Loans", ignore_case = TRUE)), "yes", NA),
+                            bank = ifelse(str_detect(designation, regex("bank|financial institution", ignore_case = TRUE)), "yes", NA),
+                            royalties = ifelse(str_detect(designation, regex("royalt", ignore_case = TRUE)) |
+                                                    str_detect(designation, regex("Know-how", ignore_case = TRUE)) |
+                                                    str_detect(designation, regex("Television", ignore_case = TRUE)) |
+                                                    str_detect(designation, regex("Films", ignore_case = TRUE)) |
+                                                    designation == "Income from Artistic, Literary or Scientific Works", "yes", NA),
+                            patents = ifelse(str_detect(designation, regex("patent", ignore_case = TRUE)) |
+                                             str_detect(designation, regex("know-how", ignore_case = TRUE)), "yes", NA),
+                            copyright = ifelse(designation %in% c("Royalties from Copyrights", 
+                                                                  "Royalties for the Right to Use Artistic Works", 
+                                                                  "Videos and Films", 
+                                                                  "Payments for Movie Films, Radio and Television", 
+                                                                  "Gross Income from Production and Distribution of Films and Television Programs", 
+                                                                  "Income from Artistic, Literary or Scientific Works", 
+                                                                  "Gross Income from Production and Distri- bution of Films and Television Programs",
+                                                                  "Payments for Movies, Films, Radio and Television", 
+                                                                  "Video, Films and Similar Items"), "yes", NA),
+                            generic = ifelse(designation %in% c("Withholding Tax (%)", 
+                                                                 "Withholding Tax Rate (%)",
+                                                                 "Nonresident Withholding Tax (%)",
+                                                                 "Payments to Nonresidents",
+                                                                 "Other",
+                                                                 "Other Income",
+                                                                 "Other payments",
+                                                                 "Other Payments Made to Nonresidents",
+                                                                 "Payments to Nonresidents Without a Permanent Establishment in Malawi",
+                                                                 "Other Non-salary Payments",
+                                                                 "Other Nonsalary Payments",
+                                                                 "Other Payments Not Specified Above",
+                                                                "Other Payments to Nonresidents",
+                                                                 "Other Income on Which No Specific With- holding Tax Is Imposed",
+                                                                 "Other Ukrainian-Source Income") |	 
+                                                str_detect(designation, regex("Payments of Other", ignore_case = TRUE)), "yes", NA))
+
+## not in technical
+not_in_services <- c("Professional Service Fees", 
+  "Fees for Services Rendered by Doctors to Patients in Private Hospitals or Clinics",
+  "Fees for Services Rendered by Doctors in a General Hospital or Diagnostic Center Run by a Company, Non-Government Organization or Trust Incorporated (Registered) in Bangladesh",
+  "Stevedoring Agencies and Private Security Services Agencies",
+  "Payments to Private Security Services Agencies",
+  "Fees and Other Payments to Surveyors of General Insurance Companies",
+  "News Services, Videos and Films",
+  "Directors’ Fees and Nondeductible Expenses",
+  "Dividends and Directors’ Fees",
+  "Sports and Entertainment Fees",
+  "Payments for Professional Services Rendered in Panama",
+  "Fees for Participation in Leading Councils",
+  "Cross-Border Transportation and Chartering Fees")
+
+withholding_tax$services[which(withholding_tax$designation %in% not_in_services)] <- NA
+
+
+
+
+```
+
+## Dividends
+
+## Interest
+
+## Royalties
+To align the categorization with the categorization of the ICTD tax treaties dataset, specific categories of royalties are distinguished.
+- A generic category for all royalties
+- Royalties for patents and know-how
+- Royalties for literary, artistic and scientific work
+- Royalties for use of equipment
+
+The generic category of the dataset includes the generic category and the patents category.  
+Literary category includes literary and generic. The equipment. In practice, no country was found to have a specific category for use of equipment in domestic law, therefore this includes only the generic category.
+
+
+## Fees for technical services
+Fees for technical services (for services of a managerial, technical or consultancy nature) may be taxed in the Contracting State in which they arise, but the tax so charged shall not exceed a specified percentage of the gross amount of the fees.
+
+Check Chile, Congo, GNQ: Payments for oil and gas services, Honduras issue (specific and generic services category). 
+Maybe differentiate in initial selection, with the specific only including those that contain words "technical" or "management".
+
+Verify professional service fees - whether this is more like independent professional fees or rather technical service fees (e.g. Bolivia, Turkey)
+
+
+## Putting all together
+
+```{r categorizing functions}
+
+select_line_privilege <- function(df, privileged_category = "no", exclude = NA){ 
+  df %<>% group_by(iso3c, year) %>% 
+      mutate(discarded = paste(designation, collapse = "")) 
+  # take all entries that enter into excluded category
+  if (!is.na(exclude)) {
+  df %<>% group_by(iso3c, year)  %>%  
+        filter(is.na(.data[[exclude]]))
+    }
+  
+  
+  if (privileged_category != "no") {
+      
+       df %<>% group_by(iso3c, year) %>% 
+      mutate(privilege = case_when(.data[[privileged_category]] == "yes" ~ 2, generic != "yes" ~ 1, TRUE ~ 0)) 
+  } else {
+  df %<>% group_by(iso3c, year)  %>%   
+         mutate(privilege = case_when(generic != "yes" ~ 1, TRUE ~ 0)) 
+    }
+  
+  df %<>% arrange(desc(privilege), desc(max_rate), .by_group = TRUE) %>% 
+      slice_head
+  df %<>% mutate(discarded = str_replace(discarded, designation, ""))
+  df %<>% select(-privilege)
+}
+
+```
+
+
+```{r categorizing}
+
+
+dividends <- withholding_tax %>% filter(dividends == "yes" | generic == "yes")
+dividends_subst <-  dividends %>% filter(companies == "yes")
+dividends_subst %<>% select_line_privilege
+dividends_port <- dividends %>% filter(individuals == "yes")
+dividends_port %<>% select_line_privilege
+
+interest <- withholding_tax %>% filter(interest == "yes" | generic == "yes")
+interest_general <- select_line_privilege(interest, exclude = "bank")
+# problem: sometimes bank exception is only in the footnote
+interest_bank <- select_line_privilege(interest, privileged_category = "bank")
+
+royalties <- withholding_tax %>% filter(royalties == "yes" | generic == "yes")
+# filter out those that apply purely to individuals
+royalties %<>% filter(!designation %in% c("Royalties from Patents, Know-how, etc. Paid to Individuals", "Royalties Paid to Nonresident Individuals", "Royalties Paid to Nonresidents Individuals"))
+
+
+royalties_general <- select_line_privilege(royalties, privileged_category = "no", exclude = "copyright")
+royalties_copyright <- select_line_privilege(royalties, privileged_category = "copyright", exclude = "patents")
+
+
+technical_services <- withholding_tax %>% filter(services == "yes" | generic == "yes")
+technical_services <- select_line_privilege(technical_services, privileged_category = "technical")
+
+```
+
+# Statutory rates
+
+I manually checked those countries with two kinds of rates, to find out whether these applied to special cases or whether they should be added (in case of surtaxes, etc.).
+
+When more rates were available
+
+BWA add both rates
+CHN add both rates
+COL add
+DEU >= 2008, add
+DEU < 2008, (25*(100-18)/100)+18
+HUN collapse  (also rate2 applies)
+PRT < 2008 multiplied than added, also higher rate for state income
+
+
+Special regimes for oil and gas (such as in Saudi Arabia or Nigeria) were disregarded for the moment. It may be interesting though to create a table for oil and gas taxation, as well.
+
+
+```{r statutory rates}
+
+stat_rates <- whole_table %>% filter(cat_1_simpl == "Corporate Income Tax Rate (%)")
+stat_rates %<>% mutate(across(c(rate1, rate2, rate3, rate4, rate5, rate6), as.numeric))
+stat_rates$rate1[which(stat_rates$iso3c == "PRY" & stat_rates$year == 2005)] <- 30 
+stat_rates$rate1[which(stat_rates$iso3c %in% c("FRA", "JAM") & stat_rates$year == 2012)] <- 33.33 
+
+stat_rates %<>% mutate(rate = pmax(rate1, rate2, rate3, rate4, rate5, rate6, na.rm = TRUE))
+
+# manual corrections
+stat_rates$rate[which(stat_rates$iso3c == "EST" & stat_rates$year == 2004)] <- 35 
+stat_rates$rate[which(stat_rates$iso3c == "ETH" & stat_rates$year %in% c(2004:2017))] <- 30 
+stat_rates$rate[which(stat_rates$iso3c == "BLR" & stat_rates$year %in% c(2016:2021))] <- 18 
+
+
+
+more_cases <- stat_rates %>% group_by(iso3c, year) %>% filter(n() > 1)
+stat_rates_one <- stat_rates %>% group_by(iso3c, year) %>% filter(n() == 1)
+
+special_cases <- more_cases %>% filter(iso3c %in% c("BWA", "CHN", "COL", "CRI", "DEU", "HUN", "PRT"))
+
+more_cases %<>% filter(
+  !(iso3c == "AFG" & designation != "Corporate Income Tax Rate (%)"),
+  !(iso3c == "BEL" & designation != "Corporate Income Tax Rate (%)"),
+  !(iso3c == "BES" & designation != "Profit Tax"),
+  !(iso3c == "BGD" & designation != "General Rate Non-Publicly Traded"),
+  !(iso3c == "BRB" & designation != "General Rate"),
+  !(iso3c == "CRI" & designation != "Corporate Income Tax Rate (%)"),
+  !(iso3c == "GIB" & designation != "Standard Rate (%)"),
+  !(iso3c == "GTM" & !designation %in% c("Optional Tax Regime", "Regime on Profits from Business Activities", "Regime on Profits from Profitable Activities")),
+  !(iso3c == "IMN" & designation != "Investment Companies"),
+  !(iso3c == "NGA" & designation != "Large Companies"),
+  !(iso3c == "PAK" & designation != "Companies Other than Banking Companies"),
+  !(iso3c == "SAU" & designation != "Other Companies"),
+  !(iso3c == "ZAF" & designation != "Corporate Income Tax Rate (%)"),
+  !(iso3c %in% c("BWA", "CHN", "COL", "CRI", "DEU", "HUN", "PRT"))
+)
+
+collapse_cases <- special_cases %>% 
+  filter(iso3c %in% c("BWA", "CHN", "COL", "HUN") | 
+           (iso3c %in% c("DEU", "PRT") & year >= 2008))
+
+collapse_cases %<>% group_by(iso3c, year) %>% summarise(rate = sum(rate)) %>% ungroup()
+collapse_cases %<>% add_row(iso3c = "DEU", year = 2004, rate = 38.5)
+collapse_cases %<>% add_row(iso3c = "DEU", year = 2005, rate = 38.5)
+collapse_cases %<>% add_row(iso3c = "DEU", year = 2006, rate = 38.5)
+collapse_cases %<>% add_row(iso3c = "DEU", year = 2007, rate = 38.5)
+collapse_cases %<>% add_row(iso3c = "PRT", year = 2004, rate = 27.5)
+collapse_cases %<>% add_row(iso3c = "PRT", year = 2005, rate = 27.5)
+collapse_cases %<>% add_row(iso3c = "PRT", year = 2006, rate = 27.5)
+collapse_cases %<>% add_row(iso3c = "PRT", year = 2007, rate = 27.5)
+
+stat_rates <- rbind(stat_rates_one, more_cases)
+stat_rates %<>% select(iso3c, year, fn1, fn2, fn3, rate)
+
+collapse_cases %<>% mutate(fn1 = NA, fn2 = NA, fn3 = NA)
+
+stat_rates <- rbind(stat_rates, collapse_cases)
+
+stat_rates %<>% mutate(explanation = paste(fn1, fn2, fn3, sep = " "))
+stat_rates %<>% select(iso3c, year, explanation, rate)
+stat_rates %<>% mutate(note = NA)
+stat_rates %<>% mutate(category = "statutory_rate")
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+
+stat_rates <- left_join(all_tocs, stat_rates, by = c("iso3c", "year"))
+
+stat_rates$rate[which(stat_rates$iso3c == "BES" & stat_rates$year %in% c(2012:2021))] <- 0 
+stat_rates$rate[which(stat_rates$iso3c == "CRI" & stat_rates$year %in% c(2020:2021))] <- 30
+stat_rates$rate[which(stat_rates$iso3c == "INF" & stat_rates$year == 2019)] <- 30
+stat_rates$rate[which(stat_rates$iso3c == "JEY" & stat_rates$year %in% c(2009:2021))] <- 0 
+
+```
+
+
+
+```{r complete table for all years and save}
+
+
+
+all_potential <- all_tocs %>% select(country, iso3c) %>% distinct(iso3c)
+
+all_potential %<>% 
+  slice(rep(1:n(), each = length(years))) %>% add_column(year = rep(years, times = nrow(all_potential))) 
+
+
+stat_rates <- left_join(all_potential, stat_rates, by = c("iso3c", "year"))
+
+write_csv(stat_rates, here("data-created/ey_stat_rates.csv"))
+
+
+```
+
+
+# Capital gains
+What is the potential treaty shopping issue with capital gains taxes? Most treaties allocate right to tax capital gains from movable assets such as shares to residence countries exclusively. Some allocate more taxing rights to source countries, for example many treaties signed by the United States. Capital gains from alienation of immovable property can generally be taxed at source (not many exceptions I think). Issues arise with regards to taxation of shares in companies (generally and land-rich companies only). These two issues have been coded by the ICTD tax treaty dataset.
+
+16% of the cases do not levy capital gains tax at all (potentially more, since not all may be captured here).
+We can assume that immobile assets (even if owned by non-residents) would always be taxed under that rate, since it would be possible to argue that a permanent establishment is connected with that.
+
+For transfers of shares, I assume that these would only be taxed if it is specified that non-residents are liable to the tax. In contrast, if the document only contains a reference that capital gains are taxed like ordinary income, 
+
+Within the EY Corporate Tax Guide, the challenge is to find out whether countries attempt to tax transfers of shares at source - and whether this applies to all shares or only those of land-rich companies. This will likely need to be hand-coded.
+Data on taxation of indirect transfers is likely not to be included in EY. This needs to be found out by other means.
+
+
+```{r capital gains tax rates}
+
+cap_gains_tax <- whole_table %>% filter(cat_1_simpl == "Capital Gains Tax Rate (%)")
+
+
+# exclude those that likely do not apply to shares
+
+
+cap_gains_tax %<>% filter(
+    !(iso3c == "BEL" & designation == "Tangible and Intangible Assets"),
+    !(iso3c == "BES" & designation == "Real Estate Tax Rate (%)"),
+    !(iso3c == "EGY" & designation == "Sales of Other Assets"),
+    !(iso3c == "FJI" & designation == "Land Sales Tax Rate (%)"),
+    !(iso3c == "GUY" & designation == "Short-Term Capital Gains Tax Rate (%)"),
+  !(iso3c == "JOR" & designation == "On Depreciable Assets"),
+      !(iso3c == "PHL" & designation == "Real Property"))
+
+#errors
+
+cap_gains_tax$rate3[which(cap_gains_tax$iso3c == "FRA" & cap_gains_tax$year %in% c(2007:2016))] <- 33.33
+cap_gains_tax$rate3[which(cap_gains_tax$iso3c == "ITA" & cap_gains_tax$year %in% c(2011:2012))] <- 27.5
+
+
+
+cap_gains_tax %<>% mutate(max_rate = pmax(rate1, rate2, rate3, rate4, rate5, rate6, na.rm = TRUE))
+
+#specific applicable rates
+
+cap_gains_tax %<>% mutate(specific_app_rate = NA)
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "ARG" & cap_gains_tax$year > 2013)] <- 15
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "BLR" & cap_gains_tax$year %in% c(2013:2015))] <- 9
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "CHN")] <- 10
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "FJI" & cap_gains_tax$year %in% c(2004:2009))] <- 0
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "MNE" & cap_gains_tax$year == 2006)] <- 15
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "PER" & cap_gains_tax$year > 2008)] <- 5
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "TUR" & cap_gains_tax$year %in% c(2007:2010))] <- 0
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "UGA" & cap_gains_tax$year %in% c(2004:2016))] <- 0
+cap_gains_tax$specific_app_rate[which(cap_gains_tax$iso3c == "VNM" & cap_gains_tax$year %in% c(2004:2006))] <- 25
+
+cap_gains_tax %<>% mutate(appl_rate = coalesce(specific_app_rate, as.numeric(max_rate), na.rm = TRUE))
+
+
+
+more_cases <- cap_gains_tax %>% group_by(iso3c, year) %>% filter(n() > 1)
+cap_gains_taxs_one <- cap_gains_tax %>% group_by(iso3c, year) %>% filter(n() == 1)
+
+
+more_cases %<>% filter(
+    !(iso3c == "PRT" & designation != "Nonresidents without Permanent Establishments in Portugal"),
+    !(iso3c == "ZWE" & designation != "Capital Gains Tax Rate (%)"),
+    !(iso3c == "GTM" & designation != "Optional Tax Regime"),
+      !(iso3c == "PHL" & designation != "Shares Other Sellers"))
+
+cap_gains_tax_rates <- rbind(more_cases, cap_gains_taxs_one)
+write_csv(cap_gains_tax_rates, here("data-created/cap_gains_rates.csv"))
+
+```
+
+
+
+# Producing complete table
+
+
+
+```{r add together}
+all_tables <- bind_rows(dividends_subst = dividends_subst, 
+                        dividends_port = dividends_port, 
+                        interest_general = interest_general, 
+                        interest_bank = interest_bank, 
+                        royalties_general = royalties_general, 
+                        royalties_copyright = royalties_copyright, 
+                        technical_services = technical_services, 
+                        .id = "category")
+
+all_tables %<>% mutate(explanation = paste(fn1, fn2, fn3, fn4, fn5, fn6, sep = " "))
+
+
+all_tables %<>% mutate(rate_appl = ifelse(category == "dividends_subst", min_rate, max_rate))
+
+```
+
+Generally, I assume that the highest rate is the one applicable on payments to non-residents. If lower rates are provided for these may often be rates on payments to residents, to specific types of taxpayers or rates that are available in some treaties. However, in some jurisdictions the highest rate only applies to payments to low-tax jurisdictions, tax havens, or similar concepts. This would be a relevant information relevant to know.
+
+For dividends, an adjustment can be made for equalization taxes, which only few countries have, among them Colombia and Argentina.
+
+
+```{r tax haven rules}
+instruction_list <- list(
+list("ECU", c(2011:2017), c("dividends_subst"), 10),
+list("ECU", c(2019:2021), c("dividends_subst"), "highest"),
+list("EST", c(2004:2009), c("dividends_subst"), "highest"),
+list("FRA", c(2010:2021), c("dividends_subst", "dividends_port", "interest_general", "interest_bank"), "highest"),
+list("FRA", c(2013:2021), c("royalties_general", "royalties_copyright"), "highest"),
+list("LTU", c(2004:2009), c("dividends_subst"), "highest"),
+list("LVA", c(2013:2021), c("dividends_subst"), "rate2"),
+list("PRT", c(2013:2021), c("dividends_subst", "interest_general", "interest_bank", "royalties_general", "royalties_copyright"), 35),
+list("SWE", c(2004:2021), c("dividends_subst"), "lowest"),
+list("TUN", c(2015:2021), c("dividends_subst", "interest_general", "interest_bank", "royalties_general", "royalties_copyright", "technical_services"), 25), 
+list("BRA", c(2015:2021), c("interest_general", "interest_bank", "royalties_general", "royalties_copyright", "technical_services"), 25), 
+list("LVA", c(2014:2021), c("interest_general", "interest_bank", "royalties_general", "royalties_copyright"), "rate2"), 
+list("MEX", c(2005:2021), c("interest_general", "interest_bank", "royalties_general", "royalties_copyright", "technical_services"), 40), 
+list("NLD", c(2021), c("interest_general", "interest_bank", "royalties_general", "royalties_copyright"), "highest"),
+list("NOR", c(2021), c("interest_general", "interest_bank", "royalties_general", "royalties_copyright"), "highest"),
+list("SLV", c(2010:2021), c("dividends_subst", "interest_general", "interest_bank", "royalties_general", "royalties_copyright", "technical_services"), "highest"),
+list("EST", c(2004:2021), c("technical_services"), "highest"),
+list("LVA", c(2004:2017), c("technical_services"), "highest"),
+list("NIC", c(2014:2019), c("technical_services"), 17),
+list("NIC", c(2020:2021), c("technical_services"), 30)
+)
+
+all_tables %<>% mutate(special_rate_th = NA)
+add_tax_haven_rules <- function(df, instructions){
+  rows <- which(df$iso3c %in% instructions[[1]] & df$year %in% instructions[[2]] & df$category %in% instructions[[3]])
+  df$special_rate_th[rows] <- instructions[[4]]
+  return(df)
+}
+
+for (i in 1:length(instruction_list)) {
+  all_tables <- add_tax_haven_rules(all_tables, instruction_list[[i]])
+}
+
+all_tables %<>% mutate(rate_th = case_when(special_rate_th == "highest" ~ max_rate,
+                                   special_rate_th == "lowest" ~ rate1,
+                                   special_rate_th == "rate2" ~ rate2))
+
+all_tables %<>% mutate(rate_gen_if_th = NA)
+
+rows_with_th_rate <- which(!is.na(all_tables$rate_th))
+
+for (i in 1:length(rows_with_th_rate)) {
+  col_index  <- which(all_tables[rows_with_th_rate[i], 4:9] == all_tables$rate_th[rows_with_th_rate[i]])
+ if (col_index == 1) {
+   all_tables$rate_gen_if_th[rows_with_th_rate[i]] <- 0 
+ } else {
+  all_tables$rate_gen_if_th[rows_with_th_rate[i]] <- all_tables[[rows_with_th_rate[i], col_index + 2]] 
+ }
+}
+
+
+
+all_tables %<>% mutate(rate_th = coalesce(rate_th, as.numeric(special_rate_th)))
+
+all_tables %<>% select(-c(special_rate_th))
+
+
+```
+
+```{r applicable dividend payments}
+
+#generally lowest except for:
+instruction_list <- list(
+list("ABW", c(2004:2021), "highest"),
+list("ALB", c(2004), "highest"),
+list("BEL", c(2010:2015), 25),
+list("BEL", c(2016), 27),
+list("BEL", c(2017:2021), 30),
+list("CIV", c(2004:2021), "rate2"),
+list("COL", c(2017:2019), "rate2"),
+list("COL", c(2020:2021), "rate3"),
+list("CZE", c(2008:2021), "rate2"),
+list("DZA", c(2012:2017), "highest"),
+list("ESP", c(2012:2014), "highest"),
+list("FIN", c(2011:2019), "highest"),
+list("FIN", c(2020:2021), "rate3"),
+list("GAB", c(2011:2021), "highest"),
+list("HUN", c(2004:2005), "rate2"),
+list("IDN", c(2004:2021), "highest"),
+list("IMN", c(2004:2006), "highest"),
+list("ISR", c(2004:2021), "highest"),
+list("ITA", c(2004:2021), "highest"),
+list("JAM", c(2004:2021), "highest"),
+list("LUX", c(2012:2021), "highest"),
+list("LVA", c(2004:2021), "highest"),
+list("MDG", c(2015:2019), "highest"),
+list("MOZ", c(2013:2021), "highest"),
+list("MWI", c(2017:2021), "highest"),
+list("NIC", c(2016:2019), "highest"),
+list("PAK", c(2004:2015), 10),
+list("PAK", c(2016:2017), 12.5),
+list("PAK", c(2018:2021), 15),
+list("PNG", c(2015:2021), "highest"),
+list("PRY", c(2006:2019), "highest"),
+list("PSE", c(2008:2009), "highest"),
+list("QAT", c(2004:2021), 0),
+list("ROU", c(2004:2005), "highest"),
+list("RWA", c(2014:2021), "highest"),
+list("SVN", c(2004), "rate2"),
+list("SYR", c(2005), 0),
+list("TCD", c(2020:2021), "highest"),
+list("TZA", c(2004:2014), "highest"),
+list("UZB", c(2019:2021), "highest"),
+list("VEN", c(2004:2021), 0), #equalization rate
+list("ZMB", c(2019:2021), "highest"),
+list("ZWE", c(2004:2021), "highest")
+)
+
+all_tables %<>% mutate(special_div_rate = NA)
+add_dividend_rates <- function(df, instructions){
+  rows <- which(df$iso3c %in% instructions[[1]] & df$year %in% instructions[[2]] & df$category == "dividends_subst")
+  df$special_div_rate[rows] <- instructions[[3]]
+  return(df)
+}
+
+for (i in 1:length(instruction_list)) {
+  all_tables <- add_dividend_rates(all_tables, instruction_list[[i]])
+}
+
+all_tables %<>% mutate(rate_div = case_when(special_div_rate == "highest" ~ max_rate,
+                                   special_div_rate == "rate2" ~ rate2,
+                                   special_div_rate == "rate3" ~ rate3))
+all_tables %<>% mutate(rate_div = coalesce(rate_div, as.numeric(special_div_rate)))
+
+all_tables %<>% mutate(rate_appl = coalesce(rate_gen_if_th, rate_div, rate_appl))
+
+all_tables %<>% select(-c(rate_gen_if_th, special_div_rate, rate_div))
+
+```
+
+
+
+Argentinian and Colombian equalization tax on dividends paid out of untaxed profits probably not akin to a withholding tax (see page 110 of Colombian Expert Commission report). Sometimes, special provisions have been negotiated such as in the treaty with France, where the equalization tax is reduced to 15%, but not to 5% like the withholding tax on dividends paid out of profits.
+
+Check El salvador other payments 2010
+Chile 2010 to 2012 higher rate for service payments
+0 general interest withholding rates are, among others, assumed for Paraguay, Zimbabwe, Austria, as well as for Malawi until 2018. 
+
+
+```{r add to tocs}
+all_tables %<>% select(iso3c, year, explanation, rate_appl, rate_th, category)
+all_tables %<>% mutate(note = NA)
+
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+categories <- levels(as.factor(all_tables$category))
+all_tocs %<>% 
+  slice(rep(1:n(), each = length(categories))) %>% add_column(category = rep(categories, times = nrow(all_tocs)))
+all_tables <- left_join(all_tocs, all_tables, by = c("iso3c", "year", "category"))
+```
+
+
+```{r manual cleaning}
+
+# BES do not have a corporate income tax and no withholding taxes, but this is not in the table, so a zero is manually added
+
+  all_tables$rate_appl[which(all_tables$iso3c == "BES")] <- 0
+  all_tables$explanation[which(all_tables$iso3c == "BES")] <- "manually added"
+
+
+#a 0 is assumed for missing values, i.e. if no withholding rate is included in the table or if no 
+  all_tables$explanation[which(is.na(all_tables$rate1))] <- "assumed zero"
+  all_tables %<>% mutate(across(.cols = c("rate_appl"), ~ recode(.x, .missing = 0)))
+
+```
+
+
+```{r complete table for all years and save}
+cap_gain <- read_csv(here("data-created/cap_gains_non_residents.csv"))
+cap_gain %<>% rename(rate_appl = rate)
+stat_rates %<>% rename(rate_appl = rate)
+
+all_tables <- bind_rows(all_tables, cap_gain, stat_rates)
+
+
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+
+all_potential <- all_tocs %>% select(country, iso3c) %>% distinct(iso3c)
+
+categories <- levels(as.factor(all_tables$category))
+
+
+all_potential %<>% 
+  slice(rep(1:n(), each = length(years))) %>% add_column(year = rep(years, times = nrow(all_potential))) 
+all_potential %<>% 
+  slice(rep(1:n(), each = length(categories))) %>% add_column(category = rep(categories, times = nrow(all_potential)))
+
+all_tables <- left_join(all_potential, all_tables, by = c("iso3c", "year" ,"category"))
+write_csv(all_tables, here("data-created/all_withholding.csv"))
+
+
+```
+
+Some manual work should aim at looking where certain domestic rates are only applied to a certain subset of states (e.g., uncooperative states). This can then be better reflected in country-value pairs. France is an example.
+
+
+# Mapping data availability
+
+```{r mapping data availability}
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+
+all_potential <- all_tocs %>% select(country, iso3c) %>% distinct(iso3c)
+
+
+all_potential %<>% 
+  slice(rep(1:n(), each = length(years))) %>% add_column(year = rep(years, times = nrow(all_potential)))
+
+all_tocs %<>% add_column(id = 1)
+all_potential %<>% left_join(all_tocs[c("iso3c", "year", "id")], by = c("iso3c", "year"))
+
+all_missing <- all_potential %>% filter(is.na(id)) %>% select(iso3c)
+
+```
+
+
+
+# Comparison with other data
+
+```{r compare with other data}
+
+## Deloitte
+
+deloitte_2020 <- readRDS(here("data-created/deloitte_withholding.RDS"))
+
+### replacing Belgium's "various" falsely interpreted by the function as maximum rate for royalties with the actual 30%
+deloitte_2020$royalties$wth_rate_max[18] <- 30
+deloitte_2020 %<>% map(mutate, year = 2020)
+### The value for Ecuador is "varies". This will need to be verified.
+
+## Loading replication data from Arel-Bundock 2017 for the year 2012
+bun_repl_data <- read_csv(here("data-raw/dat_replication_20160628.csv"))
+
+### separate dataset into a list of datasets for the different types of payment
+bun_repl_data %<>% distinct(iso3c_host, .keep_all = TRUE)
+
+bun_repl_data <- list(dividends = select(bun_repl_data, c("div_base_min", "div_base_max", "iso3c_host")),
+                     interest = select(bun_repl_data, c("int_base_min", "div_base_max", "iso3c_host")),
+                     royalties = select(bun_repl_data, c("roy_base_min", "div_base_max", "iso3c_host")))
+
+bun_repl_data %<>% map(mutate, year = 2012)
+bun_repl_data %<>% map(rename, "wth_rate_min" = 1, "wth_rate_max" = 2, "iso3c" = 3)
+
+## tax index data
+
+tax_index_wth <- readRDS(here("data-created/tax_index_wth.RDS"))
+tax_index_wth <- list(dividends = select(tax_index_wth, c("Year", "wth_div", "iso3c")),
+                     interest = select(tax_index_wth, c("Year", "wth_int", "iso3c")),
+                     royalties = select(tax_index_wth, c("Year", "wth_roy", "iso3c")))
+
+tax_index_wth %<>% map(rename, "year" = "Year", "wth_rate_max" = 2)
+tax_index_wth %<>% map(add_column, wth_rate_min = NA)
+tax_index_wth %<>% map(mutate, wth_rate_max = wth_rate_max*100) # to transform to a percent value
+
+## add datasets together
+deloitte_2020 %<>% map(select, -c(wth_rate_note, country))
+
+# redo with joins
+
+domestic_withholding <- map2(deloitte_2020, bun_repl_data, full_join, by = c("year", "iso3c"))
+domestic_withholding <- map2(domestic_withholding, tax_index_wth, full_join, by = c("year", "iso3c"))
+
+```

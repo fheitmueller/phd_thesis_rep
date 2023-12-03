@@ -1,0 +1,694 @@
+---
+title: "Global Tax Guides"
+author:
+  name: "Frederik Heitmüller"
+  affiliation: "Leiden University, Department for Tax Law"
+  email: "f.heitmuller@law.leidenuniv.nl"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
+bibliography: zotero.bib
+---
+
+```{r setup, echo=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('purrr')) install.packages('purrr'); library('purrr') 
+if (!require('pdftools')) install.packages('pdftools'); library('pdftools') 
+if (!require('qpdf')) install.packages('qpdf'); library('qpdf') 
+if (!require('stringr')) install.packages('stringr'); library('stringr') 
+if (!require('forcats')) install.packages('forcats'); library('forcats') 
+
+devtools::load_all()
+
+# defining for which data years the script should run
+years <- c(2004:2021)
+
+```
+
+In this script, I extract information on domestic withholding taxes and other aspects of corporate taxation from Ernst & Young's corporate Tax Guides. The guides are available for download for the years 2004 to 2019 [here](https://www.ey.com/en_gl/tax-guides/tax-guide-library-archive) and for the year 2020 [here](https://www.ey.com/en_gl/tax-guides/worldwide-corporate-tax-guide-2020). I extract the section "A. At A Glance" of all country chapters of the guides. This section keeps a more or less constant format across country chapters and over all years. It is therefore most suitable for producing a dataset on the features of countries' tax systems. 
+The data presents certain challenges, however. Categories are sometimes named differently (e.g. "Corporate Income Tax" or "Corporate Profits Tax"). Moreover, the table formatting is sometimes ambiguous for the machine (e.g. the same indenting is used for indicating a subcategory of a larger category or a line jump). This presents challenges since the depth of categorizations in not the same across countries. As a consequence, I develop a general extraction script, and specific extraction scripts for certain country-years.
+
+# Table Exraction
+
+```{r meta instructions}
+
+filenames <- list.files(path = here("data-raw/corporate_tax_guides"))
+filenames <- map_chr(filenames, function(x){paste0(here("data-raw/corporate_tax_guides"), "/", x)})
+
+
+# Countries which are listed in the table of contents, but which do not have an "At A Glance" table for the year in question. This is only the case in earlier reports.
+
+instructions <- list(filenames, years)
+
+custom_matches <- c("Netherlands Antilles" = "ANT",
+                    "GUERNSEY, CHANNEL ISLANDS" = "GGY",
+                    "JERSEY, CHANNEL ISLANDS" = "JEY",
+                    "Kosovo" = "KSV",
+                    "Saint-Martin" = "MAF",
+                    "Bonaire, Sint Eustatius and Saba(BES-Islands; extraordinary overseasmunicipalities of the Netherlands)" = "BES",
+                    "Bonaire, Sint Eustatius and Saba (BES-Islands; extraordinary overseas municipalities of the Netherlands)" = "BES")
+
+
+```
+
+To accurately name the tables I extract, I need to first generate a list of all the countries that are in each year's report. For this, I use the reports' table of contents. The pdftools package has a function to read in table of contents. Like this, the list of countries in the reports can be extracted. For the report from 2012, the function does not work (probably because the table of content is not formatted as such. For the year 2012, I therefore read in the content line by line and clean afterwards. Serbia and Montenegro have a separate table but only one entry in the table of content for the years, in which they were still one country. Therefore, I make two separate entries out of Serbia and Montenegro. In some of the reports, a few countries are listed in the table of content but the report does not include a table with their withholding rates (only contact numbers of local experts). I identify these manually and delete them from the list of all countries included. Finally, I add countrycodes with the help of the countrycode package.
+
+
+First, all tables of content are reproduced and saved (see specific file use for that purpose). These are needed later to know, for which years data is available for the respective countries.
+
+The next chunk contains a data cleaning function that is used to clean the "A. At a Glance" sections that are extracted. It proceeds by dividing the content into the main table and the footnotes. 
+The tables often contain specific catgories within larger categories (e.g., Withholding taxes are differentiated into Dividends, Royalties, Interest, etc., or Interest payments are further differentiated into those to financial institutions and others, etc.). In the table this is usually indicated through indenting. The procedure thus detects the level of indentation of the respective label to identify whether the label belongs to a higher category. 
+
+
+```{r data clean function}
+
+data_clean <- function(vec){
+  names(vec) <- c("text", "iso3c", "year")  
+  vec %<>% mutate(first_char = str_sub(vec$text, 1, 1))
+
+# separate main body from footnotes
+  has_footnote <- !is.na(which(vec$first_char %in% c("(","*"))[1])
+
+  if (has_footnote == FALSE) {
+    main <- vec
+  } else {
+    footnotes <- vec %>% slice(which(vec$first_char %in% c("(","*"))[1]:nrow(vec))
+    footnotes %<>% select(1)
+    main <- vec %>% slice(1:which(vec$first_char %in% c("(","*"))[1] - 1) 
+  }
+
+  # identifying the location of the rate by searching for a number or a dash preceded by two whitespaces
+  main %<>% mutate(number_location = coalesce(str_locate(main$text, "(?<=  )\\d|(?<=  )–")[, 1],
+                                              str_locate(main$text, "[:digit:]*(?=/)")[, 1],
+                                              str_locate(main$text, "[:digit:]*(?= \\(\\w\\))")[, 1]))
+  
+  main %<>% mutate(rate = str_sub(text, number_location, -1))
+  main$rate %<>% str_replace_all(" to ", "/")
+  main$rate %<>% str_replace_all(" or ", "/")
+  main %<>% separate(rate, into = c("rates", "footnotes"), c("\\(|\\*"), extra = "merge")
+  main %<>% mutate(foot_loc = str_locate(main$text, c("\\((?=\\w\\))|\\*"))[ ,1])
+  main %<>% mutate(footnotes = str_sub(text, foot_loc))
+  main %<>% mutate(text = str_sub(text, 1, coalesce(foot_loc - 1, str_length(text))))
+  main$footnotes %<>% str_replace_all("(?<!\\()\\d", "")
+
+  # some countries have the rate 331/3 (e.g. France, Jamaica), this is transformed here
+  main$rates %<>% str_replace_all("331/3", "33.33")
+  main$rates %<>% str_replace_all("33⅓", "33.33")
+  main %<>% separate(rates, into = c("rate1", "rate2", "rate3", "rate4", "rate5", "rate6"), "/")
+
+  main %<>% mutate(designation = str_sub(text, 1, ifelse(!is.na(number_location), number_location - 1, -1)))
+  main %<>% mutate(designation = trimws(designation, "right"))
+
+  # filter out those without designation (usually where there is a title line) or where first character is a number
+  main %<>% filter(designation != "")
+  main %<>% filter(substr(designation, 1, 10) != "          ")
+  main %<>% filter(!first_char %in% c(1:9))
+
+
+  main %<>% mutate(second_char = str_sub(main$designation, 2, 2),
+                  third_char = str_sub(main$designation, 3, 3),
+                  fourth_char = str_sub(main$designation, 4, 4),
+                  fifth_char = str_sub(main$designation, 5, 5))
+
+  main %<>% mutate(cat_1 = ifelse(first_char != " ", designation, NA))
+  main %<>% fill(cat_1, .direction = c("down"))
+
+  main %<>% mutate(level = case_when(first_char != " " ~ 1, 
+                                     first_char == " " & second_char != " " ~ 2,
+                                     first_char == " " & second_char == " " & third_char != " " ~ 3,
+                                     first_char == " " & second_char == " " & third_char == " " & fourth_char != " " ~ 4,
+                                     first_char == " " & second_char == " " & third_char == " " & fifth_char != " " ~ 5,
+                                     first_char == " " & second_char == " " & third_char == " " & fifth_char == " " ~ 6))
+  
+
+# trim whitespace
+
+  main %<>% mutate(designation = trimws(designation, "left"))
+  
+  
+  # dealing with line jumps and subcategories
+  
+  # special cases
+  ## El Salvador
+  
+  if (main$year[1] == 2007 & main$iso3c[1] == "SLV") {
+    main$level[5:12] <- main$level[5:12] + 1
+  }
+  
+  
+  for (i in 1:nrow(main)) {
+    end_of_group <- which(main$level[i:nrow(main)] <= main$level[i])[2] + i - 2
+    if (is.na(end_of_group)) {
+      end_of_group <- nrow(main)
+    }
+    
+    level_here <- main$level[i]
+    one_up <- which(main$level[i:end_of_group] == level_here + 1)
+    two_up <- which(main$level[i:end_of_group] == level_here + 2)
+    one_up <- one_up + i - 1
+    two_up <- two_up + i - 1
+  
+  # in case the indenting is by two and not by one  
+    if (is_empty(one_up) & !is_empty(two_up)) {
+      one_up <- two_up
+    }
+    
+    containing_numbers <- which(!is.na(main$number_location[i:end_of_group]))
+    containing_numbers <- containing_numbers + i - 1  
+  
+    # in case of level 1 only footnotes are copied, not the desigantion 
+  
+   if (level_here == 1 &
+      length(one_up) > 1 &
+      length(containing_numbers) != 1) {
+     
+      for (k in 1:length(one_up)) {
+  
+   main$footnotes[one_up[k]] <- paste(main$footnotes[i],
+                                        main$footnotes[one_up[k]],
+                                        sep = "")
+     }
+    }  
+     
+    if (level_here > 1) {
+    # the case where another category is started
+      if (length(one_up) > 1 & 
+         length(containing_numbers) != 1) {
+       
+        for (k in 1:length(one_up)) {
+     main$designation[one_up[k]] <- paste(main$designation[i],
+                                          main$designation[one_up[k]],
+                                          sep = " ")
+     main$footnotes[one_up[k]] <- paste(main$footnotes[i],
+                                          main$footnotes[one_up[k]],
+                                          sep = "")
+     
+       }
+      }
+      # the case where there is just a line jump
+     if (length(one_up) > 0 & 
+         length(containing_numbers) == 1) {
+       main$designation[containing_numbers] <- paste(main$designation[i:containing_numbers], collapse = " ")
+       
+         }
+    
+    
+      }
+    }
+  
+  
+  # filter out those without number
+  main %<>% filter(!is.na(number_location))
+  main %<>% select(-c(text, first_char, second_char, third_char, fourth_char, fifth_char, level, number_location))
+  
+  
+  # add footnotes
+  
+  ## clean footnotes
+  if (has_footnote == TRUE) {
+    footnotes %<>% mutate(number = str_extract(str_sub(text, 1,3),c("\\(\\w\\)|\\*")))
+    
+    footnotes$text %<>% trimws
+    
+    
+    pl <- which(!is.na(footnotes$number))
+    
+    footnotes <- t_pdf_tbl(footnotes, pl, 1)
+    
+    footnotes$number %<>% str_remove_all("\\)")
+    footnotes$number %<>% str_remove_all("\\(")
+    
+    ## add footnotes to space in main
+    main$footnotes %<>% trimws
+    main$footnotes %<>% str_remove_all("NA")
+    main$footnotes %<>% str_remove_all("\\)")
+    main$footnotes %<>% str_remove_all("\\(")
+    main$footnotes %<>% str_remove_all(" ")
+    main %<>% separate(footnotes, into = c("fn1", "fn2", "fn3", "fn4", "fn5", "fn6"), sep = c(1:5))
+    
+    main <- left_join(main, footnotes, by = c("fn1" = "number"))
+    main <- left_join(main, footnotes, by = c("fn2" = "number"))
+    main <- left_join(main, footnotes, by = c("fn3" = "number"))
+    main <- left_join(main, footnotes, by = c("fn4" = "number"))
+    main <- left_join(main, footnotes, by = c("fn5" = "number"))
+    main <- left_join(main, footnotes, by = c("fn6" = "number"))
+    
+    main %<>% select(-c(fn1, fn2, fn3, fn4, fn5, fn6, foot_loc))
+    main %<>% rename("fn1" = 11, "fn2" = 12, "fn3" = 13, "fn4" = 14, "fn5" = 15, "fn6" = 16)
+  } else {
+    main %<>% add_column(fn1 = NA, fn2 = NA, fn3 = NA, fn4 = NA, fn5 = NA, fn6 = NA)
+    main %<>% select(-c(footnotes, foot_loc))
+  }
+  
+  return(main)
+}
+
+
+```
+
+
+```{r common functions}
+
+extracting_content <- function(lines, upper_limit, lower_limit){
+  #the following lines remove the first line from each page where the page number and the country name appear
+
+lines <- map(lines, readr::read_lines)
+
+lines %<>% map(function(x){x <- x[-1]})
+lines %<>% flatten_chr
+
+## identify the lines in which a table starts and ends
+relevant_lines1 <- str_which(lines, upper_limit)
+relevant_lines2 <- str_which(lines, lower_limit)
+
+## extract the glance tables (the content in between the start and end lines) and put all of the in a list 
+list_of_tables <- c()
+for (i in 1:length(relevant_lines1)) {
+  vec <- paste(lines[(relevant_lines1[i] + 1):(relevant_lines2[i] - 1)], collapse = " ")
+  list_of_tables <- append(list_of_tables, vec)
+}
+  return(list_of_tables)
+}
+
+
+```
+
+
+In  the next chunk, the pdf reports are read into R line by line and the cleaning function is applied.
+
+```{r read in pdf}
+
+
+read_data <- function(num, instructions, all_tocs_split){
+
+
+  # read in the content
+  lines <- pdf_text(instructions[[1]][[num]]) 
+  
+  # take out empty pages, which would generate problems for the read lines function
+  if (length(which(lines == "")) > 0) {
+    lines <- lines[-c(which(lines == ""))]
+  }
+  lines <- as.list(lines)
+  lines <- map(lines, readr::read_lines)
+  lines %<>% map(function(x){x <- x[-1]})
+  lines %<>% flatten_chr
+
+## identify the lines in which a table starts and ends
+relevant_lines1 <- str_which(lines, "A. At a Glance|A. At a glance")
+relevant_lines2 <- str_which(lines, "B. Taxes on Corporate Income|B. Taxes on corporate income")
+
+## extract the glance tables (the content in between the start and end lines) and put all of the in a list 
+list_of_tables <- c()
+for (i in 1:length(relevant_lines1)) { 
+vec <- as.data.frame(lines[(relevant_lines1[i] + 1):(relevant_lines2[i] - 1)])
+list_of_tables <- append(list_of_tables, vec)
+}
+  
+
+  list_of_tables <- as.list(list_of_tables)
+  list_of_tables %<>% map(data.frame)
+
+  # adding countrynames with the table of content
+  
+  ## run the table of content extraction function developed above
+  toc <- all_tocs_split[[num]]
+  
+  ## add countrynames
+  list_of_tables <-  map(seq_along(toc$country), function(i){add_column(list_of_tables[[i]], iso3c = toc$iso3c[[i]])})
+  
+  ## add the year
+  list_of_tables <-  map(list_of_tables, add_column, year = instructions[[2]][[num]])
+  
+  ## run the data clean function developed above
+  list_of_tables_clean <- map(list_of_tables, data_clean)
+  list_of_tables_clean %<>% reduce(rbind)
+  return(list_of_tables_clean)
+}
+
+```
+
+The following chunk is to extract those paragraphs that specify the treatment of capital gains.
+
+The procedure takes advantage of the fact that almost all country chapters contain a paragraph within the section "B. Taxes on Corporate Income and Capital Gains", that is preceded by the sentence "Capital Gains" or something similar, written in bold. I rely on the funtion "pdf_data" from the pdftools package, which extracts all individual words from a pdf together with additional data, such as the pagenumber, the location on the page (x and y coordinates), the font and the font size. I identify the relevant paragraphs by looking for the word "Capital" written in the specific font (usually a bold font) and the respective font size (9 or 9.5). I then extract all the subsequent words until the next word that introduces a new paragraph. 
+
+To correctly link the paragraphs to countries, I run another procedure in which I identify from which page location to which page location the information for one country is contained. This is necessary, since sometimes several countries are written on one page, etc. If the start of the paragraph is contained within the bounds, then I know it should be attributed to that country. 
+
+For those countries that do not contain a specific paragraph on capital gains, I extract the whole section "B. Taxes on Corporate Income and Capital Gains" using the "pdf_text" function which extracts whole lines instead of words. 
+
+Some difficulties were encountered for which solutions had to be found:  
+First, the "pdf_data" function did not work for all pdfs from all years. Errors were returned. After some searching, I found out that these errors were due to the first pages and last pages in the pdf document, i.e., those that do not contain country-specific information. 
+
+```{r read in descriptions}
+
+
+read_descriptions <- function(num, instructions, all_tocs_split, other_sec, custom_matches, para_header){
+
+
+  # read in the content
+  pages <- pdf_text(instructions[[1]][[num]]) 
+  
+ 
+   #the following lines remove the first line from each page where the page number and the country name appear
+  lines <- list(pages)
+  
+
+  list_of_tables <- extracting_content(lines, "B. Taxes", "C. Determination|C. Customs|C. License|C. Fees|C. Corporate License|C. Other|C. Foreign|C. Miscellaneous|C. Value|C. Treaty|C. Payroll")
+
+  
+  # extract the specific paragraphs on capital gain with the more detailed word for word extraction method
+  
+  other_sec <- other_sec[num]
+
+  other_sec_loc <- which(str_detect(pages, other_sec))
+  other_sec_loc <- other_sec_loc[length(other_sec_loc)]
+
+  toc <- all_tocs_split[[num]]
+
+  first_country <- toc$country[1]    
+  first_country_loc <- which(str_detect(pages, first_country))
+  first_country_loc <- first_country_loc[which(first_country_loc > 14)]
+  first_country_loc <- first_country_loc[1]
+  
+  
+  qpdf::pdf_subset(
+input = instructions[[1]][[num]],
+output = here("data-raw/corporate_tax_guides/short.pdf"),
+pages = c(first_country_loc:(other_sec_loc - 2))
+)
+  
+    text_data <- pdf_data(here("data-raw/corporate_tax_guides/short.pdf"), font_info = T)
+
+  # add the page number to the respective data frame
+
+  text_data <- map(seq_along(text_data), function(X){mutate(text_data[[X]], page_no = X)}) # capital X is necessary, because there is already a variable called "x" in the respective data frame
+  
+  # collapse all pages into one dataframe
+  text_data %<>% reduce(rbind)
+  
+  #clean font names (take away what is before the + sign, which seems to be year-specific)
+  text_data %<>% mutate(font_name = str_sub(font_name, start = str_locate(font_name, "\\+")[1] + 1, end = -1))
+
+  # These are the font names and font sizes that are used for the introduction of the specific paragraphs within the "Taxes on Corporate Income section 
+  
+  main_font_names <- c("EYGothicCondDemiPS", "EYInterstate-Bold")
+  main_font_size <- c(9, 9.5)
+
+  
+  df <- text_data
+  df %<>% filter(font_size %in% main_font_size)
+  df$font_name %<>% as.factor()
+  df %<>% mutate(font_ind = as.numeric(font_name))
+  df %<>% mutate(font_change = c(NA, diff(font_ind)))
+  principal_lines <- which(df$font_change != 0 & df$font_name %in% main_font_names)
+  cap_lines <- which(df$text == para_header)
+  cap_lines <- cap_lines[which(cap_lines %in% principal_lines)]
+  pl_cap_lines <- which(principal_lines %in% cap_lines, arr.ind = TRUE)
+  pl_cap_lines <- pl_cap_lines + 1
+  end_lines <- principal_lines[pl_cap_lines]
+  end_lines <- end_lines - 1
+  
+  if (length(end_lines) < length(cap_lines)) { 
+    end_lines <- c(end_lines, nrow(df))
+  }
+  
+for (i in 1:length(cap_lines)) { 
+    df$text[cap_lines[i]] <- paste(df$text[(cap_lines[i]):(end_lines[i])], collapse = " ")
+}
+
+  df <- df[cap_lines, ]
+  
+  
+  
+  # identifying exact page numbers to attribute parts
+  toc_2 <- text_data %>% filter(font_name %in% main_font_names & font_size %in% c(11, 13))
+  toc_2 %<>% mutate(difference1 = c(1, diff(page_no)))
+  toc_2 %<>% mutate(difference2 = c(1, diff(y)))
+  pl <- which((toc_2$difference1 != 0 | toc_2$difference2 != 0) & 
+                str_sub(toc_2$text, 1, 1) != "(" & 
+                str_sub(toc_2$text, -1, -1) != ")" &
+                str_detect(str_sub(toc_2$text, 1, 1),"[[:upper:]]"))
+
+  toc_2 %<>% t_pdf_tbl(pl, "text")
+  
+  toc_2 %<>% mutate(try = countrycode(text,
+                                  "country.name",
+                                  "country.name"))
+
+
+  toc_2 %<>% mutate(iso3c = countrycode(coalesce(try, text),
+                                    "country.name",
+                                    "iso3c",
+                                    custom_match = custom_matches))
+  
+
+  toc_2 %<>% select(-try)
+# filter out entries in the table of content, which are not countries  
+  toc_2 %<>% filter(!is.na(iso3c))
+  
+
+    toc %<>% left_join(toc_2[c("iso3c", "page_no", "y")], by = "iso3c")
+
+    # calculate end page and end line for each country
+    toc %<>% mutate(page_no_end = NA)
+    toc %<>% mutate(line_end = NA)
+    for (i in 1:nrow(toc) - 1) {
+  toc$page_no_end[i] <- toc$page_no[i + 1]
+  toc$line_end[i] <- toc$y[i + 1] - 1   
+    }
+    toc$page_no_end[nrow(toc)] <- other_sec_loc - 2 
+      toc$line_end[nrow(toc)] <- 1
+
+  
+  
+  
+check_country <- function(page, line){
+    country <- NA #default
+  for (i in 1:nrow(toc)) {
+      if (page > toc$page_no[i] & page < toc$page_no_end[i]) {
+        country <- toc$iso3c[i]
+      }
+    if (page == toc$page_no[i] & line > toc$y[i]) {
+        country <- toc$iso3c[i]
+    }
+    if (page == toc$page_no_end[i] & line < toc$line_end[i]) {
+      country <- toc$iso3c[i]
+    }  
+  }
+return(country)
+    }
+  
+countries <- map2_chr(df$page_no, df$y, check_country)
+df %<>% mutate(country = countries) 
+df %<>% filter(!str_detect(text, "Capital Allowance|Capital allowance|Capital of Company"))  
+ 
+  # adding countrynames with the table of content
+  
+  
+  ## add table of content and extracted info together
+  table <- toc %>% mutate(corp_tax_expl = list_of_tables)
+  
+  ## add specific capital gains explanations
+  table %<>% left_join(df[c("country", "text")], by = c("iso3c" = "country"))
+  table %<>% mutate(corp_tax_expl = case_when(is.na(text) ~ corp_tax_expl))
+  table %<>% select(country, iso3c, year, corp_tax_expl, text)
+  
+  return(table)
+}
+
+
+```
+
+
+```{r run functions}
+
+# load necessary data
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+all_tocs_split <- split(all_tocs, all_tocs$year)
+other_sec <- readRDS(here("data-created/other_sec.rds"))
+
+
+# At a Glance tables
+whole_table <- map(seq_along(1:length(years)), read_data, instructions, all_tocs_split)
+
+whole_table2 <- reduce(whole_table, rbind)
+whole_table2 %<>% mutate(across(.cols = rate1:rate6, .fns = trimws, which = "both"))
+
+write_csv(whole_table2, here("data-created/eyextract.csv"))
+
+
+# capital gains section
+whole_cap_gain <- map(seq_along(1:length(years)), read_descriptions, instructions, all_tocs_split, other_sec, custom_matches, para_header = "Capital")
+
+whole_cap_gain %<>% reduce(rbind)
+write_csv(whole_cap_gain, here("data-created/capital_gains_ey.csv"))
+```
+
+
+
+```{r extracting paragraphs}
+
+read_paras <- function(num, instructions, all_tocs_split, other_sec, custom_matches){
+
+
+  # read in the content
+  pages <- pdf_text(instructions[[1]][[num]]) 
+  
+ 
+  # extract the specific paragraphs on capital gain with the more detailed word for word extraction method
+  
+  other_sec_loc <- which(str_detect(pages, other_sec[num]))
+  other_sec_loc <- other_sec_loc[length(other_sec_loc)]
+
+  toc <- all_tocs_split[[num]]
+
+  first_country <- toc$country[1]    
+  first_country_loc <- which(str_detect(pages, first_country))
+  first_country_loc <- first_country_loc[which(first_country_loc > 14)]
+  first_country_loc <- first_country_loc[1]
+  
+  
+  qpdf::pdf_subset(
+input = instructions[[1]][[num]],
+output = here("data-raw/corporate_tax_guides/short.pdf"),
+pages = c(first_country_loc:(other_sec_loc - 2))
+)
+  
+    text_data <- pdf_data(here("data-raw/corporate_tax_guides/short.pdf"), font_info = T)
+
+  # add the page number to the respective data frame
+
+  text_data <- map(seq_along(text_data), function(X){mutate(text_data[[X]], page_no = X)}) # capital X is necessary, because there is already a variable called "x" in the respective data frame
+  
+  # collapse all pages into one dataframe
+  text_data %<>% reduce(rbind)
+  #take out the first lines
+  text_data %<>% filter(y > 30)
+  if (instructions[[2]][num] == 2011) {
+    text_data %<>% filter(y > 33)
+
+  }
+  #clean font names (take away what is before the + sign, which seems to be year-specific)
+  text_data %<>% mutate(font_name = str_sub(font_name, start = str_locate(font_name, "\\+")[1] + 1, end = -1))
+
+  # These are the font names and font sizes that are used for the introduction of the specific paragraphs within the "Taxes on Corporate Income section 
+  
+  main_font_names <- c("EYGothicCondDemiPS", "EYInterstate-Bold")
+  main_font_size <- c(9, 9.5)
+
+  df <- text_data
+  df %<>% filter(font_size %in% main_font_size)
+  df$font_name %<>% as.factor()
+  df %<>% mutate(font_ind = as.numeric(font_name))
+  df %<>% mutate(font_change = c(NA, diff(font_ind)))
+  principal_lines <- which(df$font_change != 0)
+  df %<>% t_pdf_tbl(principal_lines, 6)
+  heading_lines <- which(df$font_name %in% main_font_names)
+  headings <- df$text[heading_lines]
+  df %<>% t_pdf_tbl(heading_lines, 6)
+  df %<>% mutate(heading = headings)
+  
+  
+  # identifying exact page numbers to attribute parts
+  toc_2 <- text_data %>% filter(font_name %in% main_font_names & font_size %in% c(11, 13))
+  toc_2 %<>% mutate(difference1 = c(1, diff(page_no)))
+  toc_2 %<>% mutate(difference2 = c(1, diff(y)))
+  pl <- which((toc_2$difference1 != 0 | toc_2$difference2 != 0) & 
+                str_sub(toc_2$text, 1, 1) != "(" & 
+                str_sub(toc_2$text, -1, -1) != ")" &
+                str_detect(str_sub(toc_2$text, 1, 1),"[[:upper:]]"))
+
+  toc_2 %<>% t_pdf_tbl(pl, "text")
+  
+  toc_2 %<>% mutate(try = countrycode(text,
+                                  "country.name",
+                                  "country.name"))
+
+
+  toc_2 %<>% mutate(iso3c = countrycode(coalesce(try, text),
+                                    "country.name",
+                                    "iso3c",
+                                    custom_match = custom_matches))
+  
+
+  toc_2 %<>% select(-try)
+# filter out entries in the table of content, which are not countries  
+  toc_2 %<>% filter(!is.na(iso3c))
+  
+
+    toc %<>% left_join(toc_2[c("iso3c", "page_no", "y")], by = "iso3c")
+
+    # calculate end page and end line for each country
+    toc %<>% mutate(page_no_end = NA)
+    toc %<>% mutate(line_end = NA)
+    for (i in 1:nrow(toc) - 1) {
+  toc$page_no_end[i] <- toc$page_no[i + 1]
+  toc$line_end[i] <- toc$y[i + 1] - 1   
+    }
+    toc$page_no_end[nrow(toc)] <- other_sec_loc - 2 
+      toc$line_end[nrow(toc)] <- 1
+
+  
+  
+  
+check_country <- function(page, line){
+    country <- NA #default
+  for (i in 1:nrow(toc)) {
+      if (page > toc$page_no[i] & page < toc$page_no_end[i]) {
+        country <- toc$iso3c[i]
+      }
+    if (page == toc$page_no[i] & line > toc$y[i]) {
+        country <- toc$iso3c[i]
+    }
+    if (page == toc$page_no_end[i] & line < toc$line_end[i]) {
+      country <- toc$iso3c[i]
+    }  
+  }
+return(country)
+    }
+  
+countries <- map2_chr(df$page_no, df$y, check_country)
+df %<>% mutate(iso3c = countries) 
+df %<>% mutate(year = instructions[[2]][num])
+  # adding countrynames with the table of content
+
+  df %<>% select(iso3c, year, heading, text)
+  print(instructions[[2]][num])
+  return(df)
+}
+
+```
+
+
+```{r foreign tax treatment}
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+all_tocs_split <- split(all_tocs, all_tocs$year)
+other_sec <- readRDS(here("data-created/other_sec.rds"))
+
+
+# Dividends section
+all_paras <- map(seq_along(1:length(years)), read_paras, instructions, all_tocs_split, other_sec, custom_matches)
+beepr::beep()
+all_paras %<>% reduce(rbind)
+write_csv(all_paras, here("data-created/all_paras_ey.csv"))
+
+```
+
+
+
+
+

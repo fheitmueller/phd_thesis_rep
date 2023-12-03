@@ -1,0 +1,210 @@
+---
+title: "CbCR implementation"
+author: "Frederik Heitmüller"
+date: "2022-09-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(tidyverse)
+library(magrittr)
+library(knitr)
+library(patchwork)
+library(ggpattern) # at github.com/coolbutuseless/ggpattern
+
+devtools::load_all()
+groupings <- read_rds(here("data-created/groupings.rds"))
+
+ggplot2::theme_set(theme_pubclean())
+
+```
+
+
+
+# Compliance in peer review reports on CbCR
+
+```{r cbcr peer reviews}
+cbcr_peer <- read_csv(here("data-created/cbcr_peer_reviews_summaries.csv"))
+
+legal_framework <- cbcr_peer %>% filter(part == "Part A")
+legal_framework %<>% mutate(length_text = str_count(text))
+
+legal_framework %<>% mutate(imposition_required = ifelse(str_detect(text, "CbC filing requirement|CbC requirement|finalise|finalize|impose and enforce CbC") & length_text < 400, "non_compliance", "compliance"),
+                            secondary_missing = case_when(str_detect(text, "CbC filing requirement|CbC requirement|finalise|finalize") & length_text > 400 & imposition_required == "compliance" ~ "non_compliance", 
+                                                     imposition_required == "non_compliance" ~ "law_not_in_place",
+                                                     str_detect(text, "next") ~ "not_assessed",
+                                                     TRUE ~ "compliance"),
+                            local_filing = case_when(str_detect(text, "local filing") & imposition_required == "compliance" ~ "non_compliance", 
+                                                     imposition_required == "non_compliance" ~ "law_not_in_place",
+                                                     str_detect(text, "next") ~ "not_assessed",
+                                                     TRUE ~ "compliance"),
+                            definition = case_when(str_detect(text, "definition") & imposition_required == "compliance" ~ "non_compliance", 
+                                                     imposition_required == "non_compliance" ~ "law_not_in_place",
+                                                   str_detect(text, "next") ~ "not_assessed",
+                                                     TRUE ~ "compliance"),
+                            revenue_threshold = case_when(str_detect(text, "threshold") & imposition_required == "compliance" ~ "non_compliance", 
+                                                          imposition_required == "non_compliance" ~ "law_not_in_place",
+                                                          str_detect(text, "next") ~ "not_assessed",
+                                                          TRUE ~ "compliance"),
+                            enforcement_measures = case_when(str_detect(text, "enforcement measures|enforcement provisions|enforce compliance") & imposition_required == "compliance" ~ "non_compliance", 
+                                                     imposition_required == "non_compliance" ~ "law_not_in_place",
+                                                     str_detect(text, "next") ~ "not_assessed",
+                                                     TRUE ~"compliance"),
+                            exemption = case_when(str_detect(text, "exemption") & imposition_required == "compliance" ~ "non_compliance", 
+                                                  imposition_required == "non_compliance" ~ "law_not_in_place",
+                                                  str_detect(text, "next") ~ "not_assessed",
+                                                  TRUE ~ "compliance"),
+                            timing = case_when(str_detect(text, "deadline|later than") & imposition_required == "compliance" ~ "non_compliance", 
+                                                     imposition_required == "non_compliance" ~ "law_not_in_place",
+                                               str_detect(text, "next") ~ "not_assessed",
+                                                     TRUE ~ "compliance"))
+
+# taken from https://stackoverflow.com/questions/45515218/combine-rows-in-data-frame-containing-na-to-make-complete-row
+
+legal_framework %<>% select(-c(part, name, text, length_text))
+
+coalesce_by_column <- function(df) {
+  return(coalesce(df[1], df[2]))
+}
+
+legal_framework %<>%
+  group_by(iso3c, phase) %>%
+  summarise_all(coalesce_by_column)
+
+```
+
+
+```{r appropriate use}
+appropriate_use <- cbcr_peer %>% filter(part == "Part C")
+appropriate_use %<>% mutate(text = ifelse(str_detect(text, "next peer review report"), "not_reviewed", text)) 
+appropriate_use %<>% mutate(text = ifelse(text %in% c("-", "Not applicable.", "None.", "not_reviewed", "Not reviewed."), text, "yes"))
+appropriate_use$text %<>% replace_na("not_reviewed")
+
+law_approved <- legal_framework %>% select(iso3c, phase, imposition_required)
+
+appropriate_use %<>% left_join(law_approved, by = c("iso3c", "phase"))
+appropriate_use %<>% mutate(appr = case_when(imposition_required == "compliance" & text == "yes" ~ "non_compliance",
+                                             imposition_required == "non_compliance" ~ "law_not_in_place",
+                                             text %in% c("not_reviewed", "Not reviewed.") ~ "not_assessed",
+                                             text %in% c("-", "None.", "Not applicable.") ~ "compliance"))
+
+appropriate_use %<>% pivot_wider(id_cols = "iso3c", names_from = "phase", values_from = "appr")
+
+```
+
+
+
+Written procedures were not yet monitored in phase 1
+```{r exchanges}
+exchange <- cbcr_peer %>% filter(part == "Part B")
+exchange %<>% mutate(qcaa = ifelse(str_detect(text, regex("have QCAAs in effect|Qualifying Competent Authority agreements in effect", ignore_case = TRUE)), "yes", NA))
+exchange %<>% mutate(processes = ifelse(str_detect(text, "processes and written procedures|processes or written procedures"), "yes", NA))
+
+exchange %<>% select(-c(part, name, text))
+
+exchange %<>%
+  filter(phase > 1) %>% 
+  group_by(iso3c, phase) %>%
+  summarise_all(coalesce_by_column)
+exchange %<>% left_join(law_approved, by = c("iso3c", "phase"))
+exchange %<>% mutate(qcaa = case_when(imposition_required == "compliance" & qcaa == "yes" ~ "non_compliance",
+                                             imposition_required == "non_compliance" & qcaa == "yes" ~ "law_not_in_place",
+                                             imposition_required == "non_compliance" & is.na(qcaa) ~ "law_not_in_place",
+                                             imposition_required == "compliance" & is.na(qcaa) ~ "compliance"),
+                     processes = case_when(imposition_required == "compliance" & processes == "yes" ~ "non_compliance",
+                                             imposition_required == "non_compliance" & processes == "yes" ~ "law_not_in_place",
+                                             imposition_required == "non_compliance" & is.na(processes) ~ "law_not_in_place",
+                                             imposition_required == "compliance" & is.na(processes) ~ "compliance"))
+exchange %<>% select(-(imposition_required))
+
+```
+
+
+
+```{r putting dfs together}
+
+legal_framework %<>% pivot_longer(cols = !c("phase", "iso3c"), names_to = "issue")
+legal_framework %<>% pivot_wider(names_from = "phase", values_from = "value")
+appropriate_use %<>% mutate(issue = "appropriate_use")
+exchange %<>% pivot_longer(cols = !c("phase", "iso3c"), names_to = "issue", values_to = "value")
+exchange %<>% pivot_wider(names_from = "phase", values_from = "value")
+exchange %<>% mutate(`2018` = "not_assessed")
+
+cbcr_peer <- rbind(legal_framework, appropriate_use, exchange)
+cbcr_peer %<>% select(iso3c, issue, `2018`, `2019`, `2020`, `2021`, `2022`)
+cbcr_peer %<>% mutate(across(c("2018", "2019", "2020", "2021", "2022"), ~ replace_na(.x, "not_assessed")))
+```
+
+
+```{r graphs peer reviews}
+cbcr_peer %<>% left_join(groupings[c("iso3c", "composite_group")])
+cbcr_peer %<>% pivot_longer(cols = c("2018", "2019", "2020", "2021", "2022"), names_to = "phase", values_to = "value") 
+cbcr_peer %<>%  mutate(value = factor(value, levels = c("not_assessed", "law_not_in_place", "non_compliance", "compliance")))
+
+cbcr_impl_graph <- function(data, issue_name, title){
+  data %>% 
+  filter(issue == issue_name) %>%
+  group_by(composite_group, phase, value) %>% 
+  summarise(n = n()) %>% ungroup() %>% 
+  ggplot() + 
+  geom_col_pattern(aes(x = composite_group, y = n, pattern = value), position = "stack", fill = "white", colour = "black") + 
+  facet_wrap(~ phase) +
+  labs(title = title, y = "Number of countries") +
+  theme(axis.text.x = element_text(angle = 90), axis.title.x = element_blank()) +
+  scale_pattern_manual(values = choices)
+}
+
+cbcr_impl_graph_alt <- function(data, issue_name, title){
+  data %>% 
+  filter(issue == issue_name) %>%
+  group_by(composite_group, phase, value) %>% 
+  summarise(n = n()) %>% ungroup() %>% 
+  ggplot() + 
+  geom_col_pattern(aes(x = as.integer(phase), y = n, pattern = value), position = "stack", fill = "white", colour = "black") + 
+  facet_wrap(~ composite_group) +
+  labs(title = title, y = "Number of countries") +
+  theme(axis.text.x = element_text(angle = 90), axis.title.x = element_blank()) +
+  scale_pattern_manual(values = choices)
+}
+
+
+choices <- c("none", "circle", "stripe", "crosshatch")
+names(choices) <- levels(cbcr_peer$value)
+
+cbcr_peer %>% 
+  cbcr_impl_graph("processes", "Confidentiality requirements")
+ggsave(here("fig/Figure 5_Compliance with CbCR confidentiality.png"))
+
+#cbcr_peer %>% 
+#  cbcr_impl_graph("imposition_required", "Country-by-country reporting legislation in place")
+#ggsave(here("fig/cbcr_required.png"))
+
+  
+#cbcr_peer %>% 
+#  cbcr_impl_graph("local_filing", "Limitation on local filing")
+#ggsave(here("fig/cbcr_local filing.png"))
+
+#cbcr_peer %>% 
+#  cbcr_impl_graph("appropriate_use", "Appropriate use requirements")
+#ggsave(here("fig/cbcr_appropriate use.png"))
+
+
+#cbcr_peer %>% 
+#  cbcr_impl_graph_alt("processes", "Confidentiality requirements in place")
+#ggsave(here("fig/cbcr_confidentiality_alt.png"))
+
+#cbcr_peer %>% 
+#  cbcr_impl_graph("enforcement_measures", "Enforcement measures")
+#ggsave(here("fig/cbcr_enforcement measures.png"))
+
+#cbcr_peer %>% 
+#  cbcr_impl_graph("exemption", "Exemption")
+#ggsave(here("fig/cbcr_exemption.png"))
+
+cbcr_peer %>% filter(phase == "2022" & issue == "imposition_required") %>% group_by(value) %>% summarise(n = n())
+
+
+```

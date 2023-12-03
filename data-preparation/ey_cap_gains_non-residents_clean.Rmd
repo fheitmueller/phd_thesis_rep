@@ -1,0 +1,828 @@
+---
+title: "Capital gains derived by non-residents"
+author: "Frederik Heitmüller"
+date: "2022-10-11"
+output: html_document
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('purrr')) install.packages('purrr'); library('purrr') 
+if (!require('stringr')) install.packages('stringr'); library('stringr') 
+
+devtools::load_all()
+
+# defining for which data years the script should run
+years <- c(2004:2021)
+
+```
+
+Rates for four different types of capital gains were extracted from the EY Corporate Tax Guides by hand and cross-checked by the researcher. 
+The four different types coded are:
+- “sales of shares of land-rich companies”
+- “sales of shares”; 
+- “indirect sales of shares of land-rich companies”
+- “indirect sales of shares”.
+
+Capital gains tax legislation varies significantly between countries. Some countries levy capital gains taxes as part of the general income tax, whereas other countries have specific legislation, apply differential rates or exempt certain items or taxpayers from capital gains taxation. Hence, a number of decisions had to be taken to produce a comparable data set. The idea behind decisions was to compare the treatment that would apply to the bulk of transactions undertaken by multinational enterprises that invest in developing countries.
+
+- If there is a differentiation between sales by residents and by non-residents, the rate applicable to sales by non-residents was coded. 
+- If there is a differentiation between sales by non-residents with permanent establishment in the country and sales by non-residents without permanent establishment, then the treatment for non-residents without permanent establishment is coded.
+- If there is a differentiation for shares traded on stock-exchanges and shares of private companies, the rate for sales of shares for private companies was coded. 
+- If there is a differentiation between short-term and long-term gains, the rate for long-term gains was coded. 2 years was retained as cut-off, since this is what is often used by countries. 
+- If there is a differentiation between sales of shares from portfolio investment and shares from direct investment (holdings of less or more than a certain percentage, usually 10%), the rate for sales of shares from direct investment was coded. 
+- If there is a monetary threshold above which a higher rate applies, that higher rate is coded
+- Where a company can elect between a net capital gains tax rate and a gross withholding rate, the rate for net income is coded, as this is likely to be the more beneficial rate most of the time. If only a gross withholding rate is available, then that rate was entered.
+- Where the disposal of shares in only certain types of companies is taxed (e.g. only in the mineral sector), then imposition on gains of "land-rich" companies is coded as "yes" or where a higher rate to this type of property applies, the higher rate is retained.
+- Conversely, where only the gains derived by certain types of companies other than in sectors dealing with immovable property (e.g. in the financial sector) are taxed, then an exemption is coded, since MNEs retain choices
+- Where non-residents are only taxed when situated in low-tax jurisdictions or "tax havens", this is not coded, since it is unlikely that a country would sign a tax treaty with such a jurisdiction or that the ultimate beneficiary of the income would reside in such a jurisdiction. Hence one would not expect a treaty shopping risk because of the differential treatment in these jurisdictions. 
+
+A conceptually difficult question is how the cases should be coded where the description simply states that "capital gains are included in ordinary income" (or a similar phrase). The first intuition is to suppose that this would include gains derived by non-residents from local companies. However, if the domestic law contains a provision stating that non-residents are only taxed if they have a permanent establishment in the country and are not taxed on the total income, then gains derived by non-residents would probably not be taxed. If instead, domestic law contains a more general provision, that subjects all income derived within the jurisdiction to tax, then it seems more likely that gains by non-residents from sales of shares are taxed.
+Even in that case, however, it is possible that in practice this right is not enforce due to the difficulty in detecting the sale. 
+Only if the sale needs to be registered.
+
+
+```{r cap gains taxes hand detailed}
+
+cap_gain <- read_csv(here("data-created/capital_gains_ey.csv"))
+stat_rates <- read_csv(here("data-created/ey_stat_rates.csv"))
+
+# further cleaning
+#Canada has specific paragraphs on non-residents, so the others need to be eliminated
+cap_gain <- cap_gain[-which(cap_gain$iso3c == "CAN" & str_detect(str_sub(cap_gain$text, 1, 24), "Capital gains and losses|Capital Gains and Losses")), ]
+cap_gain <- cap_gain[-which(cap_gain$iso3c == "CRI" & str_detect(str_sub(cap_gain$text, 1, 18), "Capital Income Tax")), ]
+
+cap_gain %<>% group_by(iso3c) %>% arrange(year, .by_group = TRUE)
+cap_gain %<>% mutate(text = coalesce(text, corp_tax_expl))
+cap_gain$text %<>% trimws()
+
+cap_gain %<>% mutate(text_same = NA)
+for (i in 2:nrow(cap_gain)) {
+  if (cap_gain$text[i] == cap_gain$text[i - 1]) {
+    cap_gain$text_same[i] <- "same" 
+  } else {
+    cap_gain$text_same[i] <- "change" 
+  }
+}
+
+cap_gain %<>% mutate(no_sent = str_count(text, pattern = "\\."))
+cap_gain %<>% mutate(nonresident = str_detect(text, "Nonresident|nonresident|Non-resident|non-resident|foreign|Foreign"))
+cap_gain %<>% mutate(not_taxed = str_detect(text, "Capital gains are not tax|Capital gains are not subject to tax|Capital gains are exempt from|does not impose a capital gains|does not impose a Capital Gains|does not impose capital gains tax|does not impose a tax on"))
+cap_gain %<>% mutate(indirect = str_detect(text, "Indirect|indirect|outside"))
+cap_gain %<>% mutate(ordinary = str_detect(text, "ordinary|regular"))
+cap_gain %<>% mutate(however = str_detect(text, "However|however|How- ever|How­ ever"))
+
+ordinary <- cap_gain %>% filter(ordinary == TRUE & however == FALSE)
+cap_gains_tax_rates <- read_csv(here("data-created/cap_gains_rates.csv"))
+
+cap_gain %<>% left_join(cap_gains_tax_rates[c("iso3c", "year", "appl_rate")], by = c("iso3c", "year"))
+cap_gain %<>% rename("rate" = "appl_rate")
+
+cap_gain %<>% mutate(note = case_when((not_taxed == TRUE & 
+                                             however == FALSE & 
+                                             nonresident == FALSE &
+                                             no_sent < 4) |
+                                        rate == 0 ~ "exempt",
+                                      ordinary == TRUE & 
+                                             however == FALSE & 
+                                             nonresident == FALSE &
+                                             no_sent < 4 ~ "ordinary"))
+
+
+cap_gain %<>% mutate(land_rich = NA, 
+                     shares = NA,
+                     land_rich_indirect = NA,
+                     shares_indirect = NA)
+
+
+```
+
+I assume that when there is just a reference that capital gains are taxed as ordinary business profits, then this excludes gains that non-residents without a permanent establishment in the country derive from selling a local company or a foreign company.
+
+Brazil levies a higher rate when capital gains are derived by non-residents in low-tax jurisdictions (25% instead of 15%). However, the lower rate is coded here, since it is more likely to be relevant for the treaty shopping scenario, where the ultimate residents are located in capital exporting jurisdictions.
+Italy only levies tax on sales by non-residents if located in a tax haven (27% in 2004), may prevent indirect transfers
+
+Still to check: France
+
+Some indirect transfer rules that are known to exist are not included here: China, Colombia, Senegal, United States
+
+Costa Rica, gains other than from trading are maybe exempt before 2019. Check that
+
+Czech Republic, from 2009 on gains on shares are exempt if seller is located in EU (so a bilateral adjustment may be necessary). In Spain, there are special rules for EU shareholders as well.
+
+
+```{r capital gains functions}
+
+
+
+amend_cols <- function(cap_gain, iso3c, years, columns = "all", value){
+  
+if ("all" %in% columns) {
+  columns <- which(colnames(cap_gain) %in% c("land_rich", "shares"))
+
+} else {
+    columns <- which(colnames(cap_gain) %in% columns)
+}
+
+  rows <- which(cap_gain$iso3c == iso3c & cap_gain$year %in% years)
+
+cap_gain[rows, columns] <- value
+return(cap_gain)
+}
+
+
+add_note <- function(cap_gain, iso3c, years, note){
+  rows <- which(cap_gain$iso3c %in% iso3c & cap_gain$year %in% years)
+  cap_gain$note[rows] <- note
+  return(cap_gain)
+}
+
+change_rate <- function(cap_gain, iso3c, years, value = NA, percentage_adjustment = NA){
+  rows <- which(cap_gain$iso3c == iso3c & cap_gain$year %in% years)
+  if (is.numeric(value)) {
+  cap_gain$rate[rows] <- value
+  }
+  
+  if (!is.na(percentage_adjustment)) {
+     cap_gain$rate[rows] <- cap_gain$rate[rows] * percentage_adjustment
+  }
+  
+  return(cap_gain)
+}
+
+```
+
+
+```{r capital gain handcoded}
+
+
+# Aruba
+cap_gain %<>% add_note("ABW", c(2006:2021), "ordinary")
+
+# Afghanistan
+cap_gain %<>% add_note("AFG", c(2011:2019), "ordinary")
+
+# Angola
+cap_gain %<>% add_note("AGO", c(2004:2011), "exempt") # only sale of fixed assets are mentioned
+
+cap_gain %<>% change_rate("AGO", c(2012:2021), 10) 
+cap_gain %<>% add_note("AGO", c(2012:2021), "ordinary") 
+
+#Albania
+cap_gain %<>% add_note("ALB", c(2010:2014), "included") # according to administrative guidance
+cap_gain %<>% add_note("ALB", c(2015:2018), "exempt") # only included in case of PE or domestic buyer
+cap_gain %<>% add_note("ALB", c(2019:2021), "land-rich_direct_indirect") 
+
+# Netherlands Antilles
+cap_gain %<>% add_note("ANT", c(2004:2010), "exempt") # exemption for offshore companies mentioned
+
+
+# Argentina
+cap_gain %<>% add_note("ARG", c(2004:2010), "included") # specific rule for non-Argentine companies, seems not to include indirect transfers
+cap_gain %<>% add_note("ARG", c(2011:2013), "exempt") 
+cap_gain %<>% add_note("ARG", c(2014:2018), "included") 
+cap_gain %<>% add_note("ARG", c(2019:2021), "included-indirect") 
+cap_gain %<>% change_rate("ARG", c(2014:2021), 13.5) 
+
+# Armenia
+cap_gain %<>% add_note("ARM", c(2011:2021), "ordinary") 
+
+#Australia
+cap_gain %<>% add_note("AUS", c(2004:2007), "included") 
+cap_gain %<>% add_note("AUS", c(2008:2021), "land-rich_direct_indirect") 
+
+#Austria
+cap_gain %<>% add_note("AUT", c(2004:2021), "ordinary") 
+
+
+# Belgium
+cap_gain %<>% add_note("BEL", c(2004:2021), "ordinary") 
+cap_gain %<>% change_rate("BEL", c(2015:2018), value = 0.412) 
+cap_gain %<>% change_rate("BEL", c(2019:2021), value = 15) 
+
+
+# BES 
+cap_gain %<>% add_note("BES", c(2011:2021), "exempt") # foreign companies subject to Netherlands tax regime (which exempts capital gains by non-residents)
+
+# Bangladesh
+cap_gain %<>% add_note("BGD", c(2004:2006), "ordinary") 
+cap_gain %<>% change_rate("BGD", c(2005:2006), 10) 
+cap_gain %<>% add_note("BGD", c(2019:2021), "included-indirect") 
+
+# Bulgaria
+ 
+cap_gain %<>% add_note("BGR", c(2004:2008), "included") 
+cap_gain %<>% change_rate("BGR", c(2004), 15)
+cap_gain %<>% add_note("BGR", c(2009:2021), "ordinary")
+
+# Belarus
+cap_gain %<>% add_note("BLR", c(2008:2021), "included") 
+cap_gain %<>% change_rate("BLR", c(2010), 15)
+cap_gain %<>% change_rate("BLR", c(2011:2012), 12)
+
+# Bolivia
+cap_gain %<>% add_note("BOL", c(2006:2021), "ordinary")
+
+# Brazil
+cap_gain %<>% add_note("BRA", c(2007:2021), "included") 
+cap_gain %<>% change_rate("BRA", c(2016), 15)
+cap_gain %<>% change_rate("BRA", c(2017:2021), 22.5)
+
+# Brunei Darussalam
+
+cap_gain %<>% add_note("BRN", c(2004:2021), "exempt") 
+
+# Botswana
+cap_gain %<>% change_rate("BWA", c(2004), 12.5)
+cap_gain %<>% change_rate("BWA", c(2005:2011), 18.75)
+cap_gain %<>% change_rate("BWA", c(2005:2011), 18.75)
+cap_gain %<>% change_rate("BWA", c(2012:2014), 16.5)
+cap_gain %<>% change_rate("BWA", c(2015:2021), 22.5)
+
+cap_gain %<>% add_note("BWA", c(2004:2014), "ordinary") 
+cap_gain %<>% add_note("BWA", c(2015:2021), "included") 
+
+# Canada 
+
+cap_gain %<>% add_note("CAN", c(2004:2010), "included-land-rich-indirect") 
+cap_gain %<>% add_note("CAN", c(2011:2021), "land-rich_direct_indirect") # only included in case of PE or domestic buyer
+
+# Switzerland
+
+cap_gain %<>% add_note("CHE", c(2004:2021), "ordinary") 
+
+# Chile
+cap_gain %<>% add_note("CHL", c(2008:2010), "ordinary") 
+cap_gain %<>% change_rate("CHL", c(2008:2010), 17)
+cap_gain %<>% add_note("CHL", c(2011:2012), "included") 
+cap_gain %<>% change_rate("CHL", c(2011:2014), 20)
+cap_gain %<>% add_note("CHL", c(2013:2021), "included-indirect") 
+cap_gain %<>% change_rate("CHL", c(2015:2016), 24)
+
+# China
+cap_gain %<>% add_note("CHN", c(2004:2021), "included") 
+
+
+#Cote d'Ivoire
+cap_gain %<>% add_note("CIV", c(2004:2021), "ordinary") 
+
+
+# Cameroon
+cap_gain %<>% add_note("CMR", c(2004:2013), "ordinary") 
+cap_gain %<>% add_note("CMR", c(2014), "included") 
+cap_gain %<>% add_note("CMR", c(2015:2021), "included-indirect") 
+cap_gain %<>% change_rate("CMR", c(2015:2021), 16.5)
+
+# DRC
+cap_gain %<>% add_note("COD", c(2010:2021), "ordinary") 
+
+# Congo Republic
+cap_gain %<>% add_note("COG", c(2004:2013), "ordinary") 
+cap_gain %<>% add_note("COG", c(2014:2021), "included") 
+cap_gain %<>% change_rate("COG", c(2014:2021), 20)
+
+# Colombia
+cap_gain %<>% add_note("COL", c(2004:2021), "ordinary") 
+
+# Cape Verde
+cap_gain %<>% add_note("CPV", c(2010:2021), "included") 
+cap_gain %<>% change_rate("CPV", c(2010:2021), 1)
+
+# Costa Rica
+cap_gain %<>% add_note("CRI", c(2004:2021), "ordinary") 
+cap_gain %<>% change_rate("CRI", c(2019:2021), 15)
+
+# Curacao
+cap_gain %<>% add_note("CUW", c(2011:2021), "ordinary") 
+
+# Cyprus
+cap_gain %<>% add_note("CYP", c(2004:2016), "land-rich-direct") 
+cap_gain %<>% add_note("CYP", c(2017:2021), "land-rich_direct_indirect") 
+
+# Czech Republic
+cap_gain %<>% add_note("CZE", c(2004:2008), "ordinary") 
+cap_gain %<>% add_note("CZE", c(2009:2021), "included") 
+
+# Germany
+cap_gain %<>% add_note("DEU", c(2004:2021), "included") 
+cap_gain %<>% change_rate("DEU", c(2004:2021), percentage_adjustment = 0.05)
+
+# Denmark
+cap_gain %<>% add_note("DNK", c(2004:2021), "exempt") 
+
+# Dominican Republic
+cap_gain %<>% add_note("DOM", c(2004:2006), "ordinary") 
+cap_gain %<>% add_note("DOM", c(2007:2021), "included-indirect") 
+
+# Algeria
+cap_gain %<>% add_note("DZA", c(2012:2021), "included") 
+
+# Ecuador
+cap_gain %<>% add_note("ECU", c(2004:2015), "exempt") 
+cap_gain %<>% add_note("ECU", c(2016:2021), "included-indirect") 
+
+# Egypt
+cap_gain %<>% add_note("EGY", c(2004:2014), "ordinary") 
+cap_gain %<>% add_note("EGY", c(2015:2021), "included") 
+
+# Spain
+cap_gain %<>% add_note("ESP", c(2004:2021), "included") 
+cap_gain %<>% change_rate("ESP", c(2007:2009), value = 18)
+cap_gain %<>% change_rate("ESP", c(2010:2011), value = 19)
+cap_gain %<>% change_rate("ESP", c(2012:2014), value = 21)
+cap_gain %<>% change_rate("ESP", c(2015), value = 20)
+cap_gain %<>% change_rate("ESP", c(2016:2021), value = 19)
+
+# Estonia
+cap_gain %<>% add_note("EST", c(2004:2021), "land-rich-direct") 
+
+#Ethiopia
+cap_gain %<>% add_note("ETH", c(2004:2017), "ordinary") 
+
+# Finland
+cap_gain %<>% add_note("FIN", c(2005:2021), "land-rich-direct") 
+
+# Fiji
+cap_gain %<>% add_note("FJI", c(2004:2010), "exempt") 
+cap_gain %<>% add_note("FJI", c(2011:2021), "ordinary") 
+
+# France
+
+
+# Gabon
+cap_gain %<>% add_note("GAB", c(2004:2021), "ordinary") 
+
+# United Kingdom
+cap_gain %<>% add_note("GBR", c(2004:2018), "exempt") 
+cap_gain %<>% add_note("GBR", c(2019:2021), "land-rich_direct_indirect") 
+
+
+# Georgia
+cap_gain %<>% add_note("GEO", c(2004:2018), "ordinary") 
+cap_gain %<>% add_note("GEO", c(2019:2021), "included") 
+
+# Ghana
+cap_gain %<>% add_note("GHA", c(2004:2021), "ordinary") 
+cap_gain %<>% change_rate("GHA", c(2019:2021), value = 25)
+
+# Guinea
+cap_gain %<>% add_note("GIN", c(2004:2021), "ordinary") 
+cap_gain %<>% change_rate("GIN", c(2012:2021), value = 10)
+
+# Equatorial Guinea
+cap_gain %<>% add_note("GNQ", c(2004:2021), "ordinary") 
+
+# Greece
+cap_gain %<>% add_note("GRC", c(2004:2013), "included") 
+cap_gain %<>% add_note("GRC", c(2014:2020), "ordinary") 
+cap_gain %<>% add_note("GRC", c(2021), "exempt") 
+
+# Guatemala
+cap_gain %<>% add_note("GTM", c(2004:2012), "ordinary") 
+cap_gain %<>% add_note("GTM", c(2013:2021), "included-land-rich-indirect") 
+
+# Guyana
+cap_gain %<>% add_note("GUY", c(2004:2021), "ordinary") 
+
+# Guam same as US, add Guam to the US entry
+
+# Honduras
+cap_gain %<>% add_note("HND", c(2004:2012), "ordinary") 
+cap_gain %<>% add_note("HND", c(2013:2016), "exempt") 
+cap_gain %<>% add_note("HND", c(2017:2021), "included") 
+
+# Croatia
+cap_gain %<>% add_note("HRV", c(2004:2021), "ordinary") 
+
+# Hungary
+cap_gain %<>% add_note("HUN", c(2004:2009), "exempt") 
+cap_gain %<>% add_note("HUN", c(2010:2021), "land-rich-direct") 
+
+# Indonesia
+cap_gain %<>% add_note("IDN", c(2004:2021), "included") 
+cap_gain %<>% change_rate("IDN", c(2004:2021), value = 20)
+
+# India
+cap_gain %<>% add_note("IND", c(2004:2012), "included")
+cap_gain %<>% add_note("IND", c(2013:2021), "included-indirect")
+
+# Ireland
+cap_gain %<>% add_note("IRL", c(2004:2021), "land-rich_direct") #indirect is not specifically mentioned, although it could be interpreted as if falling under the definition ("shares deriving value from land")
+
+# Iran
+cap_gain %<>% add_note("IRN", c(2004:2006), "exempt")
+
+# Iraq
+cap_gain %<>% add_note("IRQ", c(2004:2021), "exempt")
+
+# Iceland
+cap_gain %<>% add_note("ISL", c(2004:2021), "ordinary")
+
+# Isreal
+cap_gain %<>% add_note("ISR", c(2004:2021), "included-indirect")
+
+# Italy
+cap_gain %<>% add_note("ITA", c(2004:2021), "exempt")
+cap_gain %<>% add_note("ITA", c(2005:2021), "included")
+cap_gain %<>% change_rate("ITA", c(2005:2007), value = 13.2) # 33% on 40% of the gain
+cap_gain %<>% change_rate("ITA", c(2008:2016), value = 13.67)
+cap_gain %<>% change_rate("ITA", c(2017:2017), value = 11.9)
+cap_gain %<>% change_rate("ITA", c(2018), value = 13.95)
+cap_gain %<>% change_rate("ITA", c(2019:2021), value = 26)
+
+# Jamaica
+cap_gain %<>% add_note("JAM", c(2004:2021), "ordinary")
+cap_gain %<>% change_rate("JAM", c(2004:2009), value = 7.5) # no capital gains tax but a transfer tax on land and securities
+cap_gain %<>% change_rate("JAM", c(2010:2014), value = 4)
+cap_gain %<>% change_rate("JAM", c(2015:2018), value = 5)
+cap_gain %<>% change_rate("JAM", c(2019:2021), value = 2)
+
+# Jordan
+cap_gain %<>% add_note("JOR", c(2004), "included")
+cap_gain %<>% change_rate("JOR", c(2004), percentage_adjustment = 0.25)
+cap_gain %<>% add_note("JOR", c(2005:2021), "exempt") # certain types of companies are not exempt (mainly banking sector)
+
+# Japan
+cap_gain %<>% add_note("JPN", c(2004:2021), "ordinary")
+
+#Kazakhstan
+cap_gain %<>% add_note("KAZ", c(2004:2011), "ordinary")
+cap_gain %<>% add_note("KAZ", c(2012:2021), "included")
+
+# Kenya
+cap_gain %<>% add_note("KEN", c(2007, 2015:2021), "ordinary")
+cap_gain %<>% add_note("KEN", c(2008:2014), "exempt")
+
+# Cambodia
+cap_gain %<>% add_note("KHM", c(2004:2021), "ordinary")
+
+# Kosovo
+cap_gain %<>% add_note("KSV", c(2014:2021), "exempt")
+
+# Kuwait
+cap_gain %<>% add_note("KWT", c(2004:2021), "included")
+
+#Laos
+cap_gain %<>% add_note("LAO", c(2004:2021), "included")
+cap_gain %<>% change_rate("LAO", c(2004:2019), value = 10)
+cap_gain %<>% change_rate("LAO", c(2020:2021), value = 2)
+
+#Lebanon
+cap_gain %<>% add_note("LBN", c(2004:2021), "exempt") #only fixed assets are taxed
+
+# St. Lucia
+cap_gain %<>% add_note("LCA", c(2014:2021), "exempt")
+
+# Liechtenstein
+cap_gain %<>% add_note("LIE", c(2004:2010), "ordinary")
+cap_gain %<>% add_note("LIE", c(2011:2021), "exempt")
+
+# Sri Lanka
+cap_gain %<>% add_note("LKA", c(2004:2017), "exempt")
+cap_gain %<>% add_note("LKA", c(2018:2021), "ordinary")
+
+# Lithuania
+cap_gain %<>% add_note("LTU", c(2004:2021), "ordinary")
+
+#Luxembourg
+cap_gain %<>% add_note("LUX", c(2004:2021), "exempt") # according to IBFD, assumed to have been like this always. Corporate tax guide only talks about regime for resident companies
+
+#Latvia
+
+cap_gain %<>% add_note("LVA", c(2004:2007), "exempt")
+cap_gain %<>% add_note("LVA", c(2008:2021), "land-rich_direct_indirect")
+cap_gain %<>% change_rate("LVA", c(2004:2017), value = 2)
+cap_gain %<>% change_rate("LVA", c(2018:2021), value = 3)
+
+# Macau
+cap_gain %<>% add_note("MAC", c(2004:2021), "exempt")
+
+#Saint-Martin
+cap_gain %<>% add_note("MAF", c(2017:2021), "ordinary")
+
+#Morocco
+cap_gain %<>% add_note("MAR", c(2004:2006), "ordinary")
+cap_gain %<>% add_note("MAR", c(2007:2021), "included")
+
+#Monaco
+cap_gain %<>% add_note("MCO", c(2004:2021), "ordinary")
+
+#Moldova
+cap_gain %<>% add_note("MDA", c(2004:2021), "ordinary")
+
+#Madagascar
+cap_gain %<>% add_note("MDG", c(2004:2019), "ordinary")
+cap_gain %<>% add_note("MDG", c(2020:2021), "land-rich_direct_indirect")
+
+#Maldives
+cap_gain %<>% add_note("MDV", c(2004:2020), "exempt")
+cap_gain %<>% add_note("MDV", c(2021), "ordinary")
+cap_gain %<>% change_rate("MDV", c(2021), value = 15)
+
+# Mexico
+cap_gain %<>% add_note("MEX", c(2004:2015), "ordinary")
+cap_gain %<>% add_note("MEX", c(2016:2021), "included")
+cap_gain %<>% change_rate("MEX", c(2016:2021), value = 35)
+
+#Macedonia
+cap_gain %<>% add_note("MKD", c(2004:2009), "ordinary")
+cap_gain %<>% add_note("MKD", c(2010:2014), "exempt")
+cap_gain %<>% change_rate("MKD", c(2008:2009), percentage_adjustment = 0.7)
+
+#Malta
+cap_gain %<>% add_note("MLT", c(2004:2021), "land-rich-direct")
+
+#Myanmar
+cap_gain %<>% add_note("MMR", c(2004:2021), "included")
+
+#Montenegro
+cap_gain %<>% add_note("MNE", c(2004:2006), "included")
+cap_gain %<>% add_note("MNE", c(2017:2021), "included")
+
+#Mongolia
+cap_gain %<>% add_note("MNG", c(2012:2021), "included")
+
+#Northern Mariana (refer to US)
+
+#Mozambique
+# no specific mentioning of capital gains tax rate until 2013, therefore assumed to be ordinary (since a rate is specified in the at a glance table)
+
+cap_gain %<>% add_note("MOZ", c(2004:2013), "ordinary")
+cap_gain %<>% add_note("MOZ", c(2014:2021), "included-indirect")
+
+#Mauritania
+cap_gain %<>% add_note("MRT", c(2004:2021), "ordinary")
+
+#Mauritius
+cap_gain %<>% add_note("MUS", c(2004:2021), "exempt")
+
+#Malawi
+cap_gain %<>% add_note("MWI", c(2004:2021), "ordinary")
+
+#Malaysia
+# only mentioninig of real property gains tax, which would also apply to non-companies that hold real estate. 
+
+cap_gain %<>% add_note("MYS", c(2004:2019), "land-rich-direct")
+cap_gain %<>% add_note("MYS", c(2020:2021), "land-rich_direct_indirect")
+cap_gain %<>% change_rate("MYS", c(2004:2010), value = 5)
+cap_gain %<>% change_rate("MYS", c(2020:2021), value = 30)
+
+# Namibia
+cap_gain %<>% add_note("NAM", c(2004:2011), "exempt")
+cap_gain %<>% add_note("NAM", c(2012:2015), "land-rich-direct") # only mineral companies though
+cap_gain %<>% add_note("NAM", c(2016:2021), "land-rich_direct_indirect") # only mineral companies though
+
+
+cap_gain %<>% change_rate("NAM", c(2012:2021), value = stat_rates$standard_rate[which(stat_rates$iso3c == "NAM" & stat_rates$year %in% (2012:2012))])
+
+#New Caledonia
+cap_gain %<>% add_note("NCL", c(2018:2021), "land-rich-direct")
+
+#Nigeria
+cap_gain %<>% add_note("NGA", c(2004:2021), "exempt")
+
+#Nicaragua
+cap_gain %<>% add_note("NIC", c(2013:2021), "included")
+cap_gain %<>% change_rate("NIC", c(2013:2016), value = 10)
+
+#Netherlands
+cap_gain %<>% add_note("NLD", c(2004:2021), "ordinary")
+
+#Norway
+cap_gain %<>% add_note("NOR", c(2004:2008, 2012:2021), "exempt")
+cap_gain %<>% add_note("NOR", c(2009:2011), "ordinary")
+cap_gain %<>% change_rate("NOR", c(2009:2011), percentage_adjustment = 0.03)
+
+#Nepal
+cap_gain %<>% add_note("NPL", c(2006), "exempt")
+
+#New Zealand
+cap_gain %<>% add_note("NZL", c(2004:2021), "exempt")
+
+#Oman
+cap_gain %<>% add_note("OMN", c(2004:2021), "ordinary")
+
+#Pakistan
+cap_gain %<>% add_note("PAK", c(2004:2021), "ordinary")
+cap_gain %<>% change_rate("PAK", c(2004:2010), percentage_adjustment = 0.75)
+cap_gain %<>% change_rate("PAK", c(2011:2021), value = stat_rates$rate[which(stat_rates$iso3c == "PAK" & stat_rates$year %in% (2011:2021))] * 0.75)
+
+#Panama
+cap_gain %<>% add_note("PAN", c(2004:2006), "exempt")
+cap_gain %<>% add_note("PAN", c(2006:2013), "included")
+cap_gain %<>% add_note("PAN", c(2014:2021), "included-indirect")
+cap_gain %<>% change_rate("PAN", c(2006:2021), value = 10)
+
+#Peru
+cap_gain %<>% add_note("PER", c(2009:2010), "included")
+cap_gain %<>% add_note("PER", c(2011:2021), "included-indirect")
+cap_gain %<>% change_rate("PER", c(2010:2021), value = 30)
+
+#Philippines
+cap_gain %<>% add_note("PHL", c(2004:2021), "ordinary")
+cap_gain %<>% change_rate("PHL", c(2004:2021), value = 10)
+
+#Poland
+cap_gain %<>% add_note("POL", c(2004:2006), "ordinary")
+cap_gain %<>% add_note("POL", c(2007:2021), "included")
+
+#Puerto Rico
+cap_gain %<>% add_note("PRI", c(2004:2005), "included-indirect")
+cap_gain %<>% add_note("PRI", c(2006:2021), "ordinary")
+cap_gain %<>% change_rate("PRI", c(2004:2005), value = 12.5)
+
+#Portugal
+cap_gain %<>% add_note("PRT", c(2004:2021), "land-rich_direct_indirect") # For companies situated in blacklisted territories, transfers of other shares are taxed as well
+cap_gain %<>% change_rate("PRT", c(2014:2021), value = 25)
+
+#Paraguay
+cap_gain %<>% add_note("PRY", c(2004:2021), "ordinary")
+cap_gain %<>% change_rate("PRY", c(2004:2021), value = stat_rates$rate[which(stat_rates$iso3c == "PRY" & stat_rates$year %in% (2004:2021))])
+
+#Palestinian Territories
+cap_gain %<>% add_note("PSE", c(2013:2014), "ordinary")
+cap_gain %<>% change_rate("PSE", c(2013:2014), percentage_adjustment = 0.25)
+cap_gain %<>% add_note("PSE", c(2015:2021), "exempt")
+
+#Qatar
+cap_gain %<>% add_note("QAT", c(2013:2021), "included")
+
+#Romania
+cap_gain %<>% add_note("ROU", c(2004:2004), "included-land-rich-indirect")
+cap_gain %<>% add_note("ROU", c(2005:2007), "ordinary")
+cap_gain %<>% add_note("ROU", c(2008:2013), "included-land-rich-indirect")
+cap_gain %<>% add_note("ROU", c(2014:2021), "exempt")
+
+#Russia
+cap_gain %<>% add_note("RUS", c(2004:2015), "ordinary")
+cap_gain %<>% add_note("RUS", c(2016:2021), "land-rich_direct_indirect")
+
+#Rwanda
+cap_gain %<>% add_note("RWA", c(2004:2021), "ordinary")
+
+#Saudi Arabia
+cap_gain %<>% add_note("SAU", c(2005:2020), "included")
+cap_gain %<>% add_note("SAU", c(2021), "ordinary")
+
+#Sudan
+cap_gain %<>% add_note("SDN", c(2004:2006), "exempt")
+
+#Singapore
+cap_gain %<>% add_note("SGP", c(2018:2021), "exempt")
+
+
+#Senegal
+cap_gain %<>% add_note("SEN", c(2004:2021), "ordinary")
+#but in 2019 indirect transfer rule was introduced
+
+#El Salvador
+cap_gain %<>% add_note("SLV", c(2004:2021), "ordinary")
+cap_gain %<>% change_rate("SLV", c(2008:2021), value = 10)
+
+#Serbia
+cap_gain %<>% add_note("SRB", c(2011:2021), "included")
+cap_gain %<>% change_rate("SRB", c(2011:2013), value = 20)
+
+#South Sudan
+cap_gain %<>% add_note("SSD", c(2014:2021), "ordinary")
+
+#Sao Tome
+cap_gain %<>% add_note("STP", c(2017:2021), "ordinary")
+
+#Suriname
+cap_gain %<>% add_note("SUR", c(2004:2021), "ordinary")
+
+#Slovak Republic
+cap_gain %<>% add_note("SVK", c(2004:2017), "ordinary")
+cap_gain %<>% add_note("SVK", c(2018:2021), "included")
+
+#Slovenia
+cap_gain %<>% add_note("SVN", c(2004:2021), "ordinary")
+
+#Sweden
+cap_gain %<>% add_note("SWE", c(2004:2021), "exempt")
+
+#Sint Maarten
+cap_gain %<>% add_note("SXM", c(2011:2021), "ordinary")
+
+#Syria
+cap_gain %<>% add_note("SYR", c(2005:2011), "exempt")
+
+#Chad
+cap_gain %<>% add_note("TCD", c(2013:2021), "ordinary")
+
+#Trinidad and Tobago
+cap_gain %<>% add_note("TTO", c(2004:2021), "exempt")
+
+#Tunisia
+cap_gain %<>% add_note("TUN", c(2012:2021), "included")
+
+#Turkey
+cap_gain %<>% add_note("TUR", c(2004:2021), "included")
+cap_gain %<>% change_rate("TUR", c(2007:2010), value = stat_rates$rate[which(stat_rates$iso3c == "TUR" & stat_rates$year %in% (2007:2010))])
+
+#Taiwan
+cap_gain %<>% add_note("TWN", c(2004:2021), "exempt")
+
+#Tanzania
+cap_gain %<>% add_note("TZA", c(2004:2014), "ordinary")
+cap_gain %<>% add_note("TZA", c(2015:2021), "included-indirect")
+
+#Uganda
+cap_gain %<>% add_note("UGA", c(2004:2018), "ordinary") # according to EY shares are only included since 2017, but according other guide, the notion of business assets applied to shares before. Zain case also shows that tax authority was seeking to tax this
+cap_gain %<>% add_note("UGA", c(2019:2021), "included-indirect") #https://www.bdo.global/en-gb/microsites/tax-newsletters/corporate-tax-news/issue-50-february-2019/uganda-taxation-of-indirect-transfers-in-uganda
+
+#Ukraine
+cap_gain %<>% add_note("UKR", c(2014:2020), "ordinary") 
+cap_gain %<>% add_note("UKR", c(2021), "included-land-rich-indirect")
+
+#United States, Guam, Mariana Islands and US Virgin Islands
+cap_gain %<>% add_note(c("USA", "GUM", "MNP", "VIR"), c(2004:2021), "ordinary")
+
+#Uzbekistan
+cap_gain %<>% add_note("UZB", c(2013:2021), "included")
+cap_gain %<>% change_rate("UZB", c(2013:2021), value = 20)
+
+#Venezuela
+cap_gain %<>% add_note("VEN", c(2004:2021), "ordinary")
+
+#Vietnam
+cap_gain %<>% add_note("VNM", c(2004:2008), "included")
+cap_gain %<>% add_note("VNM", c(2009:2011), "ordinary")
+cap_gain %<>% add_note("VNM", c(2012:2021), "included")
+# one could argue that they are since 2012 de facto exempt, since only a gross rate of 0.1% on the share price is levied
+
+#South Africa
+cap_gain %<>% add_note("ZAF", c(2004:2021), "land-rich_direct_indirect")
+
+#Zimbabwe
+cap_gain %<>% add_note("ZWE", c(2004:2021), "ordinary")
+
+
+```
+
+
+```{r manual changes based on other literature}
+
+
+# China
+cap_gain %<>% add_note("CHN", c(2010:2021), "included-indirect") 
+
+#Colombia
+cap_gain %<>% add_note("COL", c(2019:2021), "included-indirect") 
+
+#Japan
+
+#Tanzania
+
+#Senegal
+cap_gain %<>% add_note("SEN", c(2019:2021), "land-rich_direct_indirect") 
+
+#United States
+cap_gain %<>% add_note(c("USA", "GUM", "MNP", "VIR"), c(2004:2021), "land-rich-direct")
+
+
+```
+
+
+
+```{r finalize capital gains table}
+
+
+# Assume that non-residents are taxed under the rules applying to all taxpayers, use coalesce
+
+cap_gain %<>% mutate(land_rich = ifelse(note == "exempt", 0, rate))
+
+cap_gain %<>% mutate(shares = ifelse(note %in% c("exempt", "land-rich-direct"), 0, rate))
+
+cap_gain %<>% mutate(land_rich_indirect = ifelse(note %in% c("land-rich_direct_indirect", "included-land-rich-indirect", "included-indirect"), rate, 0))
+
+cap_gain %<>% mutate(shares_indirect = ifelse(note == "included-indirect", rate, 0))
+
+# Chile different values for different types of capital gains
+cap_gain %<>% amend_cols("CHL", c(2013:2021), columns = c("land_rich_indirect", "shares_indirect"), value = 35)
+
+# standardize table format
+
+cap_gain %<>% rename(explanation = text)
+
+cap_gain %<>% select(iso3c, year, explanation, note, land_rich, land_rich_indirect, shares, shares_indirect)
+
+cap_gain %<>% pivot_longer(cols = c("land_rich", "land_rich_indirect", "shares", "shares_indirect"), names_to = "category", values_to = "rate")
+
+write_csv(cap_gain, here("data-created/cap_gains_non_residents.csv"))
+
+```
+
+
+

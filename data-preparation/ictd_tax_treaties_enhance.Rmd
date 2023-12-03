@@ -1,0 +1,185 @@
+---
+title: "enhancing_tax_treaty_data"
+author: "Frederik Heitmüller"
+date: "6 2 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(magrittr)
+```
+
+The tax treaty data was enhanced with termination dates of treaties. To begin with, dates were extracted from IBFD's Tax Research Platform. Where dates were not recorded by IBFD, manual searched were conducted. In some cases, it was clear from News releases published by IBFD that the treaty is superseded by a new treaty, which could be considered as different than a full "termination", since it appeared to be in place until the entry into force of a new treaty. 
+The majority of cases that remained unresolved by these methods are "Pre-independence" treaties, i.e. treaties that were signed by a former colonial power or predecessor state. Sometimes, these treaties were applied asymmetrically. For example, the United Kingdom continued to apply the treaty signed with the U.S.S.R. to successor states (See: https://www.gov.uk/hmrc-internal-manuals/double-taxation-relief/dt17450), whereas most successor states no longer applied the treaty. 
+
+The multilateral treaty of the OCAM. OCAM was officially dissolved in 1985 according to Wikipedia. Some members left earlier Chad (1974), Cameroon (1974),  
+Still applied by Congo, Gabon, Ivory Coast, and Senegal with respect to former signatories https://taxsummaries.pwc.com/gabon/individual/foreign-tax-relief-and-tax-treaties. The question is whether to all former members or only among each other. In Senegal, the tax authority clarified in 2004 that the OCAM treaty only applies with regards to those countries that still apply the OCAM treaty as well, and not all former members. I assume that Congo, Gabon and Ivory Coast follow the same treatment.
+
+There is a potential problem with regards to the coding of capital gains tax articles. For a number of treaties, it is coded that gains of "other shares" are taxable by the source country, while gains from shares of "land rich" companies are not. It is unlikely that this is the case (since the general shares article is more general), therefore this is recoded.
+
+```{r tax treaty data}
+taxtreaties <- read_csv(here("data-raw/taxSource.csv"), locale = locale(encoding = "ISO8859-1")) ##encoding because of Côte d'Ivoire
+taxtreaties <- taxtreaties[-which(is.na(taxtreaties$C1LONG)), ]
+taxtreaties %<>% distinct()
+
+# some treaties could be labelled as terminated, but should instead be considered as "terminated by new treaty", since a new treaty directly replaces the old one
+#Indonesia and Philippines from 1981 is only superseded
+# South AFrica and Tanzania
+#Germany Pakistan 1971 protocol, India-Japan 1970 protocol, France-Gabon 1989 protocol, Belgium-India 1985 protocol, China-UK 1995 protocol, China-Singapore 1996 protocol; Albania-Kosovo 2004 treaty
+# Georgia's treaties with France and Germany (pre-independence) treaties were still applied after independence. Azerbaijan-Germany as well. See 2004 EY Tax Guide.
+#China- New Zealand treaty and protocol
+#Brazil - Finland protocol
+#Cyprus - India, Malta - India
+#South Africa with Mauritius, Singapore, Switzerland
+# Rwanda - Mauritius
+# Pakistan - Switzerland
+
+taxtreaties$STATUS[which(taxtreaties$TREATYID %in% c(
+  2872,
+  6142,
+  10015,
+  11015,
+  11005,
+  10098,
+  10226,
+  10228,
+  8553,
+  6743,
+  6939,
+  6741,
+  7024,
+  7451,
+  7471,
+  7686,
+  7740,
+  6258,
+  10247,
+  10132,
+  3865,
+  4247
+  ))] <- "Terminated_by_new_treaty"
+
+# take out first Argentina-Switzerland protocol, because it was replaced by a second protocol entering into force the same date without changing the relevant content. If both were left in, then there would be two treaties for the same period in the dataset.
+taxtreaties %<>% filter(TREATYID != 10288)
+
+#Argentina-Chile 2015 treaty, rather in force from 2017 (from 2010 only the EoI clause for Chile), 2003 protocol can be considered as in force from 2003, since despite not entering officially into force it was applied provisionally following an exchange of notes
+
+taxtreaties$EFFECTIVE[which(taxtreaties$TREATYID == 9572)] <- 2017 
+taxtreaties$EFFECTIVE[which(taxtreaties$TREATYID == 10317)] <- 2003
+taxtreaties$STATUS[which(taxtreaties$TREATYID == 10317)] <- "Superseded"
+
+# OCAM treaty still in force for Congo, Gabon, Ivory Coast, and Senegal, but not clear if with all of them or only with those where it still in force
+
+#taxtreaties$STATUS[which(taxtreaties$TREATYID == 15000 &
+ #                          taxtreaties$C1LONG %in% c("Gabon",
+  #                                                   "Côte d'Ivoire",
+   #                                                  "Senegal",))] <- "Superseded"
+
+# Argentina - Spain 2013 contains a memorandum understanding with a partial anti-abuse clause
+
+taxtreaties$`29i`[which(taxtreaties$TREATYID == 9394)] <- "PARTIAL"
+
+
+
+## constructing dataset on a relationship basis: This means that every treaty is two times in it
+taxtreaties2 <- rename(taxtreaties, c("C1CODE" = "C2CODE", "C2CODE" = "C1CODE", "C1LONG" = "C2LONG", "C2LONG" = "C1LONG"))
+
+taxtreaties_double <- rbind(taxtreaties, taxtreaties2)
+
+## attention now every treaty is twice in the dataset, but this facilitates country level analysis
+
+## add an identifier for each country pair
+taxtreaties_double %<>% mutate(paircode = paste(C1CODE, C2CODE, sep = " - "))
+
+## add termination dates extracted from IBFD
+
+term_dates <- read_csv(here("data-created/treaty_termination_dates.csv"))
+term_dates %<>% distinct()
+
+#from treaties that are not actually terminated but superseded, it seems that the termination year in IBFD is often already the year from which the new treaty is effective, therefore I substract 1 which seems more accurate. 
+
+term_dates %<>% mutate(Termination = Termination - 1)
+
+
+taxtreaties_double %<>% left_join(
+  term_dates[c("paircode", "Conclusion", "Termination")], 
+  by = c("paircode", "SIGNED" = "Conclusion")
+  )
+taxtreaties_double %<>% distinct()
+
+## manual termination dates added
+
+### Economic Community of West African States Income, Inheritance, Registration and Stamp Tax Treaty, terminated in 2010
+taxtreaties_double$Termination[which(taxtreaties_double$TREATYID == 15004)] <- 2010
+###Mauritius Zambia
+taxtreaties_double$Termination[which(taxtreaties_double$TREATYID == 3888)] <- 2020 
+
+###Argentina - Chile protocol, unilateral termination by Argentina
+taxtreaties_double$EFFECTIVE[which(taxtreaties$TREATYID == 10317)] <- 2012
+
+###Argentina - Switzerland
+taxtreaties_double$EFFECTIVE[which(taxtreaties$TREATYID == 10367)] <- 2012
+
+# former USSR treaties no longer considered in force by successor countries. Termination date is assumed to be 1991. This may not be true. Some were considered longer in force, Some were still applied by the partner country. This still needs to be researched more closely.
+
+ussr_countries <- c(
+  "Armenia",
+  "Azerbaijan",
+  "Georgia",
+  "Moldova",
+  "Ukraine",
+  "Tajikistan")
+
+taxtreaties_double$Termination[which(
+  taxtreaties_double$TYPE == "Pre-independence" &
+    taxtreaties_double$STATUS == "Terminated" &
+    taxtreaties_double$C1LONG %in% ussr_countries
+  )] <- 1991 
+
+# UK - Tajikistan (USSR) terminated from UK's side as of 2013 (1 April 2014). From Tajikistan's side, it seems it never applied https://www.gov.uk/government/publications/announcements-in-2014-of-changes-to-uk-double-taxatation-treaties/status-of-the-ukussr-double-taxation-convention-in-relation-to-tajikistan 
+
+taxtreaties_double$Termination[which(
+  taxtreaties_double$TREATYID == 6930 &
+    taxtreaties_double$C1LONG == "United Kingdom"
+  )] <- 2013 
+
+# other UKs remained in force, therefore "terminated" should be considered as superseded: https://www.gov.uk/hmrc-internal-manuals/double-taxation-relief/dt17450
+
+taxtreaties_double$STATUS[which(
+  taxtreaties_double$TREATYID %in% c(6922, 6923, 6925, 6928, 6738, 6932) & 
+    taxtreaties_double$C1LONG == "United Kingdom"
+  )] <- "Terminated_by_new_treaty" 
+
+## for treaties that were terminated but superseded by a new treaty, an end date is added as the year before the new treaty went into effect. This makes the assumption that all treaties entered into effect on 1 January of a year and all ended on 31 December, which is likely to be incorrect, but probably not such a problem.
+
+termination_missing <- taxtreaties_double %>% filter(STATUS == "Terminated" & is.na(Termination))
+write_csv(termination_missing, here("data-created/termination_missing.csv"))
+
+superseded_dates <- taxtreaties_double %>% 
+  filter(STATUS != "Not In Force") %>% 
+  group_by(paircode) %>% 
+  arrange(EFFECTIVE) %>%  
+  mutate(superseded = ifelse(!is.na(dplyr::lead(EFFECTIVE)) & STATUS %in% c("Superseded", "Terminated_by_new_treaty"),
+                             dplyr::lead(EFFECTIVE) - 1, 
+                             NA)) %>% 
+  ungroup %>% 
+  select(paircode, SIGNED, superseded)
+
+taxtreaties_double %<>% left_join(superseded_dates, by = c("paircode", "SIGNED"))
+
+taxtreaties_double %<>% distinct()
+
+# an error emerges where IBFD contains a termination date for the original treaty, although the treaty was superseded by a protocol. Instead the termination should then apply to the protocol. This error should be solvable, by giving priority to the superseded date, where it can manually be established that the treaty was indeed superseded and not terminated.
+
+taxtreaties_double %<>% mutate(ended = coalesce(superseded, as.numeric(Termination)))
+
+# recoding capital gains articles
+taxtreaties_double$`13i`[which(taxtreaties_double$`13ii` == "YES")] <- "YES"
+
+write_csv(taxtreaties_double, here("data-created/taxtreaties_double.csv"))
+```
+
+

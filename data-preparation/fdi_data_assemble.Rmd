@@ -1,0 +1,176 @@
+---
+title: "Assembling FDI dataset"
+author: "Frederik Heitmüller"
+date: "31-3-2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(countrycode)
+library(here)
+library(magrittr)
+
+```
+
+
+
+```{r CDIS}
+
+clean_cdis <- function(cdis) {
+  cdis %<>% rename("2021" = "...20")
+  # filter out aggregates
+  aggregates <- c(
+    "Sub-Saharan Africa",
+    "South America",
+    "Oceania and Polar Regions",
+    "East Asia",
+    "North Atlantic and Caribbean",
+    "Europe",
+    "Central and South Asia",
+    "North Africa",
+    "World",
+    "North and Central America",
+    "Economies of Persian Gulf"
+  )
+
+  cdis %<>% filter(!`Country Name` %in% aggregates)
+  cdis %<>% filter(!`Counterpart Country Name` %in% aggregates)
+
+  custom_codes <- c(
+    "Aruba, Kingdom of the Netherlands" = "ABW",
+    "Curaçao, Kingdom of the Netherlands" = "CUW",
+    "Guiana, French" = "GUF",
+    "Sint Maarten, Kingdom of the Netherlands" = "SXM",
+    "US Pacific Islands" = "PUS"
+  )
+  cdis %<>% mutate(country_iso3c = countrycode(coalesce(countryname(`Country Name`), `Country Name`), "country.name", "iso3c", custom_match = custom_codes))
+  cdis %<>% mutate(counterpart_iso3c = countrycode(coalesce(countryname(`Counterpart Country Name`), `Counterpart Country Name`), "country.name", "iso3c", custom_match = custom_codes))
+  cdis %<>% pivot_longer(cols = c(8:20), names_to = "year", values_to = "value")
+  cdis$value %<>% as.numeric
+  cdis %<>% filter(!is.na(country_iso3c) & !is.na(counterpart_iso3c))
+
+  # bringing value to millions
+  cdis %<>% mutate(value = value / 1000000)
+  return(cdis)
+}
+
+cdis <- read_csv(here("data-raw/fdi_data/CDIS_12-08-2021 19-11-35-81_timeSeries.csv"), show_col_types = FALSE)
+
+# function clean_cdis available in R folder
+cdis %<>% clean_cdis
+
+```
+
+```{r oecd}
+
+fdi_oecd <- read_csv(here("data-raw/fdi_data/oecd_fdi_general.csv"), show_col_types = FALSE)
+fdi_oecd %<>% rename("country_iso3c" = "reporter", "counterpart_iso3c" = "counterpart", "type" = "type_fdi")
+fdi_oecd$type %<>% recode("LE_FA_F5" = "equity", "LE_FA_FL" = "debt", "LE_FA_F" = "total")
+fdi_oecd$direction %<>% recode("DO" = "outward", "DI" = "inward")
+fdi_oecd %<>% select(-indicator)
+```
+
+
+
+
+```{r Colombia}
+fdi_colombia <- c("data-raw/fdi_data/C2Flujo_Paises_2007.csv", "data-raw/fdi_data/C4PAISES_2007-ICE.csv")
+
+clean_col_fdi <- function(df){ 
+  df =  remove_missing(df, vars = "1994")
+  df  %<>% select(-contains("-"))
+  df  %<>% select(1:27)
+  colnames(df)[1:27] = c("country", 1994:2019)
+  
+  df$country = sapply(df$country, str_to_title)
+  df %<>% filter(country != "Paises Bajos")
+  df %<>% mutate_at(2:27, as.numeric)
+  
+  ## adding England and Scotland up to United Kingdom
+  if (length(grep("Escocia", df$country)) > 0) {
+    df[grep("Inglaterra", df$country),2:27] <- df[grep("Inglaterra", df$country), 2:27] + df[grep("Escocia", df$country),2:27]
+    df <- df[-c(grep("Escocia", df$country)), ]
+  }
+  df[grep("Inglaterra", df$country),1] <- "Reino Unido"
+  df <- df[-c(grep("Total", df$country)), ] 
+  return(df)
+}
+
+read_clean <- function(x){
+df <- read_delim(here(x), delim = ";", skip = 5, col_names = TRUE)
+df <- clean_col_fdi(df)
+}
+fdi_colombia <- lapply(fdi_colombia, read_clean)
+fdi_colombia <- bind_rows(fdi_colombia[1], fdi_colombia[2], .id = "direction")
+fdi_colombia$direction %<>% recode("1" = "inward", "2" = "outward")
+
+fdi_colombia %<>% mutate(iso3c = coalesce(countrycode(countryname(country), "country.name", "iso3c"), countrycode(country, "country.name", "iso3c", custom_match = c("Republica De Corea" = "KOR", "Islas Virgenes Britanicas" = "VGB", "Isla De Man" = "IMN", "Antillas Holandesas"  = "ANT", "Surafrica" = "ZAF"))))
+fdi_colombia %<>% gather(3:28,key = "year", value = "value")
+fdi_colombia$year %<>% str_remove(" pr")
+
+# calculate stocks out of cumulative sums
+fdi_colombia_stock <- fdi_colombia %>% group_by(direction, country) %>% mutate(stock = cumsum(value)) %>% ungroup()
+
+
+```
+
+
+```{r building full set}
+
+un_data <- read_csv(here("data-raw/un_pop.csv"), skip = 1)
+un_data <- un_data[-c(1:899), ] #taking out data on regional as opposed to country-level
+un_data %<>% mutate(country_iso3c = countrycode(`Region/Country/Area`, "iso3n", "iso3c")) ## problem with Channel Islands
+complete_table <- un_data %>% distinct(country_iso3c, `...2`)
+complete_table %<>% rename("country" = "...2")
+
+complete_table <- complete_table %>% 
+  slice(rep(1:n(), each = nrow(complete_table))) %>% 
+  add_column(counterpart_iso3c = rep(complete_table$country_iso3c, times = nrow(complete_table)))
+
+# eliminate the relations type GER - GER
+complete_table <- complete_table[-c(which(complete_table$country_iso3c == complete_table$counterpart_iso3c)), ]
+
+# adding years for the chosen period
+
+years <- c(1994:2021)
+complete_table <- complete_table %>% slice(rep(1:n(), each = length(years))) %>% mutate(year = rep(years, times = nrow(complete_table))) 
+
+directions <- c("inward", "outward")
+complete_table <- complete_table %>% slice(rep(1:n(), each = length(directions))) %>% mutate(direction = rep(directions, times = nrow(complete_table))) 
+
+type <- c("total", "debt", "equity")
+complete_table <- complete_table %>% slice(rep(1:n(), each = length(type))) %>% mutate(type = rep(type, times = nrow(complete_table))) 
+
+# filter out indicators that will not be used
+cdis %<>% filter(!str_detect(`Indicator Name`, "Gross|Derived|Fellow|Financial"))
+
+cdis %<>% mutate(direction = ifelse(str_detect(`Indicator Name`, "Outward"), "outward", "inward"))
+cdis %<>% mutate(type = case_when(str_detect(`Indicator Name`, "Equity") ~ "equity", str_detect(`Indicator Name`, "Debt") ~ "debt", TRUE ~ "total"))
+
+cdis %<>% select(country_iso3c, counterpart_iso3c, year, value, direction, type)
+cdis$year %<>% as.integer
+
+complete_table %<>% left_join(cdis, by = c("country_iso3c", "counterpart_iso3c", "year", "direction", "type"))
+complete_table %<>% left_join(fdi_oecd, by = c("country_iso3c", "counterpart_iso3c", "year", "direction", "type"))
+complete_table %<>% rename("cdis" = "value.x", "oecd" = "value.y")
+
+complete_table %<>% mutate(comparison = (cdis - oecd)/oecd) 
+
+complete_table %<>% mutate(value = coalesce(oecd, cdis))
+
+complete_table %<>% filter(direction == "outward" & type == "total")
+complete_table %<>% rename(host = counterpart_iso3c, home = country_iso3c)
+
+
+complete_table %<>% filter((host == "IND" & home == "MUS") |
+                    (host == "SEN" & home == "MUS") |
+                    (host == "COL" & home == "ESP") |
+                    (host == "NGA" & home == "NLD"))
+
+write_csv(complete_table, here("data-created/combined_fdi.csv"))
+```
+
+

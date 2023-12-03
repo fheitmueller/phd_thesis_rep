@@ -1,0 +1,218 @@
+---
+title: "Special regimes conduits"
+author: "Frederik Heitmüller"
+date: "2022-10-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('purrr')) install.packages('purrr'); library('purrr') 
+if (!require('stringr')) install.packages('stringr'); library('stringr') 
+devtools::load_all()
+
+# defining for which data years the script should run
+years <- c(2004:2021)
+```
+
+
+Special regimes that provide for wth exemptions, such as headquarter regime in South Africa. 
+
+Still to check: Honduras
+```{r special regimes}
+all_paras <- read_csv(here("data-created/all_paras_ey.csv"))
+all_paras %<>% mutate(heading = tolower(heading))
+all_paras %<>% filter(!str_detect(heading, "%"))
+all_paras$heading %<>% str_replace("\\.", "") 
+all_paras$heading %<>% trimws()
+ #maybe eliminate characters of "- " preceded by a letter
+all_paras$text %<>% str_replace_all("(?<=[:alpha:])- ", "")
+
+
+para_special_regimes <- c("foreign-source interest income exclusion", "foreign derived intangible income and global intangible low-taxed income deduction", "incentives for hub services", "incentives",  "intellectual property", "knowledge development box",  "non-domicile rule", "other tax benefits", "tax incentives")
+
+special <- all_paras %>% filter(heading %in% para_special_regimes | 
+                        str_detect(heading, "exempt|holding|headquarter|international|regime|box|conduit|intermediate|vehicle|offshore|zone|innovation") |
+                          str_detect(text, "international business|International Business"))
+
+
+special %<>% filter(!str_detect(heading, "withholding|avoidance|compliance assurance|financial reporting|tax haven|depreciation|currenc|limitation|group|restriction|foreign-exchange|types of companies|nature of tax|deductibility|capital gains|debt-to-equity|transfer pricing|expense|simplified|mandatory disclosure|payments|merger|business combinations|closely held companies|law 89/1967|employee|individual|participation exemption"))
+special %<>% filter(!heading %in% c("dividends", "dividends and interest", "rates", "rate", "rates of tax"))
+
+
+stat_rates <- read_csv(here("data-created/ey_stat_rates.csv"))
+special %<>% left_join(stat_rates[c("iso3c", "year", "rate")])
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+special <- left_join(all_tocs, special, by = c("iso3c", "year"))
+special %<>% group_by(iso3c, heading) %>% arrange(year, .by_group = TRUE)
+
+special$text %<>% trimws()
+special$text %<>% replace_na("blank")
+special %<>% mutate(same_t = NA)
+for (i in 2:nrow(special)) {
+  if (special$text[i] == special$text[i - 1]) {
+    special$same_t[i] <- "same" 
+  } else {
+    special$same_t[i] <- "change" 
+  }
+}
+
+```
+
+What to do with IP boxes with nexus requirements. If grandfathering of old regime, then code up to that date. If nexus requirement add it to the code.
+Make special analysis of Australian dividend regime, where conduit dividend income maybe exempt from taxes on receipt and withholding
+
+Lebanon special offshore holding regime
+Monaco foreign source income (except royalties) exemption regime
+
+```{r special regimes handcoded}
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+special <- all_tocs
+stat_rates <- read_csv(here("data-created/statutory_rates.csv"))
+cap_gains_rates <- read_csv(here("data-created/cap_gains_rates.csv"))
+special %<>% left_join(stat_rates[c("iso3c", "year", "comb_rate")])
+special %<>% left_join(cap_gains_rates[c("iso3c", "year", "appl_rate")])
+special %<>% mutate(appl_rate = coalesce(appl_rate, comb_rate))
+
+
+instructions <- list(
+list("ABW", c(2011:2021), "special tax regimes for certain companies", c("all_rec", "div_wth"), value = 0, "rate", NA),
+list("ALB", c(2018:2021), "tax incentives", c("roy_rec"), 5, "rate", NA), # software companies
+list("ANT", c(2004:2010), "tax incentives", c("all_rec"), 2, "rate", NA), # e-zone
+list("AUS", c(2006:2021), "foreign conduit income", c("div_wth"), 0, "rate", NA), # foreign conduit income
+list("BEL", c(2008:2021), "patent box", c("roy_rec"), 80, "percentage", NA), # grandfathered until 2021
+list("BEL", c(2016:2021), "innovation deduction", c("roy_rec"), 85, "percentage", "nexus"),
+list("BGD", c(2019:2021), "tax incentives", c("roy_rec", "ser_rec"), 0, "rate", NA), # software development and computer services exemption
+list("BLR", c(2009:2021), "special tax regimes", c("roy_rec"), 0, "rate", NA), # high technology park
+list("BRB", c(2004:2021), "international business", c("all_rec"), 1, "rate", NA), # international business companies, grandfathered until June 2021
+list("BRB", c(2004:2021), "international business", c("all_wth"), 0, "rate", NA), # international business companies, grandfathered until June 2021
+list("CHE", c(2004:2019), "holding companies", c("div_rec", "cap_rec"), 0, "rate", NA),
+list("CHE", c(2004:2019), "holding companies", c("int_rec", "roy_rec"), 7.8, "rate", NA),
+list("CHL", c(2004:2021), "chilean holding company regime", c("all_rec", "div_wth", "cap_wth"), 0, "rate", NA), # grandfathered for the years 2018:2021, apparently could not be used for treaty shopping since holding were not considered Chilean residents https://www.derechotributario.cl/2006/11/sociedad-plataforma-una-idea-frustrada/
+list("CHN", c(2010:2021), "tax incentives", c("roy_rec"), 0, nexus = "nexus", "rate", NA),
+list("COL", c(2019:2021), "colombian holding company regime", c("div_rec", "cap_rec", "div_wth", "cap_wth"), 0, "rate", NA),
+list("CPV", c(2016:2021), "international business center", c("ser_rec"), 2.5, "rate", NA),
+list("CPV", c(2016:2021), "international business center", c("div_wth", "cap_wth"), 0, "rate", NA),
+list("CRI", c(2004:2019), "free trade zone regime", c("all_rec"), 0, "rate", NA),
+list("CRI", c(2020:2021), "free trade zone regime", c("all_rec"), 0, "rate", nexus = "nexus"),
+list("CUW", c(2011:2021), "tax incentives", c("all_rec"), 2, "rate", NA), # grandfathered until 2022
+list("ESP", c(2004:2021), "foreign portfolio holding company regime", c("div_wth", "cap_wth"), 0, "rate", NA),
+list("ESP", c(2016:2021), "patent box regime", c("roy_rec"), 60, "percentage", "nexus"),
+list("GBR", c(2013:2015), "patent box", c("roy_rec"), 10, "rate", NA),
+list("GBR", c(2016:2021), "patent box", c("roy_rec"), 10, "rate", nexus = "nexus"),
+list("GGY", c(2004:2007), "exempt companies", c("all_rec"), 0, "rate", NA),
+list("GIB", c(2004:2006), "exempt companies", c("all_rec", "div_wth", "int_wth"), 0, "rate", NA),
+list("HKG", c(2004:2021), "territorial regime", c("all_rec"), 0, "rate", NA),
+list("HUN", c(2004:2005), "tax incentives", c("all_rec"), 3, "rate", NA),
+list("HUN", c(2004:2009), "tax incentives", c("int_rec", "roy_rec"), 50, "percentage", NA),
+list("HUN", c(2010:2015), "tax incentives", c("roy_rec"), 50, "percentage", NA),
+list("HUN", c(2010), "foreign-source interest income exclusion", c("int_rec"), 75, "percentage", NA),
+list("HUN", c(2016:2021), "tax incentives", c("int_rec", "roy_rec"), 50, "percentage", "nexus"),
+list("HUN", c(2004:2006), "exempt companies", c("all_rec"), 0, "rate", NA),
+list("IMN", c(2004:2006), "exempt companies", c("all_rec", "all_wth"), 0, "rate", NA),
+list("IND", c(2017:2021), "patent box regime", c("roy_rec"), 10, "rate", nexus = "nexus"),
+list("IRL", c(2016:2021), "knowledge development box", c("roy_rec"), 6.25, "rate", nexus = "nexus"),
+list("ISL", c(2004:2007), "international trading companies", c("all_rec"), 5, "rate", NA),
+list("ITA", c(2015:2021), "patent box regime", c("roy_rec"), 50, "percentage", "nexus"),
+list("JEY", c(2004:2008), "exempt companies", c("all_rec"), 0, "rate", NA),
+list("JEY", c(2004:2011), "international business companies", c("all_rec"), 2, "rate", NA),
+list("LBN", c(2004:2021), "offshore companies", c("all_rec", "div_wth"), 0, "rate", NA),
+list("LCA", c(2014:2021), "international business companies", c("all_rec", "all_wth"), 0, "rate", NA),
+list("LIE", c(2011:2020), "patent box regime for intellectual property companies", c("roy_rec"), 2.5, "rate", NA), #grandfathered since 2017
+list("LKA", c(2008:2017), "tax incentives", c("all_rec"), 0, "rate", NA), # exemptions for income received from abroad
+list("LKA", c(2018:2021), "tax incentives", c("all_rec"), 0, "rate", NA), # regional headquarter
+list("LUX", c(2011:2021), "intellectual property", c("roy_rec", "cap_rec"), 80, "percentage", NA), #from 2016 grandafthered until 2021
+list("LUX", c(2004:2010), "holding company", c("all_rec"), 0, "rate", NA), # grandfathered from 2006 onwards
+list("LUX", c(2004:2021), "dividend distribution", c("div_wth"), 0, "rate", NA),# to qualifying participations 
+list("MAC", c(2004:2020), "offshore companies", c("all_rec"), 0, "rate", NA), # repealed as of 2021
+list("MAR", c(2004:2018), "tax incentives", c("all_rec"), 0, "rate", NA), # offshore companies, only nominal rate
+list("MLT", c(2019:2021), "tax incentives", c("roy_rec"), 95, "percentage", "nexus"),
+list("MUS", c(2019:2021), "partial exemption", c("div_rec","int_rec"), 80, "percentage", NA),
+list("MUS", c(2004:2021), "Global Business Licence 1", c("all_rec"), 80, "percentage", NA), # grandfathered until 2021
+list("MUS", c(2004:2021), "Global Business Licence 1", c("all_wth"), 0, "rate", NA), # grandfathered until 2021
+list("MYS", c(2004:2010), "offshore financial center", c("all_rec","all_wth"), 0, "rate", NA),
+list("MYS", c(2011:2019), "labuan international business and financial center", c("all_rec","all_wth"), 0, "rate", NA),
+list("MYS", c(2019:2021), "labuan international business and financial center", c("int_rec", "div_rec", "cap_rec", "all_wth"), 0, "rate", NA),
+list("MYS", c(2019:2021), "labuan international business and financial center", c("roy_rec", "ser_rec"), 3, "rate", NA),
+list("NLD", c(2007:2010), "patent box", c("roy_rec"), 10, "rate", NA),
+list("NLD", c(2010:2017), "innovation box", c("roy_rec"), 5, "rate", NA),
+list("NLD", c(2018:2020), "innovation box", c("roy_rec"), 7, "rate", nexus = "nexus"),
+list("NLD", c(2021), "innovation box", c("roy_rec"), 9, "rate", nexus = "nexus"),
+list("PAN", c(2008:2018), "headquarters law", c("ser_rec"), 0, "rate", NA),
+list("PAN", c(2019:2021), "headquarters law", c("ser_rec"), 5, "rate", NA),
+list("QAT", c(2008:2021), "tax incentives", c("ser_rec"), 0, "rate", NA), # Qatar Science and Technology Park
+list("SGP", c(2004:2021), "tax incentives", c("all_rec", "roy_wth", "ser_wth"), 0, "rate", NA), # headquarter program, remittance basis for taxation, approved royalties and technical services
+list("SVK", c(2018:2021), "patent box", c("roy_rec"), 50, "percentage", nexus = "nexus"),
+list("SXM", c(2011:2019), "offshore companies", c("all_rec"), 3, "rate", NA), # tax exempt companiesalso exist, but are not eligible for treaty benefits
+list("THA", c(2016:2018), "tax incentives", c("roy_rec", "int_rec", "ser_rec"), 0, "rate", NA),
+list("THA", c(2019:2021), "tax incentives", c("div_wth", "int_wth", "div_rec"), 0, "rate", NA),
+list("THA", c(2019:2021), "tax incentives", c("roy_rec", "int_rec", "ser_rec"), 3, "rate", NA),
+list("TUR", c(2005:2021), "international holding companies", c("cap_rec"), 0, "rate", NA),
+list("VGB", c(2004:2005), "international business companies", c("all_rec"), 0, "rate", NA),
+list("ZAF", c(2011:2021), "headquarter companies", c("div_wth"), 0, "rate", NA)
+)
+```
+
+jersey general rate of 0 percent might not be adequately coded in statutory rates. Amend procedure to develop statutory rates table.
+
+
+```{r test}
+
+
+add_man <- function(instructions, special){
+  iso3c <- instructions[[1]] 
+  years <- instructions[[2]] 
+  regime <- instructions[[3]] 
+  payments <- instructions[[4]] 
+  value <- instructions[[5]] 
+  expressed_in <- instructions[[6]]
+  nexus <- instructions[[7]]
+  
+  len <- length(years)
+  
+  if ("all_rec" %in% payments) {
+    payments <- c(payments, "div_rec", "int_rec", "roy_rec", "ser_rec", "cap_rec")
+    payments <- payments[-which(payments == "all_rec")]
+  }
+
+    if ("all_wth" %in% payments) {
+    payments <- c(payments, "div_wth", "int_wth", "roy_wth", "ser_wth", "cap_wth")
+    payments <- payments[-which(payments == "all_wth")]
+  }
+  
+  addition <- data.frame(year = years)
+  addition %<>% mutate(iso3c = iso3c, div_wth = NA, int_wth = NA, roy_wth = NA, ser_wth = NA, cap_wth = NA, div_rec = NA, int_rec = NA, roy_rec = NA, ser_rec = NA, cap_rec = NA, regime = regime, nexus = nexus)
+  if (expressed_in == "rate") {
+    addition %<>% mutate(across(all_of(payments), ~ value))
+  }
+  
+    if (expressed_in == "percentage") {
+    calc_values_cap <- special$appl_rate[which(special$iso3c == iso3c & special$year %in% years)] * ((100 - value)/100)
+    calc_values_other <- special$comb_rate[which(special$iso3c == iso3c & special$year %in% years)] * ((100 - value)/100)
+    
+    if ("cap" %in% str_sub(payments, 1, 3)) {
+      cap_payments <- payments[which(str_sub(payments, 1, 3) == "cap")]
+      addition %<>% mutate(across(all_of(cap_payments), ~ calc_values_cap))
+    }
+    
+     if (length(payments[which(str_sub(payments, 1, 3) != "cap")]) > 0) {
+       other_payments <- payments[which(str_sub(payments, 1, 3) != "cap")]
+       addition %<>% mutate(across(all_of(other_payments), ~ calc_values_other))
+     }
+  }
+  
+  return(addition)
+}
+
+special_regimes <- map(instructions, add_man, special)
+special_regimes %<>% reduce(rbind)
+write_csv(special_regimes, here("data-created/special_regimes.csv"))
+```
+

@@ -1,0 +1,93 @@
+---
+title: "Action 6 implementation"
+author: "Frederik Heitmüller"
+date: "2022-11-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(here)
+library(lubridate)
+library(ggpattern)
+devtools::load_all()
+ggplot2::theme_set(theme_pubclean())
+
+```
+
+
+```{r load relevant data}
+treaty_compliance <- read_csv(here("data-created/action6_peer_review.csv"), show_col_types = FALSE)
+treaty_compliance %<>% filter(!is.na(partner))
+countries_reviewed <- read_csv(here("data-created/action6_countries_reviewed.csv"), show_col_types = FALSE) 
+groupings <- read_rds(here("data-created/groupings.rds"))
+recommendations <- read_csv(here("data-created/action6_recommendations.csv"), show_col_types = FALSE)
+years <- c(2018:2021)
+inc_frame <- groupings %>% filter(inclusive_framework == "yes")
+
+
+```
+
+
+```{r peer review results}
+
+compl_sum <- treaty_compliance %>% 
+  group_by(iso3c, year) %>% 
+  summarise(compl_inc = sum(str_detect(compliance, "Yes") & inc_frame_member == "yes"),
+            total_inc = sum(inc_frame_member == "yes"),
+            compl_non_inc = sum(str_detect(compliance, "Yes") & inc_frame_member == "no"),
+            total_non_inc = sum(inc_frame_member == "no"),
+            compl_all = sum(str_detect(compliance, "Yes")),
+            total_all = n())
+compl_sum <- left_join(countries_reviewed, compl_sum, by = c("iso3c", "year"))
+compl_sum %<>% mutate(across(!c(iso3c), ~ replace_na(.x, 0)))
+compl_sum %<>% mutate(compl_perc = compl_inc / total_inc)
+compl_sum %<>% mutate(compl_perc_n = ifelse(is.nan(compl_perc), 1, compl_perc))
+compl_sum %<>% left_join(recommendations, by = c("iso3c", "year"))
+
+compl_sum <- data.frame(iso3c = rep(inc_frame$iso3c, times = length(years)), year = rep(years, times = length(inc_frame$iso3c))) %>% left_join(compl_sum, by = c("iso3c", "year"))
+compl_sum %<>% left_join(groupings[c("composite_group", "iso3c")], by = "iso3c")
+
+
+compl_sum %>% 
+  filter(!is.na(total_all)) %>% 
+  group_by(composite_group, year) %>% 
+  summarise(mean_compl = mean(compl_perc_n),
+            total_ctr = n(),
+            mean_tr = mean(total_inc)) %>% 
+  ggplot() +
+  geom_col_pattern(aes(x = year, y = mean_compl, pattern = composite_group), position = "dodge", fill = "white", colour = "black") + 
+  scale_y_continuous(labels = scales::percent) +
+  scale_pattern_manual(values = c("none", "circle", "crosshatch", "stripe")) +
+  labs(x = "", y = "%", title = "Mean share of treaties compliant with BEPS Action 6 minimum standard", fill = "")
+
+ggsave(here("fig/Figure 16_Mean share of treaties compliant with the BEPS Action 6 minimum standard.png"))
+
+compliance_outside_inc_frame <- treaty_compliance %>% filter(inc_frame_member == "no" & str_detect(compliance, "Yes"))
+
+compl_sum %<>% mutate(tr_compl_cat = case_when(compl_perc == 1 ~ "all compliant",
+                                               compl_perc_n == 0 ~ "none compliant",
+                                               is.nan(compl_perc) ~ "no treaty",
+                                               is.na(compl_perc) ~ "not reviewed",
+                                               TRUE ~ "some compliant"))
+
+compl_sum %<>% mutate(tr_compl_cat = factor(tr_compl_cat, levels = c("not reviewed", "none compliant",  "some compliant", "no treaty", "all compliant")))
+
+choices <- c("none", "circle", "stripe", "crosshatch", "polygon_tiling")
+names(choices) <- levels(compl_sum$tr_compl_cat)
+
+compl_sum %>%  
+  group_by(composite_group, year, tr_compl_cat) %>% 
+  summarise(n = n()) %>% 
+  ggplot() +
+    geom_col_pattern(aes(x = year, y = n, pattern = tr_compl_cat), position = "stack", fill = "white", colour = "black") + 
+  facet_wrap(~ composite_group) +
+  scale_pattern_manual(values = choices, name = "") +
+  labs(x = "", y = "Number of countries", title = "Compliance of countries' treaty networks with Action 6")
+
+ggsave(here("fig/Figure 15_Compliance of countries' treaty networks with Action 6.png"))
+
+```
+

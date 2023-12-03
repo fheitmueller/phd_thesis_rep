@@ -1,0 +1,588 @@
+---
+title: "General level graphs"
+author:
+  name: Frederik Heitmüller
+  affiliation: Leiden University, Department for Tax Law
+  email: f.heitmuller@law.leidenuniv.nl
+date: '`r Sys.Date()`'
+output:
+  html_document:
+    toc: yes
+    toc_depth: '2'
+    df_print: paged
+  pdf_document:
+    number_sections: yes
+    toc: yes
+    toc_depth: 2
+bibliography: zotero.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('scales')) install.packages('scales'); library('scales') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('readxl')) install.packages('readxl'); library('readxl') 
+if (!require('kableExtra')) install.packages('kableExtra'); library('kableExtra') 
+if (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2') 
+if (!require('ggpubr')) install.packages('ggpubr'); library('ggpubr') 
+if (!require('lubridate')) install.packages('lubridate'); library('lubridate') 
+if (!require('patchwork')) install.packages('patchwork'); library('patchwork') 
+
+devtools::load_all()
+ggplot2::theme_set(theme_pubclean())
+
+```
+
+```{r loading groupings}
+
+groupings <- read_rds(here("data-created/groupings.rds"))
+all_years <- c(2004:2021)
+
+```
+# Inclusive Framework composition
+
+```{r inclusive framework composition}
+
+if_composition <- groupings %>% 
+  group_by(composite_group_orig) %>% 
+  summarise(inclusive_framework = sum(inclusive_framework == "yes"),
+            beps_44 = sum(beps_44 == "yes"),
+            total = n()) %>% 
+  kable(col.names = c("Group", "Inclusive Frame-work member (as of 2023)", "Part of BEPS development process", "Total"))
+
+save_kable(if_composition, here("fig/Table 2_Jurisdictions in the Inclusive Framework.html"))
+```
+
+
+# Capacity of international organizations
+
+```{r capacity international orgs}
+
+cap_intl <- read_excel(here("data-created/capacity_of_tax_organizations.xlsx"))
+cap_intl %<>% filter(Variable == "Staff" & Year > 2017)
+
+ggplot(cap_intl, aes(x = reorder(Organisation, desc(Value)), y = Value)) + 
+  geom_col() + 
+   geom_text(aes(label = Value), position = position_dodge(width = 0.9), vjust = -0.25) +
+  theme(axis.title.x = element_blank()) + 
+  labs(y = "No. staff", title = "Secretariats of international tax organizations", caption = "Data from organigramms and annual reports, 2021/2022")
+ggsave(here("fig/Figure 2_Staff counts at secretariats of international tax organizations.png"))
+
+```
+
+# Capital importing and exporting countries
+
+
+```{r fdi in countries}
+
+unctad_fdi <- read_csv(here("data-raw/fdi_data/US_FdiFlowsStock_ST202110071148_v1.csv"), show_col_types = FALSE)
+unctad_fdi %<>% mutate(iso3c = countrycode(as.numeric(Economy), "iso3n", "iso3c"))
+unctad_fdi %<>% left_join(groupings[c("iso3c", "composite_group")])
+
+summarized <- unctad_fdi %>% 
+  filter(`Mode Label` == "Stock", Direction == 1) %>% 
+  filter(!is.na(composite_group) & !composite_group %in% c("Low tax", "High income")) %>% 
+  group_by(Year) %>% 
+  summarise(across(c(`Percentage of Gross Domestic Product`, `US dollars at current prices in millions`), mean)) %>%
+  mutate(iso3c = "developing_countries_mean")
+
+
+unctad_fdi %<>%
+    filter(iso3c %in% c("SEN", "NGA", "IND", "COL"), `Mode Label` == "Stock", Direction == 1)
+unctad_fdi %<>% bind_rows(summarized)
+
+  ggplot(unctad_fdi) +
+    geom_line(aes(x = Year, y = `Percentage of Gross Domestic Product`, group = iso3c)) +
+    geom_point(aes(x = Year, y = `Percentage of Gross Domestic Product`, shape = iso3c)) +
+    theme(axis.text.x = element_text(angle = 90), axis.title = element_blank(), title = element_text(size = 8)) +
+    labs(title = "Inward FDI stock in % of GDP", caption  = "Data source: UNCTAD") +
+    scale_x_continuous(breaks = scales::pretty_breaks(12)) +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, NA), breaks = scales::pretty_breaks(6))
+
+  ggsave(here("fig/Figure 6_Evolution of Inward FDI stock.png"))
+
+
+
+```
+
+
+# Chinn - Ito Index
+
+```{r chinn-ito}
+
+kaopen <- read_excel(here("data-raw/kaopen_2019.xls")) 
+groupings <- read_rds(here("data-created/groupings.rds"))
+kaopen %<>% left_join(groupings, by = c("ccode" = "iso3c"))
+
+kaopen %>% group_by(composite_group, year) %>% 
+  summarise(mean_ka_open = mean(ka_open, na.rm = TRUE)) %>% 
+  filter(composite_group != "Not classified") %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = mean_ka_open, group = composite_group)) + 
+  geom_point(aes(x = year, y = mean_ka_open, shape = composite_group)) +
+  theme_pubclean() +
+  theme(legend.position = "right", axis.title = element_blank(), axis.text.x = element_text(angle = 90)) +
+  labs(title = "Evolution of Chinn-Ito Index of financial openness", caption = "Data Source: Chinn/Ito 2019:  https://web.pdx.edu/~ito/Chinn-Ito_website.htm") +
+  guides(shape = guide_legend(title = ""))
+
+ggsave(here("fig/Figure 7_Evolution of Chinn-Ito_index.png"))
+
+
+```
+
+# TP rules in place
+
+```{tp rules}
+
+tp_rules <- read_csv(here("data-created/tp_rules.csv"))
+
+anti_avoidance_graph <- function(df, variable, legend_title){
+df %>% 
+    filter(!is.na(.data[[variable]]) & !is.na(composite_group)) %>% 
+    group_by(year, composite_group, .data[[variable]]) %>% 
+    summarise(number = n()) %>% 
+    ggplot(mapping = aes(x = factor(year), y = number, alpha = .data[[variable]])) +
+    geom_col(position = "stack") + 
+    facet_wrap(vars(composite_group), nrow = 3, scales = "free") + 
+    scale_x_discrete(breaks = scales::pretty_breaks(12)) +
+    theme(axis.title = element_blank(), axis.text.x = element_text(angle = 90)) + 
+    guides(alpha = guide_legend(title = legend_title))
+  }
+
+anti_avoidance_graph(tp_rules, "tp_available_imp", "TP rules in place")
+ggsave(here("fig/Figure 3_Transfer pricing rules across countries.png"))
+
+```
+
+
+
+
+# Withholding statutory rate discrepancy
+
+```{r domestic rates and statutory rates}
+
+# Read the CSV file 'all_withholding.csv' and store it in the 'domestic_law' data frame
+domestic_law <- read_csv(here("data-created/all_withholding.csv"))
+
+# Read the RDS file 'groupings.rds' and store it in the 'groupings' data frame
+groupings <- read_rds(here("data-created/groupings.rds"))
+
+# Filter 'domestic_law' to include only rows with categories 'royalties_general', 'statutory_rate', 'interest_general', and 'technical_services'
+domestic_law %<>% filter(category %in% c("royalties_general", "statutory_rate", "interest_general", "technical_services"))
+
+# Separate 'statutory_rate' rows from 'domestic_law' into a new data frame 'statutory_rate'
+statutory_rate <- domestic_law %>% filter(category == "statutory_rate")
+
+# Remove 'statutory_rate' rows from 'domestic_law'
+domestic_law %<>% filter(category != "statutory_rate")
+
+# Rename the column 'rate_appl' in 'statutory_rate' to 'stat_rate'
+statutory_rate %<>% rename("stat_rate" = "rate_appl")
+
+# Perform a left join between 'domestic_law' and 'statutory_rate' on columns 'iso3c', 'stat_rate', and 'year'
+domestic_law %<>% left_join(statutory_rate[c("iso3c", "stat_rate", "year")])
+
+# Select specific columns 'iso3c', 'category', 'rate_appl', 'rate_th', 'stat_rate', and 'year' from 'domestic_law'
+domestic_law %<>% select(iso3c, category, rate_appl, rate_th, stat_rate, year)
+
+# Remove rows with NA values in the 'stat_rate' column from 'domestic_law'
+domestic_law %<>% filter(!is.na(stat_rate))
+
+# Calculate two new columns 'discrepancy_normal_rate' and 'discrepancy_th_rate' in 'domestic_law'
+# 'discrepancy_normal_rate' is the difference between 'rate_appl' and 'stat_rate'
+# 'discrepancy_th_rate' is the difference between 'rate_th' or 'rate_appl' (whichever is not NA) and 'stat_rate'
+domestic_law %<>% mutate(discrepancy_normal_rate = rate_appl - stat_rate,
+                         discrepancy_th_rate = coalesce(rate_th, rate_appl) - stat_rate)
+
+# Replace values greater than 0 with 0 in columns 'discrepancy_normal_rate' and 'discrepancy_th_rate'
+domestic_law %<>% mutate(across(c("discrepancy_normal_rate", "discrepancy_th_rate"), ~ ifelse(.x > 0, 0, .x)))
+
+# Perform a left join between 'domestic_law' and 'groupings' on columns 'iso3c' and 'composite_group'
+domestic_law %<>% left_join(groupings[c("iso3c", "composite_group")])
+
+# Read the RDS file 'ey_all_years_av.rds' and store it in 'all_available'
+all_available <- read_rds(here("data-created/ey_all_years_av.rds"))
+
+# Filter 'domestic_law' to include only rows with 'iso3c' present in 'all_available'
+domestic_law %<>% filter(iso3c %in% all_available)
+
+# Group and summarize data in 'domestic_law' to calculate medians for 'discrepancy_normal_rate' and 'discrepancy_th_rate'
+results_median <- domestic_law %>% 
+  group_by(category, year, composite_group) %>% 
+  summarise(general = median(discrepancy_normal_rate),
+            tax_haven = median(discrepancy_th_rate))
+
+# Reshape data from 'results_median' to a longer format using 'pivot_longer'
+results_median %<>% pivot_longer(cols = c("general", "tax_haven"), names_to = "specific_th_rate", values_to = "discrepancy")
+
+
+# Function to create a graph
+make_graph <- function(df, chosen, title) {
+  df <- df %>% filter(category == chosen)
+  graph <- ggplot(df) +
+    geom_line(aes(x = year, y = discrepancy, group = interaction(composite_group, specific_th_rate), colour = composite_group, linetype = specific_th_rate), colour = "black") +
+    geom_point(aes(x = year, y = discrepancy, shape = composite_group)) +
+    theme(legend.position = "right") +
+    labs(x = NULL, y = NULL, title = title) +
+    guides(shape = guide_legend(title = "Group"),
+           linetype = guide_legend(title = "Tax haven rate"))
+  return(graph)
+}
+
+
+# Create the plot for 'interest_general' category
+p1 <- make_graph(df = results_median, chosen = 'interest_general', title = "Interest") +
+  scale_y_continuous(limits = c(-30, 0))
+
+p2 <-  make_graph(results_median, "royalties_general", "Royalties") +
+  scale_y_continuous(limits = c(-30, 0))
+
+p3 <- make_graph(results_median, "technical_services", "Technical services") +
+  scale_y_continuous(limits = c(-30, 0))
+
+
+p1 + p2 + p3 + guide_area() +
+  plot_layout(guides = 'collect')
+
+ggsave(here("fig/Figure 8_Median difference between domestic withholding rates and statutory rates.png"), width = 8, height = 6)
+
+
+group_numbers <- domestic_law %>% distinct(iso3c, composite_group) %>% group_by(composite_group) %>% summarise(n = n())
+kable(group_numbers)
+
+
+graph <- function(df, var, title){
+  ggplot(df) +
+  geom_line(aes(x = year, y = .data[[var]], group = composite_group)) + 
+  geom_point(aes(x = year, y = .data[[var]], shape = composite_group)) + 
+  theme(legend.position = "bottom") +
+  labs(x = element_blank(), y = element_blank(), title = title) +
+  guides(colour = guide_legend(title = "Group")) + 
+    scale_y_continuous(limits = c(0, 35))
+}
+
+
+p4 <- domestic_law %>% 
+  select(iso3c, composite_group, year, stat_rate) %>% 
+  distinct() %>% group_by(year, composite_group) %>% 
+  summarise(stat_rate = median(stat_rate)) %>% 
+  graph("stat_rate", "Median statutory rates")
+
+p5 <- domestic_law %>% 
+  select(iso3c, composite_group, year, rate_appl, category) %>% 
+  distinct() %>% group_by(year, composite_group) %>% 
+  summarise(rate_appl = median(rate_appl)) %>% 
+  graph("rate_appl", "Median withholding rates \n(interest, royalties, technical services)")
+
+p4 + p5 +
+  plot_layout(guides = 'collect')
+
+ggsave(here("fig/Figure 9_Median statutory rates and withholding rates for deductible payments.png"), width = 8, height = 6)
+
+
+all_aligned <- domestic_law %>% 
+  select(-c(rate_appl, rate_th, stat_rate)) %>% 
+  pivot_longer(cols = c("discrepancy_normal_rate", "discrepancy_th_rate"), names_to = "discrepancy", values_to = "value") %>% 
+  pivot_wider(names_from = "category", values_from = "value") %>% 
+  mutate(all_aligned = ifelse(interest_general == 0 & royalties_general == 0 & technical_services == 0, "yes", "no"))
+
+all_aligned %>% 
+  group_by(year, composite_group, discrepancy, all_aligned) %>% 
+  summarise(n = n()) %>% 
+  pivot_wider(names_from = "all_aligned", values_from = "n") %>% 
+  mutate(across(c("yes", "no"), ~ replace_na(.x, 0))) %>% 
+  mutate(share_all_aligned = yes / (yes + no)) %>% 
+  mutate(discrepancy = ifelse(discrepancy == "discrepancy_normal_rate", "standard", "tax havens")) %>% 
+  ggplot() + 
+  geom_line(aes(x = year, y = share_all_aligned, group = interaction(composite_group, discrepancy), linetype = discrepancy)) + 
+  geom_point(aes(x = year, y = share_all_aligned, shape = composite_group)) +
+  scale_y_continuous(labels = label_percent()) +
+  guides(colour = guide_legend(title = "Group"),
+         linetype = guide_legend(title = "Type of rate")) +
+    theme(legend.position = "right") +
+  labs(x = "", title = "Share of countries with all withholding rates for \n deductible payments aligned with statutory rate")
+
+
+#ggsave(here("fig/Share of countries with all withholding rates for deductible payments aligned with statutory rate.png"))
+
+```
+
+
+
+```{r evolution of discrepancy with treaty rates}
+
+acby <- read_csv(here("data-created/all_countries_bilateral_year.csv"))
+acby %<>% filter(category %in% c("royalties_general", "interest_general", "technical_services"))
+acby %<>% 
+  select(host, year, category, rate_weighted_mean) %>% 
+  rename("iso3c" = "host") %>% distinct()
+
+acby %<>% left_join(statutory_rate[c("iso3c", "stat_rate", "year")])
+acby %<>% mutate(discrepancy = rate_weighted_mean - stat_rate)
+acby %<>% mutate(across(c("discrepancy"), ~ ifelse(.x > 0, 0, .x)))
+acby %<>% left_join(groupings[c("iso3c", "composite_group")])
+acby %<>% left_join(domestic_law[c("iso3c", "year", "category", "discrepancy_normal_rate")])
+
+# putting the high income country together with the upper middle ones
+acby$composite_group %<>% recode("High income" = "Upper middle income")
+
+results_median_tr <- acby %>% 
+  group_by(category, year, composite_group) %>% 
+  summarise("domestic" = median(discrepancy_normal_rate),
+            "treaties" = median(discrepancy))
+
+results_median_tr %<>% pivot_longer(cols = c("domestic", "treaties"), names_to = "rate", values_to = "discrepancy")
+
+make_graph <- function(df, chosen, name){
+graph <- df %>% 
+  filter(category == chosen) %>% 
+  ggplot() + 
+  geom_line(aes(x = year, y = discrepancy, group = interaction(composite_group, rate), linetype = rate)) +
+  geom_point(aes(x = year, y = discrepancy, shape = composite_group)) +
+  theme(legend.position = "right") +
+  labs(x = element_blank(), y = element_blank()) +
+  guides(colour = guide_legend(title = "Group"),
+         linetype = guide_legend(title = "Type of rate")) +
+  scale_y_continuous(limits = c(-25, 0)) +
+  ggtitle(name)
+return(graph)
+}
+
+p1 <- make_graph(results_median_tr, "interest_general", "Interest")
+
+p2 <-  make_graph(results_median_tr, "royalties_general", "Royalties")
+
+p3 <- make_graph(results_median_tr, "technical_services", "Technical services")
+
+p1 + p2 + p3 + guide_area() +
+  plot_layout(guides = 'collect')
+
+ggsave(here("fig/Figure 10_Median difference between applicable withholding rates (weighted mean) and statutory rates.png"), width = 8, height = 6)
+
+
+
+group_numbers <- acby %>% 
+  distinct(iso3c, composite_group) %>% 
+  group_by(composite_group) %>% 
+  summarise(n = n()) %>% kable()
+
+
+```
+
+
+
+
+# Treaty advantages tables
+
+```{r treaty advantages table}
+all_countries_bilateral_year <- read_csv(here("data-created/all_countries_bilateral_year_nga_mod.csv"))
+
+all_countries_bilateral_year %<>% filter(!category %in% c("dividends_port", "interest_bank", 
+                                                          "royalties_copyright", 
+                                                          "land_rich_indirect",
+                                                          "shares_indirect"))
+
+legal_regime_data <- all_countries_bilateral_year %>% 
+  select(c(home, category, host, year, treaty_in_place, anti_avoidance_rule, advantage_over_rest)) %>%
+  distinct() %>% 
+  mutate(advantage_over_rest = ifelse(advantage_over_rest < 0, 0, advantage_over_rest)) %>% 
+  pivot_wider(names_from = "category", values_from = c("advantage_over_rest"))
+
+legal_regime_data %<>% filter((host == "IND" & home == "MUS") |
+                    (host == "SEN" & home == "MUS") |
+                    (host == "COL" & home == "ESP") |
+                    (host == "NGA" & home == "NLD") |
+                    (host == "NGA" & home == "MUS"))
+
+
+treaty_advantages <- legal_regime_data %>% 
+  filter(year %in% c(2012, 2021)) %>% 
+  mutate(dyad = paste(host, home, sep = "-")) %>% 
+  select(dyad, year, treaty_in_place, dividends_subst, interest_general, royalties_general, technical_services, land_rich, shares) %>% 
+  mutate(treaty_in_place = recode(treaty_in_place, "0" = "no", "1" = "yes")) %>% 
+  kable(digits = 1, 
+        col.names = c("dyad", "year", "treaty", "dividends (direct investment)", "interest",  "royalties", "technical services", "capital gains (land rich companies)", "capital gains (all shares)"))
+
+save_kable(treaty_advantages, here("fig/Table 8_treaty advantages table.html"))
+
+
+```
+
+
+
+# Treaty Shopping Graphs
+
+```{r SPE investment in total investment}
+
+spe_fdi <- read_csv(here("data-created/data_for_spe_models.csv")) 
+spe_fdi %<>% filter(indicator == "million_USD") %>% filter(type_fdi == "total")
+
+spe_fdi %<>% filter((host == "IND" & home == "MUS") |
+                    (host == "SEN" & home == "MUS") |
+                    (host == "COL" & home == "ESP") |
+                    (host == "NGA" & home == "NLD"))
+
+spe_graph <- function(df, var, title, caption){
+  ggplot(df) + 
+  geom_line(aes(x = year, y = .data[[var]], group = dyad)) + 
+  geom_point(aes(x = year, y = .data[[var]], shape = dyad)) +
+  scale_y_continuous(labels = scales::label_percent()) + 
+  scale_x_continuous(breaks = breaks_pretty(n = 10)) +
+  theme(axis.title = element_blank()) + 
+  labs(title = title, 
+       caption = caption)
+}
+
+
+spe_fdi %>% 
+  mutate(dyad = paste(home, host, sep = "-")) %>% 
+  filter(year > 2011) %>% 
+  spe_graph("value_all_share", "Share of SPE investment from selected country in total inward FDI stock", "Data source: Spanish Ministry of Commerce (for ESP), OECD (for NLD),\nMauritius Financial Services Commission, IMF (for total stock)")
+  
+
+ggsave(here("fig/Figure 12_Share of SPE investment from selected country in total inward FDI stock.png"))
+
+
+
+spe_fdi %>% 
+  filter(host == "COL") %>% 
+    ggplot() + 
+  geom_line(aes(x = year, y = value_all)) +
+  scale_x_continuous(breaks = breaks_pretty(n = 10))
+
+
+
+fdi <-  read_csv(here("data-created/combined_fdi.csv"))
+fdi %<>% filter(direction == "outward" & type == "total")
+fdi %<>% rename(host = counterpart_iso3c, home = country_iso3c)
+
+
+fdi %<>% filter((host == "IND" & home == "MUS") |
+                    (host == "SEN" & home == "MUS") |
+                    (host == "COL" & home == "ESP") |
+                    (host == "NGA" & home == "NLD"))
+
+fdi %<>% left_join(spe_fdi[c("host", "home", "year", "value_all")], by = c("host", "home", "year"))
+fdi %<>% mutate(spe_share = value_all / value)
+fdi %<>% filter(!is.na(spe_share))
+
+fdi %>% 
+  mutate(dyad = paste(home, host, sep = "-")) %>% 
+  filter(year > 2011) %>% 
+  spe_graph("spe_share", "SPE investment/total inward FDI stock from selected country", "Data source: Spanish Ministry of Commerce (for ESP), OECD (for NLD),\nMauritius Financial Services Commission, IMF (for total stock)")
+
+
+  ggplot() + 
+  geom_line(aes(x = year, y = spe_share, group = dyad, colour = dyad)) + 
+  scale_y_continuous(labels = scales::label_percent()) + 
+  scale_x_continuous(breaks = breaks_pretty(n = 10)) +
+  theme(axis.title = element_blank()) + 
+  labs(title = "Share of SPE investment from selected country in inward FDI stock from selected country", 
+       caption = "Data source: Spanish Ministry of Commerce (for ESP), OECD (for NLD),\nMauritius Financial Services Commission, IMF (for total stock)")
+
+#ggsave(here("fig/Share of SPE investment from selected country in inward FDI stock from selected country.png"))
+
+
+```
+
+# Treaty shopping in 59 developing countries
+
+```{r treaty shopping in developing countries}
+all_countries_bilateral_year <- read_csv(here("data-created/all_countries_bilateral_year.csv"))
+all_countries_bilateral_year %<>% filter(!category %in% c("dividends_port", "interest_bank", "royalties_copyright"))
+
+
+descriptive_stats <- function(data){
+  data %<>% all_countries_means(weight = "weight_const")
+  mean_rates <- data %>% 
+    group_by(year, category) %>% 
+    summarise(
+      rate_weighted_median = median(rate_weighted_mean),
+      rate_shopping_median = median(rate_shopping_mean),
+      rate_shopping_median_no_aa = median(rate_shopping_mean_no_aa),
+      min_available_median = median(min_available_mean),
+      min_available_median_no_aa = median(min_available_mean_no_aa),
+      rate_weighted_mean = mean(rate_weighted_mean),
+      rate_shopping_mean = mean(rate_shopping_mean),
+      rate_shopping_mean_no_aa = mean(rate_shopping_mean_no_aa),
+      min_available_mean = mean(min_available_mean),
+      min_available_mean_no_aa = mean(min_available_mean_no_aa)
+      )
+  mean_rates %<>% pivot_longer(cols = 3:12, names_to = "variable")
+  return(mean_rates)
+  }
+
+
+mean_rates <- descriptive_stats(all_countries_bilateral_year)
+number_countries <- all_countries_bilateral_year %>% distinct(host) %>% nrow
+
+mean_rates %>% filter(variable == "rate_shopping_mean") %>%  
+  ggplot() + 
+    geom_line(aes(x = year, y = value, group = category)) +
+    geom_point(aes(x = year, y = value, shape = category)) +
+    theme_pubr(base_size = 10) +
+    theme(
+      axis.text.x = element_text(angle = 90),
+      axis.title.x = element_blank(), 
+      legend.box = "vertical" , 
+      legend.margin = margin(), 
+      legend.position = "bottom"
+      ) +
+    scale_y_continuous(expand = c(0, 0), limits = c(-1, NA)) +
+    labs(y = "%", title = paste("Evolution of treaty shopping risk across", number_countries, "countries"))
+
+
+ggsave(here("fig/Figure 13_Evolution of treaty shopping risk in developing countries.png"))
+
+
+ all_countries_bilateral_year %>% 
+  all_countries_means(weight = "weight_const") %>% 
+  group_by(year, host) %>% 
+  summarise(mean_risk = mean(rate_shopping_mean),
+            mean_risk_no_aa = mean(rate_shopping_mean_no_aa)) %>% 
+  ungroup() %>% 
+  group_by(year) %>% 
+  summarise(no = sum(mean_risk == 0),
+          yes = sum(mean_risk_no_aa == 0)) %>% 
+  pivot_longer(cols = c("yes", "no"), names_to = "anti_avoidance_considered", values_to = "value") %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = value)) +
+   theme_pubr(base_size = 10) +
+    theme(
+      axis.text.x = element_text(angle = 90),
+      axis.title = element_blank()) +
+    scale_y_continuous(expand = c(0, 0), limits = c(-1, NA)) +
+   labs(title = "Number of countries (out of 59) without any treaty shopping risk") 
+
+ggsave(here("fig/Figure 14_Countries without any treaty shopping risk.png"))
+
+
+```
+
+# Countries suitable as conduit jurisdictions
+
+```{r graph}
+conduit_list <- read_csv(here("data-created/conduits.csv"))
+
+conduit_list %<>% mutate(cond_num = ifelse(is.na(conduit), 0, 1))
+conduit_list %<>% group_by(iso3c, category) %>% mutate(cond_diff = c(0, diff(cond_num)))
+
+changes <- conduit_list %>% filter(cond_diff != 0)
+
+conduit_list %>% group_by(category, year) %>% summarise(number_ctries = sum(cond_num)) %>% 
+  ggplot() +
+  geom_line(aes(x = year, y = number_ctries, group = category)) + 
+  geom_point(aes(x = year, y = number_ctries, shape = category)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(-1, NA)) +
+  ggtitle("Number of countries suitable for conduit companies")
+  
+ggsave(here("fig/Figure 18_Number of countries suitable for conduit companies.png"))
+
+
+```
+
+

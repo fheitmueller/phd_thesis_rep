@@ -1,0 +1,92 @@
+---
+title: "transfer pricing rules"
+author: "Frederik Heitmüller"
+date: "2022-10-14"
+output: html_document
+---
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('purrr')) install.packages('purrr'); library('purrr') 
+if (!require('stringr')) install.packages('stringr'); library('stringr') 
+
+devtools::load_all()
+
+# defining for which data years the script should run
+years <- c(2004:2021)
+
+```
+
+```{r other tables}
+all_paras <- read_csv(here("data-created/all_paras_ey.csv"))
+groupings <- read_rds(here("data-created/groupings.rds"))
+all_paras %<>% mutate(heading = tolower(heading))
+all_paras %<>% filter(!str_detect(heading, "%"))
+all_paras$heading %<>% str_replace("\\.", "") 
+all_paras$heading %<>% trimws()
+ #maybe eliminate characters of "- " preceded by a letter
+all_paras$text %<>% str_replace_all("(?<=[:alpha:])- ", "")
+
+tp <- all_paras %>% filter(str_detect(heading, "transfer pricing"))
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+
+tp <- left_join(all_tocs, tp, by = c("iso3c", "year"))
+tp %<>% mutate(length_t = str_length(text))
+tp %<>% mutate(no_rule = str_detect(text, "does not have any transfer|does not have transfer|does not include transfer|have not established any transfer|do not include provisions|does not contain transfer|does not contain any transfer"))
+
+tp %<>% mutate(tp_available = ifelse(is.na(heading) | no_rule == TRUE, "no", "yes"))
+
+
+all_potential <- all_tocs %>% select(country, iso3c) %>% distinct(iso3c)
+
+all_potential %<>% 
+  slice(rep(1:n(), each = length(years))) %>% add_column(year = rep(years, times = nrow(all_potential))) 
+
+tp <- left_join(all_potential, tp)
+
+tp$tp_available[which(tp$iso3c == "SVK" & tp$year %in% c(2008, 2009))] <- "yes"
+tp$tp_available[which(tp$iso3c == "KWT" & tp$year %in% c(2013:2021))] <- "yes" #Rules are spelled out in detail
+tp$tp_available[which(tp$iso3c == "PRI" & tp$year %in% c(2021))] <- "yes"
+
+# assume for countries for which data is not available for earlier years that if rules had not yet been introduced in the year for which data is available rules were not introduced before either. Conversely, if they had been introduced already at a time but data is missing for later years, it can be assumed that they have remained in place.
+tp %<>% 
+  group_by(iso3c) %>% 
+  mutate(tp_available_imp = tp_available) %>% 
+  fill(tp_available_imp, .direction = "up") %>% 
+  mutate(tp_available_imp = ifelse(tp_available_imp == "no", tp_available_imp, tp_available)) %>%
+  ungroup()
+
+tp %<>% 
+  group_by(iso3c) %>% 
+  mutate(tp_available_imp2 = tp_available) %>% 
+  fill(tp_available_imp2, .direction = "down") %>% 
+  mutate(tp_available_imp2 = ifelse(tp_available_imp2 == "yes", tp_available_imp2, tp_available)) %>%
+  ungroup()
+
+tp %<>% mutate(tp_available_imp = coalesce(tp_available_imp, tp_available_imp2)) %>% select(-tp_available_imp2)
+
+tp %<>% left_join(groupings[c("iso3c", "composite_group")])
+
+
+all_available <- tp %>% filter(!is.na(tp_available_imp)) %>% group_by(iso3c) %>% summarise(n = n()) %>% filter(n == max(n)) %>% pull(iso3c)
+
+tp %<>% filter(iso3c %in% all_available)
+
+tp %<>% mutate(tp_num = ifelse(tp_available_imp == "yes", 1, 0))
+tp %<>% group_by(iso3c) %>% mutate(tp_diff = c(0, diff(tp_num)))
+
+write_csv(tp, here("data-created/tp_rules.csv"))
+
+```
+add Slovakia 2008/2009 where it is an error to assume that there were no rules.
+
+

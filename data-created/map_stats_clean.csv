@@ -1,0 +1,1822 @@
+country,start_inventory,cases_started,cases_closed,end_inventory,year,type,months,closing_ratio,portion_if_cases,iso3c
+Angola,0,0,0,0,2016,all,NA,NA,NA,AGO
+Argentina,5,3,2,6,2016,all,NA,NA,NA,ARG
+Australia,32,22,12,42,2016,all,NA,NA,NA,AUS
+Austria,195,70,38,227,2016,all,NA,NA,NA,AUT
+Belgium,764,426,438,752,2016,all,NA,NA,NA,BEL
+Brazil,11,4,2,13,2016,all,NA,NA,NA,BRA
+Brunei Darussalam,0,0,0,0,2016,all,NA,NA,NA,BRN
+Bulgaria,15,5,4,16,2016,all,NA,NA,NA,BGR
+Canada,260,124,160,224,2016,all,NA,NA,NA,CAN
+Chile,0,3,0,3,2016,all,NA,NA,NA,CHL
+China (People’s Republic of),160,32,84,108,2016,all,NA,NA,NA,CHN
+Costa Rica,2,0,2,0,2016,all,NA,NA,NA,CRI
+Côte d'Ivoire,0,0,0,0,2016,all,NA,NA,NA,CIV
+Croatia,10,2,0,12,2016,all,NA,NA,NA,HRV
+Czech Republic,33,17,4,46,2016,all,NA,NA,NA,CZE
+Denmark,172,50,44,178,2016,all,NA,NA,NA,DNK
+Estonia,0,1,0,1,2016,all,NA,NA,NA,EST
+Finland,98,30,19,109,2016,all,NA,NA,NA,FIN
+France,844,296,303,837,2016,all,NA,NA,NA,FRA
+Georgia,0,0,0,0,2016,all,NA,NA,NA,GEO
+Germany,1177,353,350,1180,2016,all,NA,NA,NA,DEU
+Greece,25,5,3,27,2016,all,NA,NA,NA,GRC
+Guernsey,0,0,0,0,2016,all,NA,NA,NA,GGY
+Haiti,0,0,0,0,2016,all,NA,NA,NA,HTI
+Hong Kong (China),5,5,0,10,2016,all,NA,NA,NA,HKG
+Hungary,17,4,2,19,2016,all,NA,NA,NA,HUN
+Iceland,0,1,1,0,2016,all,NA,NA,NA,ISL
+India,622,78,55,645,2016,all,NA,NA,NA,IND
+Indonesia,62,19,32,49,2016,all,NA,NA,NA,IDN
+Ireland,38,14,7,45,2016,all,NA,NA,NA,IRL
+Isle of Man,0,0,0,0,2016,all,NA,NA,NA,IMN
+Israel,18,10,9,19,2016,all,NA,NA,NA,ISR
+Italy,308,159,29,438,2016,all,NA,NA,NA,ITA
+Japan,103,36,25,114,2016,all,NA,NA,NA,JPN
+Jersey,0,0,0,0,2016,all,NA,NA,NA,JEY
+Korea,144,22,35,131,2016,all,NA,NA,NA,KOR
+Latvia,3,2,1,4,2016,all,NA,NA,NA,LVA
+Liechtenstein,11,2,3,10,2016,all,NA,NA,NA,LIE
+Lithuania,2,1,0,3,2016,all,NA,NA,NA,LTU
+Luxembourg,285,284,335,234,2016,all,NA,NA,NA,LUX
+Macau (China),0,0,0,0,2016,all,NA,NA,NA,MAC
+Malta,2,0,0,2,2016,all,NA,NA,NA,MLT
+Mauritius,2,3,1,4,2016,all,NA,NA,NA,MUS
+Mexico,16,10,5,21,2016,all,NA,NA,NA,MEX
+Monaco,0,0,0,0,2016,all,NA,NA,NA,MCO
+Netherlands,254,113,70,297,2016,all,NA,NA,NA,NLD
+New Zealand,8,13,6,15,2016,all,NA,NA,NA,NZL
+Norway,76,24,25,75,2016,all,NA,NA,NA,NOR
+Panama,0,0,0,0,2016,all,NA,NA,NA,PAN
+Papua New Guinea,0,0,0,0,2016,all,NA,NA,NA,PNG
+Paraguay,0,0,0,0,2016,all,NA,NA,NA,PRY
+Poland,78,28,28,78,2016,all,NA,NA,NA,POL
+Portugal,52,20,11,61,2016,all,NA,NA,NA,PRT
+Russian Federation,0,2,0,2,2016,all,NA,NA,NA,RUS
+Seychelles,0,0,0,0,2016,all,NA,NA,NA,SYC
+Singapore,18,8,5,21,2016,all,NA,NA,NA,SGP
+Slovak Republic,23,5,2,26,2016,all,NA,NA,NA,SVK
+Slovenia,13,13,4,22,2016,all,NA,NA,NA,SVN
+South Africa,19,6,1,24,2016,all,NA,NA,NA,ZAF
+Spain,309,85,107,287,2016,all,NA,NA,NA,ESP
+Sweden,166,63,50,179,2016,all,NA,NA,NA,SWE
+Switzerland,303,147,101,349,2016,all,NA,NA,NA,CHE
+Turkey,8,9,1,16,2016,all,NA,NA,NA,TUR
+United Kingdom,262,109,57,314,2016,all,NA,NA,NA,GBR
+United States,972,179,184,967,2016,all,NA,NA,NA,USA
+Uruguay,0,0,0,0,2016,all,NA,NA,NA,URY
+Angola,0,0,0,0,2016,other,NA,NA,NA,AGO
+Argentina,3,1,1,3,2016,other,NA,NA,NA,ARG
+Australia,9,10,4,15,2016,other,NA,NA,NA,AUS
+Austria,114,41,25,130,2016,other,NA,NA,NA,AUT
+Belgium,679,403,416,666,2016,other,NA,NA,NA,BEL
+Brazil,7,0,1,6,2016,other,NA,NA,NA,BRA
+Brunei Darussalam,0,0,0,0,2016,other,NA,NA,NA,BRN
+Bulgaria,7,3,1,9,2016,other,NA,NA,NA,BGR
+Canada,37,24,19,42,2016,other,NA,NA,NA,CAN
+Chile,0,0,0,0,2016,other,NA,NA,NA,CHL
+China (People’s Republic of),47,11,24,34,2016,other,NA,NA,NA,CHN
+Costa Rica,0,0,0,0,2016,other,NA,NA,NA,CRI
+Côte d'Ivoire,0,0,0,0,2016,other,NA,NA,NA,CIV
+Croatia,10,0,0,10,2016,other,NA,NA,NA,HRV
+Czech Republic,14,9,2,21,2016,other,NA,NA,NA,CZE
+Denmark,37,19,17,39,2016,other,NA,NA,NA,DNK
+Estonia,0,1,0,1,2016,other,NA,NA,NA,EST
+Finland,36,22,5,53,2016,other,NA,NA,NA,FIN
+France,325,166,143,348,2016,other,NA,NA,NA,FRA
+Georgia,0,0,0,0,2016,other,NA,NA,NA,GEO
+Germany,632,244,215,661,2016,other,NA,NA,NA,DEU
+Greece,17,4,2,19,2016,other,NA,NA,NA,GRC
+Guernsey,0,0,0,0,2016,other,NA,NA,NA,GGY
+Haiti,0,0,0,0,2016,other,NA,NA,NA,HTI
+Hong Kong (China),5,2,0,7,2016,other,NA,NA,NA,HKG
+Hungary,7,2,2,7,2016,other,NA,NA,NA,HUN
+Iceland,0,1,1,0,2016,other,NA,NA,NA,ISL
+India,72,7,3,76,2016,other,NA,NA,NA,IND
+Indonesia,43,10,27,26,2016,other,NA,NA,NA,IDN
+Ireland,13,6,6,13,2016,other,NA,NA,NA,IRL
+Isle of Man,0,0,0,0,2016,other,NA,NA,NA,IMN
+Israel,10,6,4,12,2016,other,NA,NA,NA,ISR
+Italy,147,20,20,147,2016,other,NA,NA,NA,ITA
+Japan,8,3,3,8,2016,other,NA,NA,NA,JPN
+Jersey,0,0,0,0,2016,other,NA,NA,NA,JEY
+Korea,58,4,9,53,2016,other,NA,NA,NA,KOR
+Latvia,1,2,1,2,2016,other,NA,NA,NA,LVA
+Liechtenstein,7,0,2,5,2016,other,NA,NA,NA,LIE
+Lithuania,1,1,0,2,2016,other,NA,NA,NA,LTU
+Luxembourg,270,274,334,210,2016,other,NA,NA,NA,LUX
+Macau (China),0,0,0,0,2016,other,NA,NA,NA,MAC
+Malta,0,0,0,0,2016,other,NA,NA,NA,MLT
+Mauritius,2,3,1,4,2016,other,NA,NA,NA,MUS
+Mexico,6,3,3,6,2016,other,NA,NA,NA,MEX
+Monaco,0,0,0,0,2016,other,NA,NA,NA,MCO
+Netherlands,144,85,56,173,2016,other,NA,NA,NA,NLD
+New Zealand,5,10,5,10,2016,other,NA,NA,NA,NZL
+Norway,36,18,13,41,2016,other,NA,NA,NA,NOR
+Panama,0,0,0,0,2016,other,NA,NA,NA,PAN
+Papua New Guinea,0,0,0,0,2016,other,NA,NA,NA,PNG
+Paraguay,0,0,0,0,2016,other,NA,NA,NA,PRY
+Poland,39,19,24,34,2016,other,NA,NA,NA,POL
+Portugal,13,8,1,20,2016,other,NA,NA,NA,PRT
+Russian Federation,0,0,0,0,2016,other,NA,NA,NA,RUS
+Seychelles,0,0,0,0,2016,other,NA,NA,NA,SYC
+Singapore,8,5,2,11,2016,other,NA,NA,NA,SGP
+Slovak Republic,14,2,1,15,2016,other,NA,NA,NA,SVK
+Slovenia,11,7,4,14,2016,other,NA,NA,NA,SVN
+South Africa,9,4,1,12,2016,other,NA,NA,NA,ZAF
+Spain,87,26,29,84,2016,other,NA,NA,NA,ESP
+Sweden,57,30,28,59,2016,other,NA,NA,NA,SWE
+Switzerland,162,87,44,205,2016,other,NA,NA,NA,CHE
+Turkey,7,7,1,13,2016,other,NA,NA,NA,TUR
+United Kingdom,79,49,20,108,2016,other,NA,NA,NA,GBR
+United States,256,49,39,266,2016,other,NA,NA,NA,USA
+Uruguay,0,0,0,0,2016,other,NA,NA,NA,URY
+Angola,0,0,0,0,2016,tp,NA,NA,NA,AGO
+Argentina,2,2,1,3,2016,tp,NA,NA,NA,ARG
+Australia,23,12,8,27,2016,tp,NA,NA,NA,AUS
+Austria,81,29,13,97,2016,tp,NA,NA,NA,AUT
+Belgium,85,23,22,86,2016,tp,NA,NA,NA,BEL
+Brazil,4,4,1,7,2016,tp,NA,NA,NA,BRA
+Brunei Darussalam,0,0,0,0,2016,tp,NA,NA,NA,BRN
+Bulgaria,8,2,3,7,2016,tp,NA,NA,NA,BGR
+Canada,223,100,141,182,2016,tp,NA,NA,NA,CAN
+Chile,0,3,0,3,2016,tp,NA,NA,NA,CHL
+China (People's Republic of),113,21,60,74,2016,tp,NA,NA,NA,CHN
+Costa Rica,2,0,2,0,2016,tp,NA,NA,NA,CRI
+Côte d'Ivoire,0,0,0,0,2016,tp,NA,NA,NA,CIV
+Croatia,0,2,0,2,2016,tp,NA,NA,NA,HRV
+Czech Republic,19,8,2,25,2016,tp,NA,NA,NA,CZE
+Denmark,135,31,27,139,2016,tp,NA,NA,NA,DNK
+Estonia,0,0,0,0,2016,tp,NA,NA,NA,EST
+Finland,62,8,14,56,2016,tp,NA,NA,NA,FIN
+France,519,130,160,489,2016,tp,NA,NA,NA,FRA
+Georgia,0,0,0,0,2016,tp,NA,NA,NA,GEO
+Germany,545,109,135,519,2016,tp,NA,NA,NA,DEU
+Greece,8,1,1,8,2016,tp,NA,NA,NA,GRC
+Guernsey,0,0,0,0,2016,tp,NA,NA,NA,GGY
+Haiti,0,0,0,0,2016,tp,NA,NA,NA,HTI
+Hong Kong (China),0,3,0,3,2016,tp,NA,NA,NA,HKG
+Hungary,10,2,0,12,2016,tp,NA,NA,NA,HUN
+Iceland,0,0,0,0,2016,tp,NA,NA,NA,ISL
+India,550,71,52,569,2016,tp,NA,NA,NA,IND
+Indonesia,19,9,5,23,2016,tp,NA,NA,NA,IDN
+Ireland,25,8,1,32,2016,tp,NA,NA,NA,IRL
+Isle of Man,0,0,0,0,2016,tp,NA,NA,NA,IMN
+Israel,8,4,5,7,2016,tp,NA,NA,NA,ISR
+Italy,161,139,9,291,2016,tp,NA,NA,NA,ITA
+Japan,95,33,22,106,2016,tp,NA,NA,NA,JPN
+Jersey,0,0,0,0,2016,tp,NA,NA,NA,JEY
+Korea,86,18,26,78,2016,tp,NA,NA,NA,KOR
+Latvia,2,0,0,2,2016,tp,NA,NA,NA,LVA
+Liechtenstein,4,2,1,5,2016,tp,NA,NA,NA,LIE
+Lithuania,1,0,0,1,2016,tp,NA,NA,NA,LTU
+Luxembourg,15,10,1,24,2016,tp,NA,NA,NA,LUX
+Macau (China),0,0,0,0,2016,tp,NA,NA,NA,MAC
+Malta,2,0,0,2,2016,tp,NA,NA,NA,MLT
+Mauritius,0,0,0,0,2016,tp,NA,NA,NA,MUS
+Mexico,10,7,2,15,2016,tp,NA,NA,NA,MEX
+Monaco,0,0,0,0,2016,tp,NA,NA,NA,MCO
+Netherlands,110,28,14,124,2016,tp,NA,NA,NA,NLD
+New Zealand,3,3,1,5,2016,tp,NA,NA,NA,NZL
+Norway,40,6,12,34,2016,tp,NA,NA,NA,NOR
+Panama,0,0,0,0,2016,tp,NA,NA,NA,PAN
+Papua New Guinea,0,0,0,0,2016,tp,NA,NA,NA,PNG
+Paraguay,0,0,0,0,2016,tp,NA,NA,NA,PRY
+Poland,39,9,4,44,2016,tp,NA,NA,NA,POL
+Portugal,39,12,10,41,2016,tp,NA,NA,NA,PRT
+Russian Federation,0,2,0,2,2016,tp,NA,NA,NA,RUS
+Seychelles,0,0,0,0,2016,tp,NA,NA,NA,SYC
+Singapore,10,3,3,10,2016,tp,NA,NA,NA,SGP
+Slovak Republic,9,3,1,11,2016,tp,NA,NA,NA,SVK
+Slovenia,2,6,0,8,2016,tp,NA,NA,NA,SVN
+South Africa,10,2,0,12,2016,tp,NA,NA,NA,ZAF
+Spain,222,59,78,203,2016,tp,NA,NA,NA,ESP
+Sweden,109,33,22,120,2016,tp,NA,NA,NA,SWE
+Switzerland,141,60,57,144,2016,tp,NA,NA,NA,CHE
+Turkey,1,2,0,3,2016,tp,NA,NA,NA,TUR
+United Kingdom,183,60,37,206,2016,tp,NA,NA,NA,GBR
+United States,716,130,145,701,2016,tp,NA,NA,NA,USA
+Uruguay,0,0,0,0,2016,tp,NA,NA,NA,URY
+Angola,0,0,0,0,2017,all,NA,NA,NA,AGO
+Argentina,6,3,2,7,2017,all,NA,NA,NA,ARG
+Australia,51,18,25,44,2017,all,NA,NA,NA,AUS
+Austria,243,81,69,255,2017,all,NA,NA,NA,AUT
+Belgium,773,502,537,738,2017,all,NA,NA,NA,BEL
+Bermuda,0,0,0,0,2017,all,NA,NA,NA,BMU
+Brazil,13,8,2,19,2017,all,NA,NA,NA,BRA
+Brunei Darussalam,0,0,0,0,2017,all,NA,NA,NA,BRN
+Bulgaria,17,3,4,16,2017,all,NA,NA,NA,BGR
+Burkina Faso,0,0,0,0,2017,all,NA,NA,NA,BFA
+Canada,224,93,141,176,2017,all,NA,NA,NA,CAN
+Cayman Islands,0,0,0,0,2017,all,NA,NA,NA,CYM
+Chile,3,1,1,3,2017,all,NA,NA,NA,CHL
+China (People's Republic of),111,41,21,131,2017,all,NA,NA,NA,CHN
+Costa Rica,0,0,0,0,2017,all,NA,NA,NA,CRI
+Côte d'Ivoire,0,0,0,0,2017,all,NA,NA,NA,CIV
+Croatia,12,1,1,12,2017,all,NA,NA,NA,HRV
+Curaçao,3,3,5,1,2017,all,NA,NA,NA,CUW
+Czech Republic,44,13,8,49,2017,all,NA,NA,NA,CZE
+Democratic Republic of the Congo,0,0,0,0,2017,all,NA,NA,NA,COD
+Denmark,181,72,60,193,2017,all,NA,NA,NA,DNK
+Djibouti,0,0,0,0,2017,all,NA,NA,NA,DJI
+Egypt,0,0,0,0,2017,all,NA,NA,NA,EGY
+Estonia,1,4,1,4,2017,all,NA,NA,NA,EST
+Finland,111,45,42,114,2017,all,NA,NA,NA,FIN
+France,837,336,291,882,2017,all,NA,NA,NA,FRA
+Georgia,0,0,0,0,2017,all,NA,NA,NA,GEO
+Germany,1181,582,522,1241,2017,all,NA,NA,NA,DEU
+Greece,29,10,11,28,2017,all,NA,NA,NA,GRC
+Guernsey,0,0,0,0,2017,all,NA,NA,NA,GGY
+Haiti,0,0,0,0,2017,all,NA,NA,NA,HTI
+Hong Kong (China),10,7,3,14,2017,all,NA,NA,NA,HKG
+Hungary,20,5,5,20,2017,all,NA,NA,NA,HUN
+Iceland,0,3,2,1,2017,all,NA,NA,NA,ISL
+India,725,136,98,763,2017,all,NA,NA,NA,IND
+Indonesia,55,16,20,51,2017,all,NA,NA,NA,IDN
+Ireland,43,11,12,42,2017,all,NA,NA,NA,IRL
+Isle of Man,0,0,0,0,2017,all,NA,NA,NA,IMN
+Israel,19,8,13,14,2017,all,NA,NA,NA,ISR
+Italy,439,206,62,583,2017,all,NA,NA,NA,ITA
+Japan,118,28,29,117,2017,all,NA,NA,NA,JPN
+Kenya,1,0,0,1,2017,all,NA,NA,NA,KEN
+Korea,131,45,45,131,2017,all,NA,NA,NA,KOR
+Latvia,2,1,1,2,2017,all,NA,NA,NA,LVA
+Liechtenstein,10,5,3,12,2017,all,NA,NA,NA,LIE
+Lithuania,3,3,1,5,2017,all,NA,NA,NA,LTU
+Luxembourg,267,250,347,170,2017,all,NA,NA,NA,LUX
+Malaysia,2,5,0,7,2017,all,NA,NA,NA,MYS
+Maldives,0,0,0,0,2017,all,NA,NA,NA,MDV
+Malta,2,0,0,2,2017,all,NA,NA,NA,MLT
+Mauritius,4,2,1,5,2017,all,NA,NA,NA,MUS
+Mexico,22,7,4,25,2017,all,NA,NA,NA,MEX
+Monaco,0,0,0,0,2017,all,NA,NA,NA,MCO
+Netherlands,303,223,176,350,2017,all,NA,NA,NA,NLD
+New Zealand,15,14,19,10,2017,all,NA,NA,NA,NZL
+Norway,76,42,37,81,2017,all,NA,NA,NA,NOR
+Oman,0,0,0,0,2017,all,NA,NA,NA,OMN
+Pakistan,1,0,1,0,2017,all,NA,NA,NA,PAK
+Panama,0,0,0,0,2017,all,NA,NA,NA,PAN
+Paraguay,0,0,0,0,2017,all,NA,NA,NA,PRY
+Peru,18,0,2,16,2017,all,NA,NA,NA,PER
+Poland,109,70,50,129,2017,all,NA,NA,NA,POL
+Portugal,60,23,34,49,2017,all,NA,NA,NA,PRT
+Qatar,0,0,0,0,2017,all,NA,NA,NA,QAT
+Romania,26,12,3,35,2017,all,NA,NA,NA,ROU
+Russian Federation,7,10,3,14,2017,all,NA,NA,NA,RUS
+Saint Kitts and Nevis,0,0,0,0,2017,all,NA,NA,NA,KNA
+San Marino,0,0,0,0,2017,all,NA,NA,NA,SMR
+Senegal,0,0,0,0,2017,all,NA,NA,NA,SEN
+Seychelles,0,0,0,0,2017,all,NA,NA,NA,SYC
+Singapore,21,17,10,28,2017,all,NA,NA,NA,SGP
+Slovak Republic,28,5,2,31,2017,all,NA,NA,NA,SVK
+Slovenia,22,5,7,20,2017,all,NA,NA,NA,SVN
+South Africa,26,10,8,28,2017,all,NA,NA,NA,ZAF
+Spain,280,112,117,275,2017,all,NA,NA,NA,ESP
+Sweden,181,114,87,208,2017,all,NA,NA,NA,SWE
+Switzerland,366,169,197,338,2017,all,NA,NA,NA,CHE
+Thailand,15,3,12,6,2017,all,NA,NA,NA,THA
+Tunisia,4,0,0,4,2017,all,NA,NA,NA,TUN
+Turkey,19,3,8,14,2017,all,NA,NA,NA,TUR
+Turks and Caicos Islands,0,0,0,0,2017,all,NA,NA,NA,TCA
+Ukraine,0,0,0,0,2017,all,NA,NA,NA,UKR
+United Kingdom,319,344,206,457,2017,all,NA,NA,NA,GBR
+United States,977,299,293,983,2017,all,NA,NA,NA,USA
+Uruguay,0,1,0,1,2017,all,NA,NA,NA,URY
+Viet Nam,3,4,1,6,2017,all,NA,NA,NA,VNM
+Zambia,0,0,0,0,2017,all,NA,NA,NA,ZMB
+Angola,0,0,0,0,2017,other,NA,NA,NA,AGO
+Argentina,3,2,2,3,2017,other,NA,NA,NA,ARG
+Australia,18,10,11,17,2017,other,NA,NA,NA,AUS
+Austria,143,44,43,144,2017,other,NA,NA,NA,AUT
+Belgium,687,465,497,655,2017,other,NA,NA,NA,BEL
+Bermuda,0,0,0,0,2017,other,NA,NA,NA,BMU
+Brazil,6,6,1,11,2017,other,NA,NA,NA,BRA
+Brunei Darussalam,0,0,0,0,2017,other,NA,NA,NA,BRN
+Bulgaria,9,3,2,10,2017,other,NA,NA,NA,BGR
+Burkina Faso,0,0,0,0,2017,other,NA,NA,NA,BFA
+Canada,42,20,27,35,2017,other,NA,NA,NA,CAN
+Cayman Islands,0,0,0,0,2017,other,NA,NA,NA,CYM
+Chile,0,1,0,1,2017,other,NA,NA,NA,CHL
+China (People's Republic of),36,16,5,47,2017,other,NA,NA,NA,CHN
+Costa Rica,0,0,0,0,2017,other,NA,NA,NA,CRI
+Côte d'Ivoire,0,0,0,0,2017,other,NA,NA,NA,CIV
+Croatia,10,1,1,10,2017,other,NA,NA,NA,HRV
+Curaçao,3,3,5,1,2017,other,NA,NA,NA,CUW
+Czech Republic,21,5,2,24,2017,other,NA,NA,NA,CZE
+Democratic Republic of the Congo,0,0,0,0,2017,other,NA,NA,NA,COD
+Denmark,41,14,9,46,2017,other,NA,NA,NA,DNK
+Djibouti,0,0,0,0,2017,other,NA,NA,NA,DJI
+Egypt,0,0,0,0,2017,other,NA,NA,NA,EGY
+Estonia,1,4,1,4,2017,other,NA,NA,NA,EST
+Finland,53,28,10,71,2017,other,NA,NA,NA,FIN
+France,346,219,157,408,2017,other,NA,NA,NA,FRA
+Georgia,0,0,0,0,2017,other,NA,NA,NA,GEO
+Germany,660,405,366,699,2017,other,NA,NA,NA,DEU
+Greece,19,10,7,22,2017,other,NA,NA,NA,GRC
+Guernsey,0,0,0,0,2017,other,NA,NA,NA,GGY
+Haiti,0,0,0,0,2017,other,NA,NA,NA,HTI
+Hong Kong (China),7,0,2,5,2017,other,NA,NA,NA,HKG
+Hungary,7,3,2,8,2017,other,NA,NA,NA,HUN
+Iceland,0,3,2,1,2017,other,NA,NA,NA,ISL
+India,105,15,3,117,2017,other,NA,NA,NA,IND
+Indonesia,28,6,14,20,2017,other,NA,NA,NA,IDN
+Ireland,12,4,1,15,2017,other,NA,NA,NA,IRL
+Isle of Man,0,0,0,0,2017,other,NA,NA,NA,IMN
+Israel,12,6,10,8,2017,other,NA,NA,NA,ISR
+Italy,147,58,14,191,2017,other,NA,NA,NA,ITA
+Japan,10,4,3,11,2017,other,NA,NA,NA,JPN
+Kenya,1,0,0,1,2017,other,NA,NA,NA,KEN
+Korea,52,12,7,57,2017,other,NA,NA,NA,KOR
+Latvia,1,1,1,1,2017,other,NA,NA,NA,LVA
+Liechtenstein,5,1,2,4,2017,other,NA,NA,NA,LIE
+Lithuania,2,1,1,2,2017,other,NA,NA,NA,LTU
+Luxembourg,243,244,341,146,2017,other,NA,NA,NA,LUX
+Malaysia,0,3,0,3,2017,other,NA,NA,NA,MYS
+Maldives,0,0,0,0,2017,other,NA,NA,NA,MDV
+Malta,2,0,0,2,2017,other,NA,NA,NA,MLT
+Mauritius,2,0,0,2,2017,other,NA,NA,NA,MUS
+Mexico,6,2,1,7,2017,other,NA,NA,NA,MEX
+Monaco,0,0,0,0,2017,other,NA,NA,NA,MCO
+Netherlands,187,181,136,232,2017,other,NA,NA,NA,NLD
+New Zealand,10,8,13,5,2017,other,NA,NA,NA,NZL
+Norway,42,28,21,49,2017,other,NA,NA,NA,NOR
+Oman,0,0,0,0,2017,other,NA,NA,NA,OMN
+Pakistan,0,0,0,0,2017,other,NA,NA,NA,PAK
+Panama,0,0,0,0,2017,other,NA,NA,NA,PAN
+Paraguay,0,0,0,0,2017,other,NA,NA,NA,PRY
+Peru,17,0,1,16,2017,other,NA,NA,NA,PER
+Poland,65,51,36,80,2017,other,NA,NA,NA,POL
+Portugal,19,12,10,21,2017,other,NA,NA,NA,PRT
+Qatar,0,0,0,0,2017,other,NA,NA,NA,QAT
+Romania,7,3,1,9,2017,other,NA,NA,NA,ROU
+Russian Federation,1,7,1,7,2017,other,NA,NA,NA,RUS
+Saint Kitts and Nevis,0,0,0,0,2017,other,NA,NA,NA,KNA
+San Marino,0,0,0,0,2017,other,NA,NA,NA,SMR
+Senegal,0,0,0,0,2017,other,NA,NA,NA,SEN
+Seychelles,0,0,0,0,2017,other,NA,NA,NA,SYC
+Singapore,11,6,3,14,2017,other,NA,NA,NA,SGP
+Slovak Republic,16,1,0,17,2017,other,NA,NA,NA,SVK
+Slovenia,16,3,7,12,2017,other,NA,NA,NA,SVN
+South Africa,14,9,7,16,2017,other,NA,NA,NA,ZAF
+Spain,84,57,37,104,2017,other,NA,NA,NA,ESP
+Sweden,61,80,50,91,2017,other,NA,NA,NA,SWE
+Switzerland,222,114,115,221,2017,other,NA,NA,NA,CHE
+Thailand,7,1,5,3,2017,other,NA,NA,NA,THA
+Tunisia,3,0,0,3,2017,other,NA,NA,NA,TUN
+Turkey,14,1,4,11,2017,other,NA,NA,NA,TUR
+Turks and Caicos Islands,0,0,0,0,2017,other,NA,NA,NA,TCA
+Ukraine,0,0,0,0,2017,other,NA,NA,NA,UKR
+United Kingdom,110,234,139,205,2017,other,NA,NA,NA,GBR
+United States,268,104,65,307,2017,other,NA,NA,NA,USA
+Uruguay,0,1,0,1,2017,other,NA,NA,NA,URY
+Viet Nam,0,1,0,1,2017,other,NA,NA,NA,VNM
+Zambia,0,0,0,0,2017,other,NA,NA,NA,ZMB
+Angola,0,0,0,0,2017,tp,NA,NA,NA,AGO
+Argentina,3,1,0,4,2017,tp,NA,NA,NA,ARG
+Australia,33,8,14,27,2017,tp,NA,NA,NA,AUS
+Austria,100,37,26,111,2017,tp,NA,NA,NA,AUT
+Belgium,86,37,40,83,2017,tp,NA,NA,NA,BEL
+Bermuda,0,0,0,0,2017,tp,NA,NA,NA,BMU
+Brazil,7,2,1,8,2017,tp,NA,NA,NA,BRA
+Brunei Darussalam,0,0,0,0,2017,tp,NA,NA,NA,BRN
+Bulgaria,8,0,2,6,2017,tp,NA,NA,NA,BGR
+Burkina Faso,0,0,0,0,2017,tp,NA,NA,NA,BFA
+Canada,182,73,114,141,2017,tp,NA,NA,NA,CAN
+Cayman Islands,0,0,0,0,2017,tp,NA,NA,NA,CYM
+Chile,3,0,1,2,2017,tp,NA,NA,NA,CHL
+China (People's Republic of),75,25,16,84,2017,tp,NA,NA,NA,CHN
+Costa Rica,0,0,0,0,2017,tp,NA,NA,NA,CRI
+Côte d'Ivoire,0,0,0,0,2017,tp,NA,NA,NA,CIV
+Croatia,2,0,0,2,2017,tp,NA,NA,NA,HRV
+Curaçao,0,0,0,0,2017,tp,NA,NA,NA,CUW
+Czech Republic,23,8,6,25,2017,tp,NA,NA,NA,CZE
+Democratic Republic of the Congo,0,0,0,0,2017,tp,NA,NA,NA,COD
+Denmark,140,58,51,147,2017,tp,NA,NA,NA,DNK
+Djibouti,0,0,0,0,2017,tp,NA,NA,NA,DJI
+Egypt,0,0,0,0,2017,tp,NA,NA,NA,EGY
+Estonia,0,0,0,0,2017,tp,NA,NA,NA,EST
+Finland,58,17,32,43,2017,tp,NA,NA,NA,FIN
+France,491,117,134,474,2017,tp,NA,NA,NA,FRA
+Georgia,0,0,0,0,2017,tp,NA,NA,NA,GEO
+Germany,521,177,156,542,2017,tp,NA,NA,NA,DEU
+Greece,10,0,4,6,2017,tp,NA,NA,NA,GRC
+Guernsey,0,0,0,0,2017,tp,NA,NA,NA,GGY
+Haiti,0,0,0,0,2017,tp,NA,NA,NA,HTI
+Hong Kong (China),3,7,1,9,2017,tp,NA,NA,NA,HKG
+Hungary,13,2,3,12,2017,tp,NA,NA,NA,HUN
+Iceland,0,0,0,0,2017,tp,NA,NA,NA,ISL
+India,620,121,95,646,2017,tp,NA,NA,NA,IND
+Indonesia,27,10,6,31,2017,tp,NA,NA,NA,IDN
+Ireland,31,7,11,27,2017,tp,NA,NA,NA,IRL
+Isle of Man,0,0,0,0,2017,tp,NA,NA,NA,IMN
+Israel,7,2,3,6,2017,tp,NA,NA,NA,ISR
+Italy,292,148,48,392,2017,tp,NA,NA,NA,ITA
+Japan,108,24,26,106,2017,tp,NA,NA,NA,JPN
+Kenya,0,0,0,0,2017,tp,NA,NA,NA,KEN
+Korea,79,33,38,74,2017,tp,NA,NA,NA,KOR
+Latvia,1,0,0,1,2017,tp,NA,NA,NA,LVA
+Liechtenstein,5,4,1,8,2017,tp,NA,NA,NA,LIE
+Lithuania,1,2,0,3,2017,tp,NA,NA,NA,LTU
+Luxembourg,24,6,6,24,2017,tp,NA,NA,NA,LUX
+Malaysia,2,2,0,4,2017,tp,NA,NA,NA,MYS
+Maldives,0,0,0,0,2017,tp,NA,NA,NA,MDV
+Malta,0,0,0,0,2017,tp,NA,NA,NA,MLT
+Mauritius,2,2,1,3,2017,tp,NA,NA,NA,MUS
+Mexico,16,5,3,18,2017,tp,NA,NA,NA,MEX
+Monaco,0,0,0,0,2017,tp,NA,NA,NA,MCO
+Netherlands,116,42,40,118,2017,tp,NA,NA,NA,NLD
+New Zealand,5,6,6,5,2017,tp,NA,NA,NA,NZL
+Norway,34,14,16,32,2017,tp,NA,NA,NA,NOR
+Oman,0,0,0,0,2017,tp,NA,NA,NA,OMN
+Pakistan,1,0,1,0,2017,tp,NA,NA,NA,PAK
+Panama,0,0,0,0,2017,tp,NA,NA,NA,PAN
+Paraguay,0,0,0,0,2017,tp,NA,NA,NA,PRY
+Peru,1,0,1,0,2017,tp,NA,NA,NA,PER
+Poland,44,19,14,49,2017,tp,NA,NA,NA,POL
+Portugal,41,11,24,28,2017,tp,NA,NA,NA,PRT
+Qatar,0,0,0,0,2017,tp,NA,NA,NA,QAT
+Romania,19,9,2,26,2017,tp,NA,NA,NA,ROU
+Russian Federation,6,3,2,7,2017,tp,NA,NA,NA,RUS
+Saint Kitts and Nevis,0,0,0,0,2017,tp,NA,NA,NA,KNA
+San Marino,0,0,0,0,2017,tp,NA,NA,NA,SMR
+Senegal,0,0,0,0,2017,tp,NA,NA,NA,SEN
+Seychelles,0,0,0,0,2017,tp,NA,NA,NA,SYC
+Singapore,10,11,7,14,2017,tp,NA,NA,NA,SGP
+Slovak Republic,12,4,2,14,2017,tp,NA,NA,NA,SVK
+Slovenia,6,2,0,8,2017,tp,NA,NA,NA,SVN
+South Africa,12,1,1,12,2017,tp,NA,NA,NA,ZAF
+Spain,196,55,80,171,2017,tp,NA,NA,NA,ESP
+Sweden,120,34,37,117,2017,tp,NA,NA,NA,SWE
+Switzerland,144,55,82,117,2017,tp,NA,NA,NA,CHE
+Thailand,8,2,7,3,2017,tp,NA,NA,NA,THA
+Tunisia,1,0,0,1,2017,tp,NA,NA,NA,TUN
+Turkey,5,2,4,3,2017,tp,NA,NA,NA,TUR
+Turks and Caicos Islands,0,0,0,0,2017,tp,NA,NA,NA,TCA
+Ukraine,0,0,0,0,2017,tp,NA,NA,NA,UKR
+United Kingdom,209,110,67,252,2017,tp,NA,NA,NA,GBR
+United States,709,195,228,676,2017,tp,NA,NA,NA,USA
+Uruguay,0,0,0,0,2017,tp,NA,NA,NA,URY
+Viet Nam,3,3,1,5,2017,tp,NA,NA,NA,VNM
+Zambia,0,0,0,0,2017,tp,NA,NA,NA,ZMB
+Germany,1241,615,658,1198,2018,all,22.21,42,NA,DEU
+United States,1005,253,251,1007,2018,all,34.37,22,NA,USA
+France,885,449,362,972,2018,all,24.37,33,NA,FRA
+India,778,148,85,841,2018,all,37.17,10,NA,IND
+Belgium,735,581,635,681,2018,all,14.53,62,NA,BEL
+Italy,587,256,101,742,2018,all,28.59,14,NA,ITA
+United Kingdom,453,251,274,430,2018,all,13.4,47,NA,GBR
+Netherlands,337,357,373,321,2018,all,12.26,72,NA,NLD
+Switzerland,337,170,158,349,2018,all,22.27,37,NA,CHE
+Austria,309,89,87,311,2018,all,24.51,25,NA,AUT
+Spain,279,211,82,408,2018,all,27.82,21,NA,ESP
+Sweden,208,108,81,235,2018,all,32.32,31,NA,SWE
+Denmark,198,68,73,193,2018,all,26.2,31,NA,DNK
+Canada,176,97,126,147,2018,all,22.82,56,NA,CAN
+Luxembourg,173,243,244,172,2018,all,11.02,83,NA,LUX
+China,132,24,45,111,2018,all,31.88,31,NA,CHN
+Korea,130,41,38,133,2018,all,34.4,25,NA,KOR
+Poland,130,36,26,140,2018,all,29.38,18,NA,POL
+Japan,117,33,57,93,2018,all,29,43,NA,JPN
+Finland,114,36,34,116,2018,all,34.38,26,NA,FIN
+Norway,81,66,47,100,2018,all,29.52,41,NA,NOR
+Czech Republic,53,15,15,53,2018,all,40.63,25,NA,CZE
+Indonesia,52,26,19,59,2018,all,15.83,29,NA,IDN
+Portugal,47,43,20,70,2018,all,12.97,29,NA,PRT
+Ireland,42,28,12,58,2018,all,48.75,21,NA,IRL
+Australia,41,18,28,31,2018,all,18.68,56,NA,AUS
+Romania,36,21,8,49,2018,all,7.23,17,NA,ROU
+South Africa,32,7,11,28,2018,all,29.7,31,NA,ZAF
+Slovak Republic,31,9,3,37,2018,all,66,8,NA,SVK
+Greece,29,16,11,34,2018,all,32.62,30,NA,GRC
+Mexico,27,19,7,39,2018,all,53.37,19,NA,MEX
+Singapore,27,25,19,33,2018,all,12.06,48,NA,SGP
+Brazil,20,9,2,27,2018,all,11.67,8,NA,BRA
+Hungary,20,5,3,22,2018,all,8.62,13,NA,HUN
+Slovenia,20,10,4,26,2018,all,22.6,16,NA,SVN
+Kazakhstan,18,8,4,22,2018,all,22.13,18,NA,KAZ
+Thailand,17,2,12,7,2018,all,31.75,67,NA,THA
+Bulgaria,16,3,7,12,2018,all,34.7,40,NA,BGR
+"Hong Kong, China",15,5,4,16,2018,all,13.32,23,NA,HKG
+Israel,14,9,8,15,2018,all,25.37,43,NA,ISR
+Russia,14,11,1,24,2018,all,9.2,5,NA,RUS
+Türkiye,14,7,3,18,2018,all,16.7,17,NA,TUR
+Croatia,12,5,0,17,2018,all,no cases closed,no cases closed,NA,HRV
+Liechtenstein,12,3,8,7,2018,all,28.3,59,NA,LIE
+New Zealand,10,13,10,13,2018,all,6.45,61,NA,NZL
+Argentina,7,7,1,13,2018,all,7.2,10,NA,ARG
+Lithuania,7,5,10,2,2018,all,15.92,105,NA,LTU
+Malaysia,7,37,2,42,2018,all,22.1,8,NA,MYS
+Tunisia,7,7,0,14,2018,all,no cases closed,no cases closed,NA,TUN
+Latvia,6,1,3,4,2018,all,13.24,26,NA,LVA
+Mauritius,5,0,0,5,2018,all,no cases closed,no cases closed,NA,MUS
+Estonia,4,1,0,5,2018,all,no cases closed,no cases closed,NA,EST
+Saudi Arabia,4,0,0,4,2018,all,no cases closed,no cases closed,NA,SAU
+Botswana,3,1,2,2,2018,all,18.84,57,NA,BWA
+Chile,3,2,2,3,2018,all,19.91,50,NA,CHL
+Malta,3,4,1,6,2018,all,2,20,NA,MLT
+Colombia,1,2,0,3,2018,all,no cases closed,no cases closed,NA,COL
+Curaçao,1,3,4,0,2018,all,2.58,160,NA,CUW
+Dominican Republic,1,2,0,3,2018,all,no cases closed,no cases closed,NA,DOM
+Iceland,1,1,1,1,2018,all,14.5,67,NA,ISL
+Jersey,1,0,1,0,2018,all,6.5,100,NA,JEY
+Kenya,1,0,0,1,2018,all,no cases closed,no cases closed,NA,KEN
+Pakistan,1,2,1,2,2018,all,n.a.,50,NA,PAK
+Serbia,1,1,0,2,2018,all,no cases closed,no cases closed,NA,SRB
+Uruguay,1,0,0,1,2018,all,no cases closed,no cases closed,NA,URY
+Bahrain,0,0,0,0,2018,all,no cases closed,n.a.,NA,BHR
+Brunei Darussalam,0,0,0,0,2018,all,no cases closed,n.a.,NA,BRN
+Cayman Islands,0,0,0,0,2018,all,no cases closed,n.a.,NA,CYM
+Costa Rica,0,0,0,0,2018,all,no cases closed,n.a.,NA,CRI
+Côte d'Ivoire,0,0,0,0,2018,all,no cases closed,n.a.,NA,CIV
+Georgia,0,0,0,0,2018,all,no cases closed,n.a.,NA,GEO
+Guernsey,0,0,0,0,2018,all,no cases closed,n.a.,NA,GGY
+Isle of Man,0,1,0,1,2018,all,no cases closed,n.a.,NA,IMN
+"Macau, China",0,0,0,0,2018,all,no cases closed,n.a.,NA,MAC
+Maldives,0,0,0,0,2018,all,no cases closed,n.a.,NA,MDV
+Monaco,0,0,0,0,2018,all,no cases closed,n.a.,NA,MCO
+Oman,0,0,0,0,2018,all,no cases closed,n.a.,NA,OMN
+Panama,0,0,0,0,2018,all,no cases closed,n.a.,NA,PAN
+Papua New Guinea,0,0,0,0,2018,all,no cases closed,n.a.,NA,PNG
+Paraguay,0,0,0,0,2018,all,no cases closed,n.a.,NA,PRY
+Peru,0,1,0,1,2018,all,no cases closed,n.a.,NA,PER
+Qatar,0,33,1,32,2018,all,3.35,6,NA,QAT
+Saint Kitts and Nevis,0,0,0,0,2018,all,no cases closed,n.a.,NA,KNA
+San Marino,0,0,0,0,2018,all,no cases closed,n.a.,NA,SMR
+Senegal,0,0,0,0,2018,all,no cases closed,n.a.,NA,SEN
+Seychelles,0,0,0,0,2018,all,no cases closed,n.a.,NA,SYC
+Trinidad and Tobago,0,0,0,0,2018,all,no cases closed,n.a.,NA,TTO
+Turks and Caicos Islands,0,0,0,0,2018,all,no cases closed,n.a.,NA,TCA
+Zambia,0,0,0,0,2018,all,no cases closed,n.a.,NA,ZMB
+Germany,699,437,431,705,2018,other,13.29,47,NA,DEU
+Belgium,653,546,596,603,2018,other,13.72,64,NA,BEL
+France,411,227,226,412,2018,other,17.71,43,NA,FRA
+United States,311,96,70,337,2018,other,32.78,19,NA,USA
+Switzerland,222,100,125,197,2018,other,19.88,46,NA,CHE
+Netherlands,221,293,314,200,2018,other,8.81,85,NA,NLD
+United Kingdom,209,171,185,195,2018,other,6.1,63,NA,GBR
+Italy,192,60,11,241,2018,other,21.89,5,NA,ITA
+Austria,169,44,45,168,2018,other,18.65,24,NA,AUT
+Luxembourg,149,227,241,135,2018,other,10.8,92,NA,LUX
+India,119,15,3,131,2018,other,4.99,2,NA,IND
+Spain,104,79,32,151,2018,other,22.78,22,NA,ESP
+Sweden,91,60,44,107,2018,other,16.97,36,NA,SWE
+Poland,80,24,17,87,2018,other,23.82,18,NA,POL
+Finland,71,16,11,76,2018,other,21.25,14,NA,FIN
+Korea,57,16,10,63,2018,other,47.62,15,NA,KOR
+Norway,49,53,26,76,2018,other,29.2,34,NA,NOR
+China,47,11,6,52,2018,other,31.46,11,NA,CHN
+Denmark,46,17,8,55,2018,other,14,15,NA,DNK
+Canada,35,22,24,33,2018,other,15.49,52,NA,CAN
+Czech Republic,25,8,6,27,2018,other,41.29,21,NA,CZE
+Greece,22,11,11,22,2018,other,32.62,40,NA,GRC
+Portugal,20,28,18,30,2018,other,11.23,53,NA,PRT
+Indonesia,19,8,5,22,2018,other,1.91,22,NA,IDN
+South Africa,19,6,7,18,2018,other,23.47,32,NA,ZAF
+Slovak Republic,18,5,2,21,2018,other,98.08,10,NA,SVK
+Australia,15,12,15,12,2018,other,14.27,71,NA,AUS
+Ireland,15,10,4,21,2018,other,38.37,20,NA,IRL
+Singapore,13,10,8,15,2018,other,10.56,44,NA,SGP
+Kazakhstan,12,6,2,16,2018,other,24,13,NA,KAZ
+Slovenia,12,8,2,18,2018,other,21.59,13,NA,SVN
+Brazil,11,3,2,12,2018,other,11.67,16,NA,BRA
+Japan,11,2,4,9,2018,other,16.67,33,NA,JPN
+Türkiye,11,2,2,11,2018,other,15.38,17,NA,TUR
+Bulgaria,10,1,4,7,2018,other,44.49,38,NA,BGR
+Croatia,10,2,0,12,2018,other,no cases closed,no cases closed,NA,HRV
+Romania,10,4,4,10,2018,other,8.72,33,NA,ROU
+Thailand,10,2,5,7,2018,other,8.57,45,NA,THA
+Hungary,8,2,1,9,2018,other,6.27,11,NA,HUN
+Mexico,8,7,1,14,2018,other,11.44,9,NA,MEX
+Israel,7,5,5,7,2018,other,21.93,53,NA,ISR
+Russia,7,7,1,13,2018,other,9.2,10,NA,RUS
+Tunisia,6,6,0,12,2018,other,no cases closed,no cases closed,NA,TUN
+"Hong Kong, China",5,2,1,6,2018,other,3.52,17,NA,HKG
+New Zealand,5,6,4,7,2018,other,11.22,50,NA,NZL
+Estonia,4,1,0,5,2018,other,no cases closed,no cases closed,NA,EST
+Latvia,4,1,2,3,2018,other,2.81,44,NA,LVA
+Liechtenstein,4,3,5,2,2018,other,22.39,91,NA,LIE
+Argentina,3,5,1,7,2018,other,7.2,18,NA,ARG
+Botswana,3,1,2,2,2018,other,18.84,57,NA,BWA
+Lithuania,3,5,6,2,2018,other,5.29,109,NA,LTU
+Malaysia,3,33,0,36,2018,other,no cases closed,no cases closed,NA,MYS
+Malta,2,2,1,3,2018,other,2,33,NA,MLT
+Mauritius,2,0,0,2,2018,other,no cases closed,no cases closed,NA,MUS
+Saudi Arabia,2,0,0,2,2018,other,no cases closed,no cases closed,NA,SAU
+Chile,1,2,1,2,2018,other,11.44,50,NA,CHL
+Curaçao,1,3,4,0,2018,other,2.58,160,NA,CUW
+Dominican Republic,1,2,0,3,2018,other,no cases closed,no cases closed,NA,DOM
+Iceland,1,1,1,1,2018,other,14.5,67,NA,ISL
+Jersey,1,0,1,0,2018,other,6.5,100,NA,JEY
+Kenya,1,0,0,1,2018,other,no cases closed,no cases closed,NA,KEN
+Serbia,1,0,0,1,2018,other,no cases closed,no cases closed,NA,SRB
+Uruguay,1,0,0,1,2018,other,no cases closed,no cases closed,NA,URY
+Bahrain,0,0,0,0,2018,other,no cases closed,n.a.,NA,BHR
+Brunei Darussalam,0,0,0,0,2018,other,no cases closed,n.a.,NA,BRN
+Cayman Islands,0,0,0,0,2018,other,no cases closed,n.a.,NA,CYM
+Colombia,0,2,0,2,2018,other,no cases closed,no cases closed,NA,COL
+Costa Rica,0,0,0,0,2018,other,no cases closed,n.a.,NA,CRI
+Côte d'Ivoire,0,0,0,0,2018,other,no cases closed,n.a.,NA,CIV
+Georgia,0,0,0,0,2018,other,no cases closed,n.a.,NA,GEO
+Guernsey,0,0,0,0,2018,other,no cases closed,n.a.,NA,GGY
+Isle of Man,0,1,0,1,2018,other,no cases closed,no cases closed,NA,IMN
+"Macau, China",0,0,0,0,2018,other,no cases closed,n.a.,NA,MAC
+Maldives,0,0,0,0,2018,other,no cases closed,n.a.,NA,MDV
+Monaco,0,0,0,0,2018,other,no cases closed,n.a.,NA,MCO
+Oman,0,0,0,0,2018,other,no cases closed,n.a.,NA,OMN
+Pakistan,0,1,0,1,2018,other,no cases closed,no cases closed,NA,PAK
+Panama,0,0,0,0,2018,other,no cases closed,n.a.,NA,PAN
+Papua New Guinea,0,0,0,0,2018,other,no cases closed,n.a.,NA,PNG
+Paraguay,0,0,0,0,2018,other,no cases closed,n.a.,NA,PRY
+Peru,0,1,0,1,2018,other,no cases closed,no cases closed,NA,PER
+Qatar,0,33,1,32,2018,other,3.35,6,NA,QAT
+Saint Kitts and Nevis,0,0,0,0,2018,other,no cases closed,n.a.,NA,KNA
+San Marino,0,0,0,0,2018,other,no cases closed,n.a.,NA,SMR
+Senegal,0,0,0,0,2018,other,no cases closed,n.a.,NA,SEN
+Seychelles,0,0,0,0,2018,other,no cases closed,n.a.,NA,SYC
+Trinidad and Tobago,0,0,0,0,2018,other,no cases closed,n.a.,NA,TTO
+Turks and Caicos Islands,0,0,0,0,2018,other,no cases closed,n.a.,NA,TCA
+Zambia,0,0,0,0,2018,other,no cases closed,n.a.,NA,ZMB
+United States,694,157,181,670,2018,tp,34.98,23,NA,USA
+India,659,133,82,710,2018,tp,38.35,11,NA,IND
+Germany,542,178,227,493,2018,tp,39.14,36,NA,DEU
+France,474,222,136,560,2018,tp,35.43,23,NA,FRA
+Italy,395,196,90,501,2018,tp,29.4,18,NA,ITA
+United Kingdom,244,80,89,235,2018,tp,28.58,31,NA,GBR
+Spain,175,132,50,257,2018,tp,31.04,21,NA,ESP
+Denmark,152,51,65,138,2018,tp,27.7,37,NA,DNK
+Canada,141,75,102,114,2018,tp,24.54,57,NA,CAN
+Austria,140,45,42,143,2018,tp,30.78,26,NA,AUT
+Sweden,117,48,37,128,2018,tp,50.58,26,NA,SWE
+Netherlands,116,64,59,121,2018,tp,30.64,40,NA,NLD
+Switzerland,115,70,33,152,2018,tp,31.3,22,NA,CHE
+Japan,106,31,53,84,2018,tp,29.93,44,NA,JPN
+China,85,13,39,59,2018,tp,31.95,43,NA,CHN
+Belgium,82,35,39,78,2018,tp,26.87,39,NA,BEL
+Korea,73,25,28,70,2018,tp,29.68,33,NA,KOR
+Poland,50,12,9,53,2018,tp,39.88,16,NA,POL
+Finland,43,20,23,40,2018,tp,40.66,43,NA,FIN
+Indonesia,33,18,14,37,2018,tp,20.81,33,NA,IDN
+Norway,32,13,21,24,2018,tp,29.92,55,NA,NOR
+Czech Republic,28,7,9,26,2018,tp,40.19,29,NA,CZE
+Ireland,27,18,8,37,2018,tp,53.94,22,NA,IRL
+Portugal,27,15,2,40,2018,tp,28.64,6,NA,PRT
+Australia,26,6,13,19,2018,tp,23.77,45,NA,AUS
+Romania,26,17,4,39,2018,tp,5.73,12,NA,ROU
+Luxembourg,24,16,3,37,2018,tp,28.46,9,NA,LUX
+Mexico,19,12,6,25,2018,tp,60.36,24,NA,MEX
+Singapore,14,15,11,18,2018,tp,13.15,51,NA,SGP
+Slovak Republic,13,4,1,16,2018,tp,1.84,7,NA,SVK
+South Africa,13,1,4,10,2018,tp,40.61,30,NA,ZAF
+Hungary,12,3,2,13,2018,tp,9.8,15,NA,HUN
+"Hong Kong, China",10,3,3,10,2018,tp,16.59,26,NA,HKG
+Brazil,9,6,0,15,2018,tp,no cases closed,no cases closed,NA,BRA
+Liechtenstein,8,0,3,5,2018,tp,38.14,38,NA,LIE
+Slovenia,8,2,2,8,2018,tp,23.62,22,NA,SVN
+Greece,7,5,0,12,2018,tp,no cases closed,no cases closed,NA,GRC
+Israel,7,4,3,8,2018,tp,31.11,33,NA,ISR
+Russia,7,4,0,11,2018,tp,no cases closed,no cases closed,NA,RUS
+Thailand,7,0,7,0,2018,tp,48.3,100,NA,THA
+Bulgaria,6,2,3,5,2018,tp,21.66,43,NA,BGR
+Kazakhstan,6,2,2,6,2018,tp,20.25,29,NA,KAZ
+New Zealand,5,7,6,6,2018,tp,3.28,71,NA,NZL
+Argentina,4,2,0,6,2018,tp,no cases closed,no cases closed,NA,ARG
+Lithuania,4,0,4,0,2018,tp,31.87,100,NA,LTU
+Malaysia,4,4,2,6,2018,tp,22.1,33,NA,MYS
+Mauritius,3,0,0,3,2018,tp,no cases closed,no cases closed,NA,MUS
+Türkiye,3,5,1,7,2018,tp,19.33,18,NA,TUR
+Chile,2,0,1,1,2018,tp,28.37,50,NA,CHL
+Croatia,2,3,0,5,2018,tp,no cases closed,no cases closed,NA,HRV
+Latvia,2,0,1,1,2018,tp,34.1,50,NA,LVA
+Saudi Arabia,2,0,0,2,2018,tp,no cases closed,no cases closed,NA,SAU
+Colombia,1,0,0,1,2018,tp,no cases closed,no cases closed,NA,COL
+Malta,1,2,0,3,2018,tp,no cases closed,no cases closed,NA,MLT
+Pakistan,1,1,1,1,2018,tp,n.a.,67,NA,PAK
+Tunisia,1,1,0,2,2018,tp,no cases closed,no cases closed,NA,TUN
+Bahrain,0,0,0,0,2018,tp,no cases closed,n.a.,NA,BHR
+Botswana,0,0,0,0,2018,tp,no cases closed,n.a.,NA,BWA
+Brunei Darussalam,0,0,0,0,2018,tp,no cases closed,n.a.,NA,BRN
+Cayman Islands,0,0,0,0,2018,tp,no cases closed,n.a.,NA,CYM
+Costa Rica,0,0,0,0,2018,tp,no cases closed,n.a.,NA,CRI
+Côte d'Ivoire,0,0,0,0,2018,tp,no cases closed,n.a.,NA,CIV
+Curaçao,0,0,0,0,2018,tp,no cases closed,n.a.,NA,CUW
+Dominican Republic,0,0,0,0,2018,tp,no cases closed,n.a.,NA,DOM
+Estonia,0,0,0,0,2018,tp,no cases closed,n.a.,NA,EST
+Georgia,0,0,0,0,2018,tp,no cases closed,n.a.,NA,GEO
+Guernsey,0,0,0,0,2018,tp,no cases closed,n.a.,NA,GGY
+Iceland,0,0,0,0,2018,tp,no cases closed,n.a.,NA,ISL
+Isle of Man,0,0,0,0,2018,tp,no cases closed,n.a.,NA,IMN
+Jersey,0,0,0,0,2018,tp,no cases closed,n.a.,NA,JEY
+Kenya,0,0,0,0,2018,tp,no cases closed,n.a.,NA,KEN
+"Macau, China",0,0,0,0,2018,tp,no cases closed,n.a.,NA,MAC
+Maldives,0,0,0,0,2018,tp,no cases closed,n.a.,NA,MDV
+Monaco,0,0,0,0,2018,tp,no cases closed,n.a.,NA,MCO
+Oman,0,0,0,0,2018,tp,no cases closed,n.a.,NA,OMN
+Panama,0,0,0,0,2018,tp,no cases closed,n.a.,NA,PAN
+Papua New Guinea,0,0,0,0,2018,tp,no cases closed,n.a.,NA,PNG
+Paraguay,0,0,0,0,2018,tp,no cases closed,n.a.,NA,PRY
+Peru,0,0,0,0,2018,tp,no cases closed,n.a.,NA,PER
+Qatar,0,0,0,0,2018,tp,no cases closed,n.a.,NA,QAT
+Saint Kitts and Nevis,0,0,0,0,2018,tp,no cases closed,n.a.,NA,KNA
+San Marino,0,0,0,0,2018,tp,no cases closed,n.a.,NA,SMR
+Senegal,0,0,0,0,2018,tp,no cases closed,n.a.,NA,SEN
+Serbia,0,1,0,1,2018,tp,no cases closed,no cases closed,NA,SRB
+Seychelles,0,0,0,0,2018,tp,no cases closed,n.a.,NA,SYC
+Trinidad and Tobago,0,0,0,0,2018,tp,no cases closed,n.a.,NA,TTO
+Turks and Caicos Islands,0,0,0,0,2018,tp,no cases closed,n.a.,NA,TCA
+Uruguay,0,0,0,0,2018,tp,no cases closed,n.a.,NA,URY
+Zambia,0,0,0,0,2018,tp,no cases closed,n.a.,NA,ZMB
+Germany,1198,659,615,1242,2019,all,27.62,40,19,DEU
+United States,975,350,303,1022,2019,all,24.66,26,37,USA
+France,969,381,448,902,2019,all,24.78,39,27,FRA
+India,866,206,121,951,2019,all,33.43,13,50,IND
+Italy,741,361,215,887,2019,all,30.18,23,20,ITA
+Belgium,700,493,630,563,2019,all,31.41,67,10,BEL
+United Kingdom,450,409,299,560,2019,all,9.73,46,14,GBR
+Spain,390,204,154,440,2019,all,30.37,31,11,ESP
+Switzerland,349,208,180,377,2019,all,21.4,40,14,CHE
+Netherlands,323,201,208,316,2019,all,20.33,49,13,NLD
+Austria,316,119,125,310,2019,all,33.5,33,31,AUT
+Sweden,234,118,113,239,2019,all,22.69,39,14,SWE
+Denmark,193,103,87,209,2019,all,27.93,36,28,DNK
+Luxembourg,188,213,190,211,2019,all,12.87,65,15,LUX
+Canada,147,75,60,162,2019,all,17.6,33,11,CAN
+Poland,140,54,41,153,2019,all,26.9,25,24,POL
+Korea,135,49,28,156,2019,all,48.36,18,24,KOR
+Finland,118,25,46,97,2019,all,27.09,35,34,FIN
+China,117,24,19,122,2019,all,47.36,15,26,CHN
+Norway,99,50,81,68,2019,all,12.24,65,18,NOR
+Japan,90,51,57,84,2019,all,21.63,49,29,JPN
+Portugal,71,40,38,73,2019,all,26.82,42,12,PRT
+Indonesia,59,15,16,58,2019,all,30.15,24,34,IDN
+Ireland,57,40,11,86,2019,all,20.88,14,17,IRL
+Czech Republic,54,17,23,48,2019,all,30.24,37,29,CZE
+Romania,52,16,7,61,2019,all,26.08,12,26,ROU
+Malaysia,42,5,0,47,2019,all,no cases closed,no cases closed,4,MYS
+Mexico,40,18,7,51,2019,all,17.66,14,8,MEX
+Slovak Republic,38,11,8,41,2019,all,68.59,18,41,SVK
+Greece,33,15,13,35,2019,all,26.6,32,31,GRC
+Singapore,33,18,17,34,2019,all,21.12,41,9,SGP
+Qatar,32,0,0,32,2019,all,no cases closed,no cases closed,0,QAT
+Australia,31,24,20,35,2019,all,22.4,47,11,AUS
+South Africa,28,11,14,25,2019,all,28.36,42,28,ZAF
+Brazil,27,5,8,24,2019,all,56.48,27,17,BRA
+Slovenia,26,12,8,30,2019,all,30.21,25,13,SVN
+Morocco,25,2,0,27,2019,all,no cases closed,no cases closed,93,MAR
+Kazakhstan,22,0,0,22,2019,all,no cases closed,no cases closed,41,KAZ
+Russia,21,9,0,30,2019,all,no cases closed,no cases closed,3,RUS
+Türkiye,20,5,8,17,2019,all,34.08,36,29,TUR
+Israel,18,5,10,13,2019,all,17.75,49,8,ISR
+Croatia,17,4,6,15,2019,all,42.92,32,33,HRV
+"Hong Kong, China",16,8,4,20,2019,all,21.44,20,20,HKG
+Hungary,16,9,5,20,2019,all,17.02,24,30,HUN
+Argentina,14,6,4,16,2019,all,14.94,24,13,ARG
+New Zealand,13,12,11,14,2019,all,13.38,58,0,NZL
+Bulgaria,12,3,4,11,2019,all,23.72,30,55,BGR
+Thailand,10,3,1,12,2019,all,9.79,9,42,THA
+Viet Nam,10,3,2,11,2019,all,11.58,17,45,VNM
+Saudi Arabia,9,3,7,5,2019,all,17.09,66,0,SAU
+Estonia,8,3,1,10,2019,all,2,11,0,EST
+Tunisia,8,2,0,10,2019,all,no cases closed,no cases closed,0,TUN
+Liechtenstein,7,15,3,19,2019,all,3.29,21,11,LIE
+Malta,6,3,1,8,2019,all,8,13,25,MLT
+Latvia,5,3,4,4,2019,all,38.5,62,25,LVA
+Mauritius,5,2,0,7,2019,all,no cases closed,no cases closed,14,MUS
+Kenya,4,5,1,8,2019,all,5,15,13,KEN
+Zambia,4,1,0,5,2019,all,no cases closed,no cases closed,20,ZMB
+Chile,3,0,1,2,2019,all,38.47,33,0,CHL
+Colombia,3,0,0,3,2019,all,no cases closed,no cases closed,33,COL
+Dominican Republic,3,0,0,3,2019,all,no cases closed,no cases closed,33,DOM
+Faroe Islands,3,1,3,1,2019,all,9.67,86,100,FRO
+Serbia,3,3,1,5,2019,all,20.68,22,20,SRB
+Greenland,2,4,0,6,2019,all,no cases closed,no cases closed,17,GRL
+Lithuania,2,1,1,2,2019,all,16.54,40,50,LTU
+Nigeria,2,0,1,1,2019,all,20.68,50,0,NGA
+Pakistan,2,0,0,2,2019,all,no cases closed,no cases closed,0,PAK
+Barbados,1,2,0,3,2019,all,no cases closed,no cases closed,0,BRB
+Iceland,1,6,2,5,2019,all,9.12,50,0,ISL
+Isle of Man,1,0,1,0,2019,all,13.55,100,0,IMN
+Panama,1,0,0,1,2019,all,no cases closed,no cases closed,0,PAN
+Peru,1,0,0,1,2019,all,no cases closed,no cases closed,0,PER
+Trinidad and Tobago,1,0,0,1,2019,all,no cases closed,no cases closed,0,TTO
+Uruguay,1,0,0,1,2019,all,no cases closed,no cases closed,0,URY
+Andorra,0,0,0,0,2019,all,no cases closed,n.a.,0,AND
+Angola,0,0,0,0,2019,all,no cases closed,n.a.,0,AGO
+Aruba,0,3,0,3,2019,all,no cases closed,no cases closed,0,ABW
+Bahamas,0,0,0,0,2019,all,no cases closed,n.a.,0,BHS
+Bahrain,0,0,0,0,2019,all,no cases closed,n.a.,0,BHR
+Belize,0,0,0,0,2019,all,no cases closed,n.a.,0,BLZ
+Bermuda,0,0,0,0,2019,all,no cases closed,n.a.,0,BMU
+Bosnia and Herzegovina,0,0,0,0,2019,all,no cases closed,n.a.,0,BIH
+British Virgin Islands,0,0,0,0,2019,all,no cases closed,n.a.,0,VGB
+Brunei Darussalam,0,0,0,0,2019,all,no cases closed,n.a.,0,BRN
+Cayman Islands,0,0,0,0,2019,all,no cases closed,n.a.,0,CYM
+Cook Islands,0,0,0,0,2019,all,no cases closed,n.a.,0,COK
+Costa Rica,0,0,0,0,2019,all,no cases closed,n.a.,0,CRI
+Côte d'Ivoire,0,0,0,0,2019,all,no cases closed,n.a.,0,CIV
+Curaçao,0,0,0,0,2019,all,no cases closed,n.a.,0,CUW
+Georgia,0,0,0,0,2019,all,no cases closed,n.a.,0,GEO
+Gibraltar,0,0,0,0,2019,all,no cases closed,n.a.,0,GIB
+Guernsey,0,0,0,0,2019,all,no cases closed,n.a.,0,GGY
+Jordan,0,0,0,0,2019,all,no cases closed,n.a.,0,JOR
+Liberia,0,0,0,0,2019,all,no cases closed,n.a.,0,LBR
+"Macau, China",0,0,0,0,2019,all,no cases closed,n.a.,0,MAC
+Monaco,0,0,0,0,2019,all,no cases closed,n.a.,0,MCO
+Mongolia,0,0,0,0,2019,all,no cases closed,n.a.,0,MNG
+Oman,0,0,0,0,2019,all,no cases closed,n.a.,0,OMN
+Papua New Guinea,0,0,0,0,2019,all,no cases closed,n.a.,0,PNG
+Saint Kitts and Nevis,0,0,0,0,2019,all,no cases closed,n.a.,0,KNA
+Senegal,0,0,0,0,2019,all,no cases closed,n.a.,0,SEN
+Seychelles,0,0,0,0,2019,all,no cases closed,n.a.,0,SYC
+Turks and Caicos Islands,0,0,0,0,2019,all,no cases closed,n.a.,0,TCA
+Ukraine,0,0,0,0,2019,all,no cases closed,n.a.,0,UKR
+United Arab Emirates,0,0,0,0,2019,all,no cases closed,n.a.,0,ARE
+Germany,705,418,397,726,2019,other,22.74,43,23,DEU
+Belgium,622,442,593,471,2019,other,31.36,70,11,BEL
+France,421,217,238,400,2019,other,18.85,45,22,FRA
+United States,346,162,161,347,2019,other,15.36,38,40,USA
+Italy,241,78,74,245,2019,other,33.34,26,37,ITA
+United Kingdom,208,288,227,269,2019,other,6.28,65,12,GBR
+Netherlands,204,130,141,193,2019,other,17.38,52,11,NLD
+Switzerland,201,113,126,188,2019,other,20.62,49,14,CHE
+Austria,170,73,67,176,2019,other,37.3,32,34,AUT
+Luxembourg,151,196,178,169,2019,other,11.89,72,15,LUX
+Spain,151,72,46,177,2019,other,23.63,25,13,ESP
+India,145,22,6,161,2019,other,26.18,4,60,IND
+Sweden,106,71,60,117,2019,other,16.15,42,9,SWE
+Poland,86,32,31,87,2019,other,26.44,30,18,POL
+Finland,76,15,28,63,2019,other,30.87,34,37,FIN
+Norway,76,38,65,49,2019,other,11.22,68,14,NOR
+Korea,63,13,10,66,2019,other,56.87,14,42,KOR
+China,58,14,4,68,2019,other,47.3,6,0,CHN
+Denmark,53,36,16,73,2019,other,18.58,23,30,DNK
+Malaysia,36,3,0,39,2019,other,no cases closed,no cases closed,3,MYS
+Canada,33,25,20,38,2019,other,14.11,44,18,CAN
+Qatar,32,0,0,32,2019,other,no cases closed,no cases closed,0,QAT
+Portugal,30,30,26,34,2019,other,17.27,58,9,PRT
+Czech Republic,27,11,16,22,2019,other,31.6,49,23,CZE
+Morocco,24,2,0,26,2019,other,no cases closed,no cases closed,92,MAR
+Slovak Republic,24,5,6,23,2019,other,86.37,23,48,SVK
+Indonesia,22,6,6,22,2019,other,29.49,24,59,IDN
+Greece,21,11,12,20,2019,other,27.09,45,20,GRC
+Ireland,21,28,6,43,2019,other,15.07,17,14,IRL
+Kazakhstan,19,0,0,19,2019,other,no cases closed,no cases closed,47,KAZ
+Slovenia,18,9,7,20,2019,other,31.14,31,20,SVN
+South Africa,18,7,11,14,2019,other,26.68,51,7,ZAF
+Singapore,15,6,5,16,2019,other,20.17,28,13,SGP
+Mexico,14,4,3,15,2019,other,18.96,19,7,MEX
+Australia,12,15,11,16,2019,other,11.31,56,6,AUS
+Brazil,12,0,6,6,2019,other,67.45,50,17,BRA
+Croatia,12,4,5,11,2019,other,47.37,36,45,HRV
+Romania,12,8,4,16,2019,other,9.52,25,13,ROU
+Türkiye,12,3,4,11,2019,other,27.58,30,45,TUR
+Russia,10,3,0,13,2019,other,no cases closed,no cases closed,0,RUS
+Hungary,9,5,3,11,2019,other,8.15,26,36,HUN
+Japan,9,4,4,9,2019,other,33.45,36,22,JPN
+Thailand,9,3,0,12,2019,other,no cases closed,no cases closed,42,THA
+Argentina,7,3,1,9,2019,other,0.43,12,11,ARG
+Bulgaria,7,0,2,5,2019,other,26.76,29,60,BGR
+Israel,7,4,5,6,2019,other,11.87,56,17,ISR
+New Zealand,7,9,8,8,2019,other,12.3,50,0,NZL
+Saudi Arabia,7,3,6,4,2019,other,17.8,70,0,SAU
+"Hong Kong, China",6,7,0,13,2019,other,no cases closed,no cases closed,23,HKG
+Tunisia,6,1,0,7,2019,other,no cases closed,no cases closed,0,TUN
+Kenya,4,1,1,4,2019,other,5,22,25,KEN
+Latvia,4,0,3,1,2019,other,37.67,75,100,LVA
+Dominican Republic,3,0,0,3,2019,other,no cases closed,no cases closed,33,DOM
+Faroe Islands,3,1,3,1,2019,other,9.67,86,100,FRO
+Liechtenstein,3,15,3,15,2019,other,3.29,29,7,LIE
+Malta,3,0,1,2,2019,other,8,33,100,MLT
+Chile,2,0,0,2,2019,other,no cases closed,no cases closed,0,CHL
+Colombia,2,0,0,2,2019,other,no cases closed,no cases closed,0,COL
+Lithuania,2,1,1,2,2019,other,16.54,40,50,LTU
+Mauritius,2,1,0,3,2019,other,no cases closed,no cases closed,0,MUS
+Barbados,1,2,0,3,2019,other,no cases closed,no cases closed,0,BRB
+Greenland,1,2,0,3,2019,other,no cases closed,no cases closed,33,GRL
+Iceland,1,6,2,5,2019,other,9.12,50,0,ISL
+Isle of Man,1,0,1,0,2019,other,13.55,100,0,IMN
+Pakistan,1,0,0,1,2019,other,no cases closed,no cases closed,0,PAK
+Peru,1,0,0,1,2019,other,no cases closed,no cases closed,0,PER
+Serbia,1,1,0,2,2019,other,no cases closed,no cases closed,50,SRB
+Trinidad and Tobago,1,0,0,1,2019,other,no cases closed,no cases closed,0,TTO
+Uruguay,1,0,0,1,2019,other,no cases closed,no cases closed,0,URY
+Viet Nam,1,0,1,0,2019,other,23.15,100,0,VNM
+Zambia,1,1,0,2,2019,other,no cases closed,no cases closed,0,ZMB
+Andorra,0,0,0,0,2019,other,no cases closed,n.a.,0,AND
+Angola,0,0,0,0,2019,other,no cases closed,n.a.,0,AGO
+Aruba,0,3,0,3,2019,other,no cases closed,no cases closed,0,ABW
+Bahamas,0,0,0,0,2019,other,no cases closed,n.a.,0,BHS
+Bahrain,0,0,0,0,2019,other,no cases closed,n.a.,0,BHR
+Belize,0,0,0,0,2019,other,no cases closed,n.a.,0,BLZ
+Bermuda,0,0,0,0,2019,other,no cases closed,n.a.,0,BMU
+Bosnia and Herzegovina,0,0,0,0,2019,other,no cases closed,n.a.,0,BIH
+British Virgin Islands,0,0,0,0,2019,other,no cases closed,n.a.,0,VGB
+Brunei Darussalam,0,0,0,0,2019,other,no cases closed,n.a.,0,BRN
+Cayman Islands,0,0,0,0,2019,other,no cases closed,n.a.,0,CYM
+Cook Islands,0,0,0,0,2019,other,no cases closed,n.a.,0,COK
+Costa Rica,0,0,0,0,2019,other,no cases closed,n.a.,0,CRI
+Côte d'Ivoire,0,0,0,0,2019,other,no cases closed,n.a.,0,CIV
+Curaçao,0,0,0,0,2019,other,no cases closed,n.a.,0,CUW
+Estonia,0,0,0,0,2019,other,no cases closed,n.a.,0,EST
+Georgia,0,0,0,0,2019,other,no cases closed,n.a.,0,GEO
+Gibraltar,0,0,0,0,2019,other,no cases closed,n.a.,0,GIB
+Guernsey,0,0,0,0,2019,other,no cases closed,n.a.,0,GGY
+Jordan,0,0,0,0,2019,other,no cases closed,n.a.,0,JOR
+Liberia,0,0,0,0,2019,other,no cases closed,n.a.,0,LBR
+"Macau, China",0,0,0,0,2019,other,no cases closed,n.a.,0,MAC
+Monaco,0,0,0,0,2019,other,no cases closed,n.a.,0,MCO
+Mongolia,0,0,0,0,2019,other,no cases closed,n.a.,0,MNG
+Nigeria,0,0,0,0,2019,other,no cases closed,n.a.,0,NGA
+Oman,0,0,0,0,2019,other,no cases closed,n.a.,0,OMN
+Panama,0,0,0,0,2019,other,no cases closed,n.a.,0,PAN
+Papua New Guinea,0,0,0,0,2019,other,no cases closed,n.a.,0,PNG
+Saint Kitts and Nevis,0,0,0,0,2019,other,no cases closed,n.a.,0,KNA
+Senegal,0,0,0,0,2019,other,no cases closed,n.a.,0,SEN
+Seychelles,0,0,0,0,2019,other,no cases closed,n.a.,0,SYC
+Turks and Caicos Islands,0,0,0,0,2019,other,no cases closed,n.a.,0,TCA
+Ukraine,0,0,0,0,2019,other,no cases closed,n.a.,0,UKR
+United Arab Emirates,0,0,0,0,2019,other,no cases closed,n.a.,0,ARE
+India,721,184,115,790,2019,tp,33.8,14,48,IND
+United States,629,188,142,675,2019,tp,35.2,20,36,USA
+France,548,164,210,502,2019,tp,31.49,33,31,FRA
+Italy,500,283,141,642,2019,tp,28.52,22,14,ITA
+Germany,493,241,218,516,2019,tp,36.5,36,14,DEU
+United Kingdom,242,121,72,291,2019,tp,20.6,24,17,GBR
+Spain,239,132,108,263,2019,tp,33.25,35,10,ESP
+Switzerland,148,95,54,189,2019,tp,23.23,28,13,CHE
+Austria,146,46,58,134,2019,tp,29.11,34,28,AUT
+Denmark,140,67,71,136,2019,tp,30.04,41,27,DNK
+Sweden,128,47,53,122,2019,tp,30.1,35,20,SWE
+Netherlands,119,71,67,123,2019,tp,26.52,43,15,NLD
+Canada,114,50,40,124,2019,tp,19.34,29,9,CAN
+Japan,81,47,53,75,2019,tp,20.74,51,29,JPN
+Belgium,78,51,37,92,2019,tp,32.1,36,8,BEL
+Korea,72,36,18,90,2019,tp,43.64,20,11,KOR
+China,59,10,15,54,2019,tp,47.38,23,22,CHN
+Poland,54,22,10,66,2019,tp,28.33,15,30,POL
+Finland,42,10,18,34,2019,tp,21.23,38,29,FIN
+Portugal,41,10,12,39,2019,tp,47.5,26,15,PRT
+Romania,40,8,3,45,2019,tp,48.15,7,31,ROU
+Indonesia,37,9,10,36,2019,tp,30.55,24,19,IDN
+Luxembourg,37,17,12,42,2019,tp,27.52,26,12,LUX
+Ireland,36,12,5,43,2019,tp,27.84,12,21,IRL
+Czech Republic,27,6,7,26,2019,tp,27.12,23,35,CZE
+Mexico,26,14,4,36,2019,tp,16.69,12,8,MEX
+Norway,23,12,16,19,2019,tp,16.4,55,26,NOR
+Australia,19,9,9,19,2019,tp,35.96,38,16,AUS
+Singapore,18,12,12,18,2019,tp,21.52,50,6,SGP
+Brazil,15,5,2,18,2019,tp,23.54,11,17,BRA
+Slovak Republic,14,6,2,18,2019,tp,15.24,12,33,SVK
+Greece,12,4,1,15,2019,tp,20.68,7,47,GRC
+Israel,11,1,5,7,2019,tp,23.62,44,0,ISR
+Russia,11,6,0,17,2019,tp,no cases closed,no cases closed,6,RUS
+"Hong Kong, China",10,1,4,7,2019,tp,21.44,38,14,HKG
+South Africa,10,4,3,11,2019,tp,34.51,25,55,ZAF
+Viet Nam,9,3,1,11,2019,tp,0,10,45,VNM
+Estonia,8,3,1,10,2019,tp,2,11,0,EST
+Slovenia,8,3,1,10,2019,tp,23.74,11,0,SVN
+Türkiye,8,2,4,6,2019,tp,40.57,44,0,TUR
+Argentina,7,3,3,7,2019,tp,19.78,35,14,ARG
+Hungary,7,4,2,9,2019,tp,30.34,22,22,HUN
+Malaysia,6,2,0,8,2019,tp,no cases closed,no cases closed,13,MYS
+New Zealand,6,3,3,6,2019,tp,16.26,40,0,NZL
+Bulgaria,5,3,2,6,2019,tp,20.68,31,50,BGR
+Croatia,5,0,1,4,2019,tp,20.68,20,0,HRV
+Liechtenstein,4,0,0,4,2019,tp,no cases closed,no cases closed,25,LIE
+Kazakhstan,3,0,0,3,2019,tp,no cases closed,no cases closed,0,KAZ
+Malta,3,3,0,6,2019,tp,no cases closed,no cases closed,0,MLT
+Mauritius,3,1,0,4,2019,tp,no cases closed,no cases closed,25,MUS
+Zambia,3,0,0,3,2019,tp,no cases closed,no cases closed,33,ZMB
+Nigeria,2,0,1,1,2019,tp,20.68,50,0,NGA
+Saudi Arabia,2,0,1,1,2019,tp,11.41,50,0,SAU
+Serbia,2,2,1,3,2019,tp,20.68,33,0,SRB
+Tunisia,2,1,0,3,2019,tp,no cases closed,no cases closed,0,TUN
+Chile,1,0,1,0,2019,tp,38.47,100,0,CHL
+Colombia,1,0,0,1,2019,tp,no cases closed,no cases closed,100,COL
+Greenland,1,2,0,3,2019,tp,no cases closed,no cases closed,0,GRL
+Latvia,1,3,1,3,2019,tp,41,40,0,LVA
+Morocco,1,0,0,1,2019,tp,no cases closed,no cases closed,100,MAR
+Pakistan,1,0,0,1,2019,tp,no cases closed,n.a.,0,PAK
+Panama,1,0,0,1,2019,tp,no cases closed,no cases closed,0,PAN
+Thailand,1,0,1,0,2019,tp,9.79,100,0,THA
+Andorra,0,0,0,0,2019,tp,no cases closed,n.a.,0,AND
+Angola,0,0,0,0,2019,tp,no cases closed,n.a.,0,AGO
+Aruba,0,0,0,0,2019,tp,no cases closed,n.a.,0,ABW
+Bahamas,0,0,0,0,2019,tp,no cases closed,n.a.,0,BHS
+Bahrain,0,0,0,0,2019,tp,no cases closed,n.a.,0,BHR
+Barbados,0,0,0,0,2019,tp,no cases closed,n.a.,0,BRB
+Belize,0,0,0,0,2019,tp,no cases closed,n.a.,0,BLZ
+Bermuda,0,0,0,0,2019,tp,no cases closed,n.a.,0,BMU
+Bosnia and Herzegovina,0,0,0,0,2019,tp,no cases closed,n.a.,0,BIH
+British Virgin Islands,0,0,0,0,2019,tp,no cases closed,n.a.,0,VGB
+Brunei Darussalam,0,0,0,0,2019,tp,no cases closed,n.a.,0,BRN
+Cayman Islands,0,0,0,0,2019,tp,no cases closed,n.a.,0,CYM
+Cook Islands,0,0,0,0,2019,tp,no cases closed,n.a.,0,COK
+Costa Rica,0,0,0,0,2019,tp,no cases closed,n.a.,0,CRI
+Côte d'Ivoire,0,0,0,0,2019,tp,no cases closed,n.a.,0,CIV
+Curaçao,0,0,0,0,2019,tp,no cases closed,n.a.,0,CUW
+Dominican Republic,0,0,0,0,2019,tp,no cases closed,n.a.,0,DOM
+Faroe Islands,0,0,0,0,2019,tp,no cases closed,n.a.,0,FRO
+Georgia,0,0,0,0,2019,tp,no cases closed,n.a.,0,GEO
+Gibraltar,0,0,0,0,2019,tp,no cases closed,n.a.,0,GIB
+Guernsey,0,0,0,0,2019,tp,no cases closed,n.a.,0,GGY
+Iceland,0,0,0,0,2019,tp,no cases closed,n.a.,0,ISL
+Isle of Man,0,0,0,0,2019,tp,no cases closed,n.a.,0,IMN
+Jordan,0,0,0,0,2019,tp,no cases closed,n.a.,0,JOR
+Kenya,0,4,0,4,2019,tp,no cases closed,n.a.,0,KEN
+Liberia,0,0,0,0,2019,tp,no cases closed,n.a.,0,LBR
+Lithuania,0,0,0,0,2019,tp,no cases closed,n.a.,0,LTU
+"Macau, China",0,0,0,0,2019,tp,no cases closed,n.a.,0,MAC
+Monaco,0,0,0,0,2019,tp,no cases closed,n.a.,0,MCO
+Mongolia,0,0,0,0,2019,tp,no cases closed,n.a.,0,MNG
+Oman,0,0,0,0,2019,tp,no cases closed,n.a.,0,OMN
+Papua New Guinea,0,0,0,0,2019,tp,no cases closed,n.a.,0,PNG
+Peru,0,0,0,0,2019,tp,no cases closed,n.a.,0,PER
+Qatar,0,0,0,0,2019,tp,no cases closed,n.a.,0,QAT
+Saint Kitts and Nevis,0,0,0,0,2019,tp,no cases closed,n.a.,0,KNA
+Senegal,0,0,0,0,2019,tp,no cases closed,n.a.,0,SEN
+Seychelles,0,0,0,0,2019,tp,no cases closed,n.a.,0,SYC
+Trinidad and Tobago,0,0,0,0,2019,tp,no cases closed,n.a.,0,TTO
+Turks and Caicos Islands,0,0,0,0,2019,tp,no cases closed,n.a.,0,TCA
+Ukraine,0,0,0,0,2019,tp,no cases closed,n.a.,0,UKR
+United Arab Emirates,0,0,0,0,2019,tp,no cases closed,n.a.,0,ARE
+Uruguay,0,0,0,0,2019,tp,no cases closed,n.a.,0,URY
+Germany,1244,747,569,1422,2020,all,22.84,35,12,DEU
+United States,1002,295,357,940,2020,all,39.82,31,27,USA
+India,947,108,182,873,2020,all,62.72,18,43,IND
+France,908,414,339,983,2020,all,23.95,30,21,FRA
+Italy,888,373,266,995,2020,all,33.54,25,12,ITA
+United Kingdom,574,403,335,642,2020,all,19.66,43,9,GBR
+Belgium,563,445,356,652,2020,all,13.22,45,6,BEL
+Spain,442,273,148,567,2020,all,24.17,26,6,ESP
+Switzerland,375,236,181,430,2020,all,20.09,37,8,CHE
+Netherlands,323,218,180,361,2020,all,16.14,42,8,NLD
+Austria,306,99,119,286,2020,all,26.35,33,22,AUT
+Sweden,242,174,104,312,2020,all,24.85,32,6,SWE
+Luxembourg,216,193,212,197,2020,all,11,68,11,LUX
+Denmark,209,112,71,250,2020,all,42.6,27,14,DNK
+Canada,165,72,74,163,2020,all,21.83,37,7,CAN
+Korea,158,41,31,168,2020,all,29.07,17,19,KOR
+Poland,154,46,43,157,2020,all,36.02,24,18,POL
+China,121,46,15,152,2020,all,39.27,10,18,CHN
+Finland,97,74,39,132,2020,all,23.42,29,20,FIN
+Romania,96,18,14,100,2020,all,8.68,13,41,ROU
+Ireland,86,103,38,151,2020,all,12.55,28,9,IRL
+Japan,85,46,28,103,2020,all,42.14,26,12,JPN
+Portugal,75,39,20,94,2020,all,15.87,21,9,PRT
+Norway,68,73,64,77,2020,all,20.14,61,5,NOR
+Indonesia,59,12,24,47,2020,all,62.84,37,17,IDN
+Mexico,52,31,19,64,2020,all,14.7,28,6,MEX
+Czech Republic,48,19,19,48,2020,all,27.63,33,23,CZE
+Malaysia,47,7,28,26,2020,all,20.18,55,4,MYS
+Slovak Republic,40,12,11,41,2020,all,44.76,24,29,SVK
+Greece,35,6,7,34,2020,all,22.15,18,29,GRC
+Australia,34,41,24,51,2020,all,7.38,44,6,AUS
+Singapore,34,22,15,41,2020,all,16.96,33,7,SGP
+Qatar,32,0,25,7,2020,all,18.64,78,0,QAT
+Morocco,30,2,2,30,2020,all,86.9,6,83,MAR
+Slovenia,30,6,5,31,2020,all,10.54,15,13,SVN
+Russia,29,7,2,34,2020,all,10.41,6,3,RUS
+Brazil,27,4,2,29,2020,all,1.48,7,14,BRA
+Kazakhstan,26,2,0,28,2020,all,no cases closed,no cases closed,32,KAZ
+South Africa,24,20,7,37,2020,all,24.72,21,16,ZAF
+Hungary,23,7,8,22,2020,all,21.57,30,23,HUN
+"Hong Kong, China",20,7,10,17,2020,all,26.48,43,18,HKG
+Liechtenstein,19,1,11,9,2020,all,16.76,56,22,LIE
+Türkiye,17,9,2,24,2020,all,56.18,9,17,TUR
+Argentina,16,5,2,19,2020,all,8.15,11,11,ARG
+Croatia,15,3,1,17,2020,all,2.98,6,29,HRV
+Bulgaria,14,5,12,7,2020,all,42.14,73,14,BGR
+Tunisia,14,0,1,13,2020,all,37.71,7,23,TUN
+Israel,13,13,11,15,2020,all,13.95,56,0,ISR
+New Zealand,13,18,19,12,2020,all,6.07,86,0,NZL
+Thailand,13,0,0,13,2020,all,no cases closed,no cases closed,38,THA
+Viet Nam,12,2,0,14,2020,all,no cases closed,no cases closed,36,VNM
+Estonia,10,2,3,9,2020,all,22.99,27,0,EST
+Kenya,8,4,2,10,2020,all,0.62,20,10,KEN
+Malta,8,8,1,15,2020,all,50.04,8,7,MLT
+Mauritius,7,0,1,6,2020,all,19,14,17,MUS
+Saudi Arabia,6,3,2,7,2020,all,5.05,27,0,SAU
+Barbados,5,2,2,5,2020,all,0.5,33,0,BRB
+Iceland,5,5,4,6,2020,all,11.08,53,0,ISL
+Serbia,5,2,2,5,2020,all,4.81,33,20,SRB
+Zambia,5,0,0,5,2020,all,no cases closed,no cases closed,20,ZMB
+Latvia,4,10,2,12,2020,all,10.11,22,8,LVA
+Aruba,3,1,4,0,2020,all,5.52,114,0,ABW
+Dominican Republic,3,0,0,3,2020,all,no cases closed,no cases closed,33,DOM
+Greenland,3,0,2,1,2020,all,46.32,67,0,GRL
+Chile,2,2,0,4,2020,all,no cases closed,no cases closed,0,CHL
+Colombia,2,1,0,3,2020,all,no cases closed,no cases closed,0,COL
+Lithuania,2,4,1,5,2020,all,56,25,0,LTU
+Pakistan,2,2,0,4,2020,all,no cases closed,no cases closed,0,PAK
+Faroe Islands,1,0,0,1,2020,all,no cases closed,no cases closed,100,FRO
+Jersey,1,0,1,0,2020,all,16,100,0,JEY
+Nigeria,1,1,1,1,2020,all,0.62,67,0,NGA
+Panama,1,1,0,2,2020,all,no cases closed,no cases closed,0,PAN
+Peru,1,1,1,1,2020,all,6,67,0,PER
+Trinidad and Tobago,1,0,0,1,2020,all,no cases closed,no cases closed,0,TTO
+Uruguay,1,0,0,1,2020,all,no cases closed,no cases closed,0,URY
+Albania,0,0,0,0,2020,all,no cases closed,n/a,0,ALB
+Andorra,0,0,0,0,2020,all,no cases closed,n/a,0,AND
+Angola,0,0,0,0,2020,all,no cases closed,n/a,0,AGO
+Anguilla,0,0,0,0,2020,all,no cases closed,n/a,0,AIA
+Antigua and Barbuda,0,0,0,0,2020,all,no cases closed,n/a,0,ATG
+Armenia,0,0,0,0,2020,all,no cases closed,n/a,0,ARM
+Bahamas,0,0,0,0,2020,all,no cases closed,n/a,0,BHS
+Bahrain,0,0,0,0,2020,all,no cases closed,n/a,0,BHR
+Belize,0,0,0,0,2020,all,no cases closed,n/a,0,BLZ
+Benin,0,0,0,0,2020,all,no cases closed,n/a,0,BEN
+Bermuda,0,0,0,0,2020,all,no cases closed,n/a,0,BMU
+Bosnia and Herzegovina,0,1,1,0,2020,all,6.82,200,0,BIH
+Botswana,0,0,0,0,2020,all,no cases closed,n/a,0,BWA
+British Virgin Islands,0,0,0,0,2020,all,no cases closed,n/a,0,VGB
+Brunei Darussalam,0,0,0,0,2020,all,no cases closed,n/a,0,BRN
+Burkina Faso,0,0,0,0,2020,all,no cases closed,n/a,0,BFA
+Cabo Verde,0,0,0,0,2020,all,no cases closed,n/a,0,CPV
+Cameroon,0,0,0,0,2020,all,no cases closed,n/a,0,CMR
+Cayman Islands,0,0,0,0,2020,all,no cases closed,n/a,0,CYM
+Congo,0,0,0,0,2020,all,no cases closed,n/a,0,COG
+Cook Islands,0,0,0,0,2020,all,no cases closed,n/a,0,COK
+Costa Rica,0,0,0,0,2020,all,no cases closed,n/a,0,CRI
+Côte d'Ivoire,0,0,0,0,2020,all,no cases closed,n/a,0,CIV
+Curaçao,0,5,5,0,2020,all,1.97,200,0,CUW
+DRC,0,0,0,0,2020,all,no cases closed,n/a,0,COD
+Djibouti,0,0,0,0,2020,all,no cases closed,n/a,0,DJI
+Dominica,0,0,0,0,2020,all,no cases closed,n/a,0,DMA
+Egypt,0,0,0,0,2020,all,no cases closed,n/a,0,EGY
+Eswatini,0,0,0,0,2020,all,no cases closed,n/a,0,SWZ
+Gabon,0,0,0,0,2020,all,no cases closed,n/a,0,GAB
+Georgia,0,0,0,0,2020,all,no cases closed,n/a,0,GEO
+Gibraltar,0,0,0,0,2020,all,no cases closed,n/a,0,GIB
+Grenada,0,0,0,0,2020,all,no cases closed,n/a,0,GRD
+Guernsey,0,0,0,0,2020,all,no cases closed,n/a,0,GGY
+Haiti,0,0,0,0,2020,all,no cases closed,n/a,0,HTI
+Honduras,0,0,0,0,2020,all,no cases closed,n/a,0,HND
+Isle of Man,0,0,0,0,2020,all,no cases closed,n/a,0,IMN
+Jamaica,0,0,0,0,2020,all,no cases closed,n/a,0,JAM
+Jordan,0,0,0,0,2020,all,no cases closed,n/a,0,JOR
+Liberia,0,0,0,0,2020,all,no cases closed,n/a,0,LBR
+"Macau, China",0,0,0,0,2020,all,no cases closed,n/a,0,MAC
+Maldives,0,0,0,0,2020,all,no cases closed,n/a,0,MDV
+Monaco,0,0,0,0,2020,all,no cases closed,n/a,0,MCO
+Mongolia,0,0,0,0,2020,all,no cases closed,n/a,0,MNG
+Montenegro,0,0,0,0,2020,all,no cases closed,n/a,0,MNE
+Montserrat,0,0,0,0,2020,all,no cases closed,n/a,0,MSR
+Namibia,0,0,0,0,2020,all,no cases closed,n/a,0,NAM
+North Macedonia,0,1,0,1,2020,all,no cases closed,no cases closed,0,MKD
+Oman,0,0,0,0,2020,all,no cases closed,n/a,0,OMN
+Papua New Guinea,0,0,0,0,2020,all,no cases closed,n/a,0,PNG
+Paraguay,0,0,0,0,2020,all,no cases closed,n/a,0,PRY
+Saint Kitts and Nevis,0,0,0,0,2020,all,no cases closed,n/a,0,KNA
+Saint Lucia,0,0,0,0,2020,all,no cases closed,n/a,0,LCA
+Saint Vincent and the Grenadines,0,0,0,0,2020,all,no cases closed,n/a,0,VCT
+San Marino,0,0,0,0,2020,all,no cases closed,n/a,0,SMR
+Senegal,0,0,0,0,2020,all,no cases closed,n/a,0,SEN
+Seychelles,0,0,0,0,2020,all,no cases closed,n/a,0,SYC
+Sierra Leone,0,0,0,0,2020,all,no cases closed,n/a,0,SLE
+Sri Lanka,0,4,0,4,2020,all,no cases closed,no cases closed,0,LKA
+Turks and Caicos Islands,0,0,0,0,2020,all,no cases closed,n/a,0,TCA
+Ukraine,0,0,0,0,2020,all,no cases closed,n/a,0,UKR
+United Arab Emirates,0,0,0,0,2020,all,no cases closed,n/a,0,ARE
+Germany,727,424,365,786,2020,other,19.61,39,15,DEU
+Belgium,471,396,339,528,2020,other,12.75,51,6,BEL
+France,402,191,171,422,2020,other,17.24,34,19,FRA
+United States,353,116,148,321,2020,other,29.52,36,36,USA
+United Kingdom,273,268,230,311,2020,other,12.33,57,9,GBR
+Italy,247,66,41,272,2020,other,51.83,15,25,ITA
+Netherlands,197,142,124,215,2020,other,12.19,46,7,NLD
+Switzerland,189,156,115,230,2020,other,20,43,6,CHE
+Spain,179,102,42,239,2020,other,14.43,18,8,ESP
+Austria,173,59,78,154,2020,other,20.37,39,26,AUT
+Luxembourg,172,183,198,157,2020,other,9.75,75,13,LUX
+India,162,20,18,164,2020,other,58.53,10,54,IND
+Sweden,121,81,80,122,2020,other,18.37,50,3,SWE
+Poland,90,17,25,82,2020,other,28.69,25,20,POL
+Denmark,73,21,26,68,2020,other,33.66,31,22,DNK
+China,69,28,10,87,2020,other,35.55,12,21,CHN
+Korea,66,12,10,68,2020,other,42.44,14,34,KOR
+Finland,63,35,21,77,2020,other,23.61,26,25,FIN
+Norway,49,40,47,42,2020,other,18.01,68,5,NOR
+Ireland,43,55,27,71,2020,other,7.39,38,7,IRL
+Canada,42,17,22,37,2020,other,19.15,44,14,CAN
+Malaysia,39,2,25,16,2020,other,18.64,63,6,MYS
+Romania,38,4,8,34,2020,other,11.39,20,44,ROU
+Portugal,36,25,14,47,2020,other,8.96,29,6,PRT
+Qatar,32,0,25,7,2020,other,18.64,78,0,QAT
+Morocco,28,2,2,28,2020,other,86.9,7,82,MAR
+Indonesia,23,7,13,17,2020,other,91.19,49,12,IDN
+Kazakhstan,23,2,0,25,2020,other,no cases closed,no cases closed,36,KAZ
+Slovak Republic,23,2,3,22,2020,other,99.7,13,32,SVK
+Czech Republic,22,8,6,24,2020,other,23.22,23,21,CZE
+Greece,20,4,6,18,2020,other,25.74,27,17,GRC
+Slovenia,20,3,2,21,2020,other,12.87,9,19,SVN
+Australia,18,28,22,24,2020,other,6.12,69,4,AUS
+Singapore,16,5,3,18,2020,other,16.52,16,11,SGP
+Liechtenstein,15,1,10,6,2020,other,14.47,65,17,LIE
+Mexico,15,8,4,19,2020,other,26.12,21,5,MEX
+Hungary,14,3,5,12,2020,other,10.87,32,33,HUN
+"Hong Kong, China",13,2,4,11,2020,other,22.33,29,18,HKG
+Russia,13,3,0,16,2020,other,no cases closed,no cases closed,0,RUS
+South Africa,13,12,6,19,2020,other,19.07,32,5,ZAF
+Thailand,13,0,0,13,2020,other,no cases closed,no cases closed,38,THA
+Croatia,11,3,1,13,2020,other,2.98,8,38,HRV
+Türkiye,11,3,1,13,2020,other,111.74,8,31,TUR
+Estonia,10,2,3,9,2020,other,22.99,27,0,EST
+Japan,10,6,4,12,2020,other,46.61,31,0,JPN
+Tunisia,10,0,0,10,2020,other,no cases closed,no cases closed,30,TUN
+Argentina,9,2,1,10,2020,other,15.68,10,10,ARG
+Israel,7,6,8,5,2020,other,15.01,80,0,ISR
+New Zealand,7,18,17,8,2020,other,3.91,106,0,NZL
+Brazil,6,1,1,6,2020,other,2.33,15,17,BRA
+Mauritius,6,0,1,5,2020,other,19,17,20,MUS
+Barbados,5,0,1,4,2020,other,0,20,0,BRB
+Bulgaria,5,3,2,6,2020,other,105,31,17,BGR
+Iceland,5,4,4,5,2020,other,11.08,57,0,ISL
+Kenya,4,2,0,6,2020,other,no cases closed,no cases closed,17,KEN
+Saudi Arabia,4,2,1,5,2020,other,9.47,20,0,SAU
+Aruba,3,1,4,0,2020,other,5.52,114,0,ABW
+Dominican Republic,3,0,0,3,2020,other,no cases closed,no cases closed,33,DOM
+Greenland,3,0,2,1,2020,other,46.32,67,0,GRL
+Malta,3,0,1,2,2020,other,50.04,33,50,MLT
+Chile,2,0,0,2,2020,other,no cases closed,no cases closed,0,CHL
+Colombia,2,1,0,3,2020,other,no cases closed,n/a,0,COL
+Lithuania,2,3,1,4,2020,other,56,29,0,LTU
+Serbia,2,1,1,2,2020,other,9,40,50,SRB
+Zambia,2,0,0,2,2020,other,no cases closed,no cases closed,0,ZMB
+Faroe Islands,1,0,0,1,2020,other,no cases closed,no cases closed,100,FRO
+Latvia,1,7,0,8,2020,other,no cases closed,no cases closed,13,LVA
+Pakistan,1,1,0,2,2020,other,no cases closed,no cases closed,0,PAK
+Peru,1,1,1,1,2020,other,6,67,0,PER
+Trinidad and Tobago,1,0,0,1,2020,other,no cases closed,no cases closed,0,TTO
+Uruguay,1,0,0,1,2020,other,no cases closed,no cases closed,0,URY
+Viet Nam,1,2,0,3,2020,other,no cases closed,no cases closed,0,VNM
+Albania,0,0,0,0,2020,other,no cases closed,n/a,0,ALB
+Andorra,0,0,0,0,2020,other,no cases closed,n/a,0,AND
+Angola,0,0,0,0,2020,other,no cases closed,n/a,0,AGO
+Anguilla,0,0,0,0,2020,other,no cases closed,n/a,0,AIA
+Antigua and Barbuda,0,0,0,0,2020,other,no cases closed,n/a,0,ATG
+Armenia,0,0,0,0,2020,other,no cases closed,n/a,0,ARM
+Bahamas,0,0,0,0,2020,other,no cases closed,n/a,0,BHS
+Bahrain,0,0,0,0,2020,other,no cases closed,n/a,0,BHR
+Belize,0,0,0,0,2020,other,no cases closed,n/a,0,BLZ
+Benin,0,0,0,0,2020,other,no cases closed,n/a,0,BEN
+Bermuda,0,0,0,0,2020,other,no cases closed,n/a,0,BMU
+Bosnia and Herzegovina,0,0,0,0,2020,other,no cases closed,n/a,0,BIH
+Botswana,0,0,0,0,2020,other,no cases closed,n/a,0,BWA
+British Virgin Islands,0,0,0,0,2020,other,no cases closed,n/a,0,VGB
+Brunei Darussalam,0,0,0,0,2020,other,no cases closed,n/a,0,BRN
+Burkina Faso,0,0,0,0,2020,other,no cases closed,n/a,0,BFA
+Cabo Verde,0,0,0,0,2020,other,no cases closed,n/a,0,CPV
+Cameroon,0,0,0,0,2020,other,no cases closed,n/a,0,CMR
+Cayman Islands,0,0,0,0,2020,other,no cases closed,n/a,0,CYM
+Congo,0,0,0,0,2020,other,no cases closed,n/a,0,COG
+Cook Islands,0,0,0,0,2020,other,no cases closed,n/a,0,COK
+Costa Rica,0,0,0,0,2020,other,no cases closed,n/a,0,CRI
+Côte d'Ivoire,0,0,0,0,2020,other,no cases closed,n/a,0,CIV
+Curaçao,0,5,5,0,2020,other,1.97,200,0,CUW
+DRC,0,0,0,0,2020,other,no cases closed,n/a,0,COD
+Djibouti,0,0,0,0,2020,other,no cases closed,n/a,0,DJI
+Dominica,0,0,0,0,2020,other,no cases closed,n/a,0,DMA
+Egypt,0,0,0,0,2020,other,no cases closed,n/a,0,EGY
+Eswatini,0,0,0,0,2020,other,no cases closed,n/a,0,SWZ
+Gabon,0,0,0,0,2020,other,no cases closed,n/a,0,GAB
+Georgia,0,0,0,0,2020,other,no cases closed,n/a,0,GEO
+Gibraltar,0,0,0,0,2020,other,no cases closed,n/a,0,GIB
+Grenada,0,0,0,0,2020,other,no cases closed,n/a,0,GRD
+Guernsey,0,0,0,0,2020,other,no cases closed,n/a,0,GGY
+Haiti,0,0,0,0,2020,other,no cases closed,n/a,0,HTI
+Honduras,0,0,0,0,2020,other,no cases closed,n/a,0,HND
+Isle of Man,0,0,0,0,2020,other,no cases closed,n/a,0,IMN
+Jamaica,0,0,0,0,2020,other,no cases closed,n/a,0,JAM
+Jersey,0,0,0,0,2020,other,no cases closed,n/a,0,JEY
+Jordan,0,0,0,0,2020,other,no cases closed,n/a,0,JOR
+Liberia,0,0,0,0,2020,other,no cases closed,n/a,0,LBR
+"Macau, China",0,0,0,0,2020,other,no cases closed,n/a,0,MAC
+Maldives,0,0,0,0,2020,other,no cases closed,n/a,0,MDV
+Monaco,0,0,0,0,2020,other,no cases closed,n/a,0,MCO
+Mongolia,0,0,0,0,2020,other,no cases closed,n/a,0,MNG
+Montenegro,0,0,0,0,2020,other,no cases closed,n/a,0,MNE
+Montserrat,0,0,0,0,2020,other,no cases closed,n/a,0,MSR
+Namibia,0,0,0,0,2020,other,no cases closed,n/a,0,NAM
+Nigeria,0,0,0,0,2020,other,no cases closed,n/a,0,NGA
+North Macedonia,0,1,0,1,2020,other,no cases closed,no cases closed,0,MKD
+Oman,0,0,0,0,2020,other,no cases closed,n/a,0,OMN
+Panama,0,0,0,0,2020,other,no cases closed,n/a,0,PAN
+Papua New Guinea,0,0,0,0,2020,other,no cases closed,n/a,0,PNG
+Paraguay,0,0,0,0,2020,other,no cases closed,n/a,0,PRY
+Saint Kitts and Nevis,0,0,0,0,2020,other,no cases closed,n/a,0,KNA
+Saint Lucia,0,0,0,0,2020,other,no cases closed,n/a,0,LCA
+Saint Vincent and the Grenadines,0,0,0,0,2020,other,no cases closed,n/a,0,VCT
+San Marino,0,0,0,0,2020,other,no cases closed,n/a,0,SMR
+Senegal,0,0,0,0,2020,other,no cases closed,n/a,0,SEN
+Seychelles,0,0,0,0,2020,other,no cases closed,n/a,0,SYC
+Sierra Leone,0,0,0,0,2020,other,no cases closed,n/a,0,SLE
+Sri Lanka,0,4,0,4,2020,other,no cases closed,no cases closed,0,LKA
+Turks and Caicos Islands,0,0,0,0,2020,other,no cases closed,n/a,0,TCA
+Ukraine,0,0,0,0,2020,other,no cases closed,n/a,0,UKR
+United Arab Emirates,0,0,0,0,2020,other,no cases closed,n/a,0,ARE
+India,785,88,164,709,2020,tp,63.18,20,40,IND
+United States,649,179,209,619,2020,tp,47.11,28,23,USA
+Italy,641,307,225,723,2020,tp,30.21,28,7,ITA
+Germany,517,323,204,636,2020,tp,28.62,30,7,DEU
+France,506,223,168,561,2020,tp,30.79,27,22,FRA
+United Kingdom,301,135,105,331,2020,tp,35.71,28,8,GBR
+Spain,263,171,106,328,2020,tp,28.03,30,4,ESP
+Switzerland,186,80,66,200,2020,tp,20.23,29,11,CHE
+Denmark,136,91,45,182,2020,tp,47.77,25,11,DNK
+Austria,133,40,41,132,2020,tp,37.73,27,18,AUT
+Netherlands,126,76,56,146,2020,tp,24.9,34,8,NLD
+Canada,123,55,52,126,2020,tp,22.97,35,5,CAN
+Sweden,121,93,24,190,2020,tp,46.44,14,8,SWE
+Belgium,92,49,17,124,2020,tp,22.5,15,5,BEL
+Korea,92,29,21,100,2020,tp,22.71,20,9,KOR
+Japan,75,40,24,91,2020,tp,41.39,25,13,JPN
+Poland,64,29,18,75,2020,tp,46.21,23,17,POL
+Romania,58,14,6,66,2020,tp,5.06,9,39,ROU
+China,52,18,5,65,2020,tp,46.73,8,15,CHN
+Luxembourg,44,10,14,40,2020,tp,28.59,29,5,LUX
+Ireland,43,48,11,80,2020,tp,25.2,16,10,IRL
+Portugal,39,14,6,47,2020,tp,32,13,11,PRT
+Mexico,37,23,15,45,2020,tp,11.65,31,7,MEX
+Indonesia,36,5,11,30,2020,tp,29.33,29,20,IDN
+Finland,34,39,18,55,2020,tp,23.21,34,13,FIN
+Czech Republic,26,11,13,24,2020,tp,29.67,41,25,CZE
+Brazil,21,3,1,23,2020,tp,0.62,4,13,BRA
+Norway,19,33,17,35,2020,tp,26.03,48,6,NOR
+Singapore,18,17,12,23,2020,tp,17.07,45,4,SGP
+Slovak Republic,17,10,8,19,2020,tp,24.16,36,26,SVK
+Australia,16,13,2,27,2020,tp,21.23,9,7,AUS
+Russia,16,4,2,18,2020,tp,10.41,11,6,RUS
+Greece,15,2,1,16,2020,tp,0.62,6,44,GRC
+South Africa,11,8,1,18,2020,tp,58.65,7,28,ZAF
+Viet Nam,11,0,0,11,2020,tp,no cases closed,no cases closed,45,VNM
+Slovenia,10,3,3,10,2020,tp,8.99,26,0,SVN
+Bulgaria,9,2,10,1,2020,tp,29.57,100,0,BGR
+Hungary,9,4,3,10,2020,tp,39.4,27,10,HUN
+Malaysia,8,5,3,10,2020,tp,32.99,29,0,MYS
+Argentina,7,3,1,9,2020,tp,0.62,12,11,ARG
+"Hong Kong, China",7,5,6,6,2020,tp,29.25,63,17,HKG
+Israel,6,7,3,10,2020,tp,11.14,32,0,ISR
+New Zealand,6,0,2,4,2020,tp,24.48,33,0,NZL
+Türkiye,6,6,1,11,2020,tp,0.62,11,0,TUR
+Malta,5,8,0,13,2020,tp,no cases closed,no cases closed,0,MLT
+Croatia,4,0,0,4,2020,tp,no cases closed,no cases closed,0,HRV
+Kenya,4,2,2,4,2020,tp,0.62,40,0,KEN
+Liechtenstein,4,0,1,3,2020,tp,39.68,25,33,LIE
+Tunisia,4,0,1,3,2020,tp,37.71,25,0,TUN
+Kazakhstan,3,0,0,3,2020,tp,no cases closed,no cases closed,0,KAZ
+Latvia,3,3,2,4,2020,tp,10.11,44,0,LVA
+Serbia,3,1,1,3,2020,tp,0.62,29,0,SRB
+Zambia,3,0,0,3,2020,tp,no cases closed,no cases closed,33,ZMB
+Morocco,2,0,0,2,2020,tp,no cases closed,no cases closed,100,MAR
+Saudi Arabia,2,1,1,2,2020,tp,0.62,40,0,SAU
+Jersey,1,0,1,0,2020,tp,16,100,0,JEY
+Mauritius,1,0,0,1,2020,tp,no cases closed,no cases closed,0,MUS
+Nigeria,1,1,1,1,2020,tp,0.62,67,0,NGA
+Pakistan,1,1,0,2,2020,tp,no cases closed,no cases closed,0,PAK
+Panama,1,1,0,2,2020,tp,no cases closed,no cases closed,0,PAN
+Albania,0,0,0,0,2020,tp,no cases closed,n/a,0,ALB
+Andorra,0,0,0,0,2020,tp,no cases closed,n/a,0,AND
+Angola,0,0,0,0,2020,tp,no cases closed,n/a,0,AGO
+Anguilla,0,0,0,0,2020,tp,no cases closed,n/a,0,AIA
+Antigua and Barbuda,0,0,0,0,2020,tp,no cases closed,n/a,0,ATG
+Armenia,0,0,0,0,2020,tp,no cases closed,n/a,0,ARM
+Aruba,0,0,0,0,2020,tp,no cases closed,n/a,0,ABW
+Bahamas,0,0,0,0,2020,tp,no cases closed,n/a,0,BHS
+Bahrain,0,0,0,0,2020,tp,no cases closed,n/a,0,BHR
+Barbados,0,2,1,1,2020,tp,1,100,0,BRB
+Belize,0,0,0,0,2020,tp,no cases closed,n/a,0,BLZ
+Benin,0,0,0,0,2020,tp,no cases closed,n/a,0,BEN
+Bermuda,0,0,0,0,2020,tp,no cases closed,n/a,0,BMU
+Bosnia and Herzegovina,0,1,1,0,2020,tp,6.82,200,0,BIH
+Botswana,0,0,0,0,2020,tp,no cases closed,n/a,0,BWA
+British Virgin Islands,0,0,0,0,2020,tp,no cases closed,n/a,0,VGB
+Brunei Darussalam,0,0,0,0,2020,tp,no cases closed,n/a,0,BRN
+Burkina Faso,0,0,0,0,2020,tp,no cases closed,n/a,0,BFA
+Cabo Verde,0,0,0,0,2020,tp,no cases closed,n/a,0,CPV
+Cameroon,0,0,0,0,2020,tp,no cases closed,n/a,0,CMR
+Cayman Islands,0,0,0,0,2020,tp,no cases closed,n/a,0,CYM
+Chile,0,2,0,2,2020,tp,no cases closed,no cases closed,0,CHL
+Colombia,0,0,0,0,2020,tp,no cases closed,n/a,0,COL
+Congo,0,0,0,0,2020,tp,no cases closed,n/a,0,COG
+Cook Islands,0,0,0,0,2020,tp,no cases closed,n/a,0,COK
+Costa Rica,0,0,0,0,2020,tp,no cases closed,n/a,0,CRI
+Côte d'Ivoire,0,0,0,0,2020,tp,no cases closed,n/a,0,CIV
+Curaçao,0,0,0,0,2020,tp,no cases closed,n/a,0,CUW
+DRC,0,0,0,0,2020,tp,no cases closed,n/a,0,COD
+Djibouti,0,0,0,0,2020,tp,no cases closed,n/a,0,DJI
+Dominica,0,0,0,0,2020,tp,no cases closed,n/a,0,DMA
+Dominican Republic,0,0,0,0,2020,tp,no cases closed,n/a,0,DOM
+Egypt,0,0,0,0,2020,tp,no cases closed,n/a,0,EGY
+Estonia,0,0,0,0,2020,tp,no cases closed,n/a,0,EST
+Eswatini,0,0,0,0,2020,tp,no cases closed,n/a,0,SWZ
+Faroe Islands,0,0,0,0,2020,tp,no cases closed,n/a,0,FRO
+Gabon,0,0,0,0,2020,tp,no cases closed,n/a,0,GAB
+Georgia,0,0,0,0,2020,tp,no cases closed,n/a,0,GEO
+Gibraltar,0,0,0,0,2020,tp,no cases closed,n/a,0,GIB
+Greenland,0,0,0,0,2020,tp,no cases closed,n/a,0,GRL
+Grenada,0,0,0,0,2020,tp,no cases closed,n/a,0,GRD
+Guernsey,0,0,0,0,2020,tp,no cases closed,n/a,0,GGY
+Haiti,0,0,0,0,2020,tp,no cases closed,n/a,0,HTI
+Honduras,0,0,0,0,2020,tp,no cases closed,n/a,0,HND
+Iceland,0,1,0,1,2020,tp,no cases closed,no cases closed,0,ISL
+Isle of Man,0,0,0,0,2020,tp,no cases closed,n/a,0,IMN
+Jamaica,0,0,0,0,2020,tp,no cases closed,n/a,0,JAM
+Jordan,0,0,0,0,2020,tp,no cases closed,n/a,0,JOR
+Liberia,0,0,0,0,2020,tp,no cases closed,n/a,0,LBR
+Lithuania,0,1,0,1,2020,tp,no cases closed,no cases closed,0,LTU
+"Macau, China",0,0,0,0,2020,tp,no cases closed,n/a,0,MAC
+Maldives,0,0,0,0,2020,tp,no cases closed,n/a,0,MDV
+Monaco,0,0,0,0,2020,tp,no cases closed,n/a,0,MCO
+Mongolia,0,0,0,0,2020,tp,no cases closed,n/a,0,MNG
+Montenegro,0,0,0,0,2020,tp,no cases closed,n/a,0,MNE
+Montserrat,0,0,0,0,2020,tp,no cases closed,n/a,0,MSR
+Namibia,0,0,0,0,2020,tp,no cases closed,n/a,0,NAM
+North Macedonia,0,0,0,0,2020,tp,no cases closed,n/a,0,MKD
+Oman,0,0,0,0,2020,tp,no cases closed,n/a,0,OMN
+Papua New Guinea,0,0,0,0,2020,tp,no cases closed,n/a,0,PNG
+Paraguay,0,0,0,0,2020,tp,no cases closed,n/a,0,PRY
+Peru,0,0,0,0,2020,tp,no cases closed,n/a,0,PER
+Qatar,0,0,0,0,2020,tp,no cases closed,n/a,0,QAT
+Saint Kitts and Nevis,0,0,0,0,2020,tp,no cases closed,n/a,0,KNA
+Saint Lucia,0,0,0,0,2020,tp,no cases closed,n/a,0,LCA
+Saint Vincent and the Grenadines,0,0,0,0,2020,tp,no cases closed,n/a,0,VCT
+San Marino,0,0,0,0,2020,tp,no cases closed,n/a,0,SMR
+Senegal,0,0,0,0,2020,tp,no cases closed,n/a,0,SEN
+Seychelles,0,0,0,0,2020,tp,no cases closed,n/a,0,SYC
+Sierra Leone,0,0,0,0,2020,tp,no cases closed,n/a,0,SLE
+Sri Lanka,0,0,0,0,2020,tp,no cases closed,n/a,0,LKA
+Thailand,0,0,0,0,2020,tp,no cases closed,n/a,0,THA
+Trinidad and Tobago,0,0,0,0,2020,tp,no cases closed,n/a,0,TTO
+Turks and Caicos Islands,0,0,0,0,2020,tp,no cases closed,n/a,0,TCA
+Ukraine,0,0,0,0,2020,tp,no cases closed,n/a,0,UKR
+United Arab Emirates,0,0,0,0,2020,tp,no cases closed,n/a,0,ARE
+Uruguay,0,0,0,0,2020,tp,no cases closed,n/a,0,URY
+Australia,NA,9,NA,16,2006,all,NA,NA,NA,AUS
+Australia,NA,13,NA,23,2007,all,NA,NA,NA,AUS
+Australia,NA,8,NA,22,2008,all,NA,NA,NA,AUS
+Australia,NA,19,NA,23,2009,all,NA,NA,NA,AUS
+Australia,NA,21,NA,27,2010,all,NA,NA,NA,AUS
+Australia,NA,10,NA,21,2011,all,NA,NA,NA,AUS
+Australia,NA,10,NA,21,2012,all,NA,NA,NA,AUS
+Australia,NA,8,NA,23,2013,all,NA,NA,NA,AUS
+Australia,NA,10,NA,18,2014,all,NA,NA,NA,AUS
+Australia,NA,14,NA,22,2015,all,NA,NA,NA,AUS
+Austria,NA,29,NA,144,2006,all,NA,NA,NA,AUT
+Austria,NA,26,NA,152,2007,all,NA,NA,NA,AUT
+Austria,NA,36,NA,105,2008,all,NA,NA,NA,AUT
+Austria,NA,30,NA,120,2009,all,NA,NA,NA,AUT
+Austria,NA,38,NA,106,2010,all,NA,NA,NA,AUT
+Austria,NA,35,NA,110,2011,all,NA,NA,NA,AUT
+Austria,NA,61,NA,137,2012,all,NA,NA,NA,AUT
+Austria,NA,41,NA,156,2013,all,NA,NA,NA,AUT
+Austria,NA,49,NA,180,2014,all,NA,NA,NA,AUT
+Austria,NA,43,NA,185,2015,all,NA,NA,NA,AUT
+Belgium,NA,31,NA,81,2006,all,NA,NA,NA,BEL
+Belgium,NA,30,NA,95,2007,all,NA,NA,NA,BEL
+Belgium,NA,71,NA,152,2008,all,NA,NA,NA,BEL
+Belgium,NA,213,NA,265,2009,all,NA,NA,NA,BEL
+Belgium,NA,120,NA,142,2010,all,NA,NA,NA,BEL
+Belgium,NA,120,NA,241,2011,all,NA,NA,NA,BEL
+Belgium,NA,151,NA,305,2012,all,NA,NA,NA,BEL
+Belgium,NA,124,NA,317,2013,all,NA,NA,NA,BEL
+Belgium,NA,205,NA,492,2014,all,NA,NA,NA,BEL
+Belgium,NA,428,NA,632,2015,all,NA,NA,NA,BEL
+Canada,NA,76,NA,134,2006,all,NA,NA,NA,CAN
+Canada,NA,70,NA,153,2007,all,NA,NA,NA,CAN
+Canada,NA,85,NA,186,2008,all,NA,NA,NA,CAN
+Canada,NA,103,NA,206,2009,all,NA,NA,NA,CAN
+Canada,NA,101,NA,225,2010,all,NA,NA,NA,CAN
+Canada,NA,94,NA,225,2011,all,NA,NA,NA,CAN
+Canada,NA,87,NA,222,2012,all,NA,NA,NA,CAN
+Canada,NA,127,NA,235,2013,all,NA,NA,NA,CAN
+Canada,NA,127,NA,257,2014,all,NA,NA,NA,CAN
+Canada,NA,130,NA,272,2015,all,NA,NA,NA,CAN
+Chile,NA,0,NA,0,2006,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2007,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2008,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2009,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2010,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2011,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2012,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2013,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2014,all,NA,NA,NA,CHL
+Chile,NA,0,NA,0,2015,all,NA,NA,NA,CHL
+Czech Republic,NA,5,NA,13,2006,all,NA,NA,NA,CZE
+Czech Republic,NA,10,NA,13,2007,all,NA,NA,NA,CZE
+Czech Republic,NA,5,NA,4,2008,all,NA,NA,NA,CZE
+Czech Republic,NA,6,NA,8,2009,all,NA,NA,NA,CZE
+Czech Republic,NA,8,NA,13,2010,all,NA,NA,NA,CZE
+Czech Republic,NA,12,NA,14,2011,all,NA,NA,NA,CZE
+Czech Republic,NA,13,NA,16,2012,all,NA,NA,NA,CZE
+Czech Republic,NA,7,NA,21,2013,all,NA,NA,NA,CZE
+Czech Republic,NA,12,NA,26,2014,all,NA,NA,NA,CZE
+Czech Republic,NA,11,NA,33,2015,all,NA,NA,NA,CZE
+Denmark,NA,15,NA,82,2006,all,NA,NA,NA,DNK
+Denmark,NA,18,NA,82,2007,all,NA,NA,NA,DNK
+Denmark,NA,21,NA,79,2008,all,NA,NA,NA,DNK
+Denmark,NA,22,NA,86,2009,all,NA,NA,NA,DNK
+Denmark,NA,20,NA,67,2010,all,NA,NA,NA,DNK
+Denmark,NA,24,NA,57,2011,all,NA,NA,NA,DNK
+Denmark,NA,24,NA,55,2012,all,NA,NA,NA,DNK
+Denmark,NA,22,NA,57,2013,all,NA,NA,NA,DNK
+Denmark,NA,43,NA,72,2014,all,NA,NA,NA,DNK
+Denmark,NA,52,NA,148,2015,all,NA,NA,NA,DNK
+Estonia,NA,0,NA,0,2006,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2007,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2008,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2009,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2010,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2011,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2012,all,NA,NA,NA,EST
+Estonia,NA,0,NA,0,2013,all,NA,NA,NA,EST
+Estonia,NA,1,NA,1,2014,all,NA,NA,NA,EST
+Estonia,NA,2,NA,1,2015,all,NA,NA,NA,EST
+Finland,NA,1,NA,12,2006,all,NA,NA,NA,FIN
+Finland,NA,11,NA,22,2007,all,NA,NA,NA,FIN
+Finland,NA,8,NA,20,2008,all,NA,NA,NA,FIN
+Finland,NA,5,NA,22,2009,all,NA,NA,NA,FIN
+Finland,NA,11,NA,32,2010,all,NA,NA,NA,FIN
+Finland,NA,13,NA,37,2011,all,NA,NA,NA,FIN
+Finland,NA,14,NA,50,2012,all,NA,NA,NA,FIN
+Finland,NA,56,NA,103,2013,all,NA,NA,NA,FIN
+Finland,NA,49,NA,109,2014,all,NA,NA,NA,FIN
+Finland,NA,20,NA,95,2015,all,NA,NA,NA,FIN
+France,NA,104,NA,254,2006,all,NA,NA,NA,FRA
+France,NA,100,NA,233,2007,all,NA,NA,NA,FRA
+France,NA,154,NA,328,2008,all,NA,NA,NA,FRA
+France,NA,169,NA,427,2009,all,NA,NA,NA,FRA
+France,NA,135,NA,490,2010,all,NA,NA,NA,FRA
+France,NA,173,NA,539,2011,all,NA,NA,NA,FRA
+France,NA,181,NA,551,2012,all,NA,NA,NA,FRA
+France,NA,216,NA,618,2013,all,NA,NA,NA,FRA
+France,NA,201,NA,549,2014,all,NA,NA,NA,FRA
+France,NA,173,NA,566,2015,all,NA,NA,NA,FRA
+Germany,NA,212,NA,476,2006,all,NA,NA,NA,DEU
+Germany,NA,186,NA,527,2007,all,NA,NA,NA,DEU
+Germany,NA,177,NA,519,2008,all,NA,NA,NA,DEU
+Germany,NA,177,NA,543,2009,all,NA,NA,NA,DEU
+Germany,NA,150,NA,484,2010,all,NA,NA,NA,DEU
+Germany,NA,306,NA,702,2011,all,NA,NA,NA,DEU
+Germany,NA,277,NA,787,2012,all,NA,NA,NA,DEU
+Germany,NA,267,NA,858,2013,all,NA,NA,NA,DEU
+Germany,NA,374,NA,1029,2014,all,NA,NA,NA,DEU
+Germany,NA,363,NA,1147,2015,all,NA,NA,NA,DEU
+Greece,NA,1,NA,4,2006,all,NA,NA,NA,GRC
+Greece,NA,2,NA,5,2007,all,NA,NA,NA,GRC
+Greece,NA,0,NA,NA,2008,all,NA,NA,NA,GRC
+Greece,NA,0,NA,NA,2009,all,NA,NA,NA,GRC
+Greece,NA,0,NA,NA,2010,all,NA,NA,NA,GRC
+Greece,NA,5,NA,27,2011,all,NA,NA,NA,GRC
+Greece,NA,3,NA,30,2012,all,NA,NA,NA,GRC
+Greece,NA,NA,NA,NA,2013,all,NA,NA,NA,GRC
+Greece,NA,4,NA,35,2014,all,NA,NA,NA,GRC
+Greece,NA,6,NA,28,2015,all,NA,NA,NA,GRC
+Hungary,NA,4,NA,12,2006,all,NA,NA,NA,HUN
+Hungary,NA,3,NA,9,2007,all,NA,NA,NA,HUN
+Hungary,NA,1,NA,10,2008,all,NA,NA,NA,HUN
+Hungary,NA,2,NA,7,2009,all,NA,NA,NA,HUN
+Hungary,NA,1,NA,8,2010,all,NA,NA,NA,HUN
+Hungary,NA,0,NA,4,2011,all,NA,NA,NA,HUN
+Hungary,NA,1,NA,2,2012,all,NA,NA,NA,HUN
+Hungary,NA,2,NA,4,2013,all,NA,NA,NA,HUN
+Hungary,NA,4,NA,8,2014,all,NA,NA,NA,HUN
+Hungary,NA,4,NA,11,2015,all,NA,NA,NA,HUN
+Iceland,NA,1,NA,1,2006,all,NA,NA,NA,ISL
+Iceland,NA,0,NA,1,2007,all,NA,NA,NA,ISL
+Iceland,NA,0,NA,0,2008,all,NA,NA,NA,ISL
+Iceland,NA,0,NA,0,2009,all,NA,NA,NA,ISL
+Iceland,NA,0,NA,0,2010,all,NA,NA,NA,ISL
+Iceland,NA,1,NA,1,2011,all,NA,NA,NA,ISL
+Iceland,NA,2,NA,1,2012,all,NA,NA,NA,ISL
+Iceland,NA,1,NA,0,2013,all,NA,NA,NA,ISL
+Iceland,NA,4,NA,1,2014,all,NA,NA,NA,ISL
+Iceland,NA,1,NA,0,2015,all,NA,NA,NA,ISL
+Ireland,NA,3,NA,4,2006,all,NA,NA,NA,IRL
+Ireland,NA,3,NA,6,2007,all,NA,NA,NA,IRL
+Ireland,NA,2,NA,7,2008,all,NA,NA,NA,IRL
+Ireland,NA,6,NA,13,2009,all,NA,NA,NA,IRL
+Ireland,NA,7,NA,16,2010,all,NA,NA,NA,IRL
+Ireland,NA,6,NA,17,2011,all,NA,NA,NA,IRL
+Ireland,NA,12,NA,22,2012,all,NA,NA,NA,IRL
+Ireland,NA,12,NA,26,2013,all,NA,NA,NA,IRL
+Ireland,NA,5,NA,25,2014,all,NA,NA,NA,IRL
+Ireland,NA,13,NA,28,2015,all,NA,NA,NA,IRL
+Israel,NA,0,NA,0,2006,all,NA,NA,NA,ISR
+Israel,NA,0,NA,0,2007,all,NA,NA,NA,ISR
+Israel,NA,0,NA,0,2008,all,NA,NA,NA,ISR
+Israel,NA,0,NA,13,2009,all,NA,NA,NA,ISR
+Israel,NA,4,NA,13,2010,all,NA,NA,NA,ISR
+Israel,NA,9,NA,14,2011,all,NA,NA,NA,ISR
+Israel,NA,5,NA,17,2012,all,NA,NA,NA,ISR
+Israel,NA,3,NA,18,2013,all,NA,NA,NA,ISR
+Israel,NA,3,NA,17,2014,all,NA,NA,NA,ISR
+Israel,NA,2,NA,17,2015,all,NA,NA,NA,ISR
+Italy,NA,14,NA,52,2006,all,NA,NA,NA,ITA
+Italy,NA,20,NA,63,2007,all,NA,NA,NA,ITA
+Italy,NA,14,NA,56,2008,all,NA,NA,NA,ITA
+Italy,NA,31,NA,67,2009,all,NA,NA,NA,ITA
+Italy,NA,22,NA,80,2010,all,NA,NA,NA,ITA
+Italy,NA,41,NA,102,2011,all,NA,NA,NA,ITA
+Italy,NA,45,NA,130,2012,all,NA,NA,NA,ITA
+Italy,NA,52,NA,174,2013,all,NA,NA,NA,ITA
+Italy,NA,89,NA,250,2014,all,NA,NA,NA,ITA
+Italy,NA,80,NA,319,2015,all,NA,NA,NA,ITA
+Japan,NA,37,NA,67,2006,all,NA,NA,NA,JPN
+Japan,NA,49,NA,85,2007,all,NA,NA,NA,JPN
+Japan,NA,40,NA,82,2008,all,NA,NA,NA,JPN
+Japan,NA,44,NA,90,2009,all,NA,NA,NA,JPN
+Japan,NA,34,NA,75,2010,all,NA,NA,NA,JPN
+Japan,NA,22,NA,61,2011,all,NA,NA,NA,JPN
+Japan,NA,31,NA,70,2012,all,NA,NA,NA,JPN
+Japan,NA,36,NA,65,2013,all,NA,NA,NA,JPN
+Japan,NA,45,NA,77,2014,all,NA,NA,NA,JPN
+Japan,NA,38,NA,95,2015,all,NA,NA,NA,JPN
+Korea,NA,8,NA,28,2006,all,NA,NA,NA,KOR
+Korea,NA,9,NA,30,2007,all,NA,NA,NA,KOR
+Korea,NA,13,NA,30,2008,all,NA,NA,NA,KOR
+Korea,NA,25,NA,47,2009,all,NA,NA,NA,KOR
+Korea,NA,13,NA,44,2010,all,NA,NA,NA,KOR
+Korea,NA,24,NA,59,2011,all,NA,NA,NA,KOR
+Korea,NA,22,NA,65,2012,all,NA,NA,NA,KOR
+Korea,NA,23,NA,80,2013,all,NA,NA,NA,KOR
+Korea,NA,33,NA,98,2014,all,NA,NA,NA,KOR
+Korea,NA,42,NA,139,2015,all,NA,NA,NA,KOR
+Latvia†,NA,0,NA,NA,2013,all,NA,NA,NA,LVA
+Latvia†,NA,NA,NA,NA,2014,all,NA,NA,NA,LVA
+Latvia†,NA,3,NA,1,2015,all,NA,NA,NA,LVA
+Luxembourg,NA,22,NA,31,2006,all,NA,NA,NA,LUX
+Luxembourg,NA,31,NA,34,2007,all,NA,NA,NA,LUX
+Luxembourg,NA,31,NA,35,2008,all,NA,NA,NA,LUX
+Luxembourg,NA,25,NA,38,2009,all,NA,NA,NA,LUX
+Luxembourg,NA,35,NA,59,2010,all,NA,NA,NA,LUX
+Luxembourg,NA,75,NA,109,2011,all,NA,NA,NA,LUX
+Luxembourg,NA,39,NA,76,2012,all,NA,NA,NA,LUX
+Luxembourg,NA,45,NA,72,2013,all,NA,NA,NA,LUX
+Luxembourg,NA,116,NA,123,2014,all,NA,NA,NA,LUX
+Luxembourg,NA,212,NA,137,2015,all,NA,NA,NA,LUX
+Mexico,NA,14,NA,26,2006,all,NA,NA,NA,MEX
+Mexico,NA,11,NA,23,2007,all,NA,NA,NA,MEX
+Mexico,NA,5,NA,14,2008,all,NA,NA,NA,MEX
+Mexico,NA,10,NA,18,2009,all,NA,NA,NA,MEX
+Mexico,NA,4,NA,12,2010,all,NA,NA,NA,MEX
+Mexico,NA,5,NA,11,2011,all,NA,NA,NA,MEX
+Mexico,NA,17,NA,19,2012,all,NA,NA,NA,MEX
+Mexico,NA,12,NA,14,2013,all,NA,NA,NA,MEX
+Mexico,NA,4,NA,16,2014,all,NA,NA,NA,MEX
+Mexico,NA,3,NA,15,2015,all,NA,NA,NA,MEX
+Netherlands,NA,80,NA,120,2006,all,NA,NA,NA,NLD
+Netherlands,NA,57,NA,151,2007,all,NA,NA,NA,NLD
+Netherlands,NA,0,NA,127,2008,all,NA,NA,NA,NLD
+Netherlands,NA,64,NA,118,2009,all,NA,NA,NA,NLD
+Netherlands,NA,51,NA,97,2010,all,NA,NA,NA,NLD
+Netherlands,NA,34,NA,99,2011,all,NA,NA,NA,NLD
+Netherlands,NA,83,NA,140,2012,all,NA,NA,NA,NLD
+Netherlands,NA,75,NA,123,2013,all,NA,NA,NA,NLD
+Netherlands,NA,87,NA,198,2014,all,NA,NA,NA,NLD
+Netherlands,NA,128,NA,259,2015,all,NA,NA,NA,NLD
+New Zealand,NA,4,NA,2,2006,all,NA,NA,NA,NZL
+New Zealand,NA,5,NA,4,2007,all,NA,NA,NA,NZL
+New Zealand,NA,2,NA,1,2008,all,NA,NA,NA,NZL
+New Zealand,NA,6,NA,3,2009,all,NA,NA,NA,NZL
+New Zealand,NA,4,NA,1,2010,all,NA,NA,NA,NZL
+New Zealand,NA,4,NA,1,2011,all,NA,NA,NA,NZL
+New Zealand,NA,3,NA,3,2012,all,NA,NA,NA,NZL
+New Zealand,NA,14,NA,13,2013,all,NA,NA,NA,NZL
+New Zealand,NA,28,NA,18,2014,all,NA,NA,NA,NZL
+New Zealand,NA,7,NA,7,2015,all,NA,NA,NA,NZL
+Norway,NA,15,NA,25,2006,all,NA,NA,NA,NOR
+Norway,NA,21,NA,32,2007,all,NA,NA,NA,NOR
+Norway,NA,30,NA,42,2008,all,NA,NA,NA,NOR
+Norway,NA,21,NA,51,2009,all,NA,NA,NA,NOR
+Norway,NA,16,NA,52,2010,all,NA,NA,NA,NOR
+Norway,NA,7,NA,44,2011,all,NA,NA,NA,NOR
+Norway,NA,10,NA,36,2012,all,NA,NA,NA,NOR
+Norway,NA,26,NA,49,2013,all,NA,NA,NA,NOR
+Norway,NA,18,NA,48,2014,all,NA,NA,NA,NOR
+Norway,NA,33,NA,68,2015,all,NA,NA,NA,NOR
+Poland,NA,11,NA,26,2006,all,NA,NA,NA,POL
+Poland,NA,7,NA,25,2007,all,NA,NA,NA,POL
+Poland,NA,19,NA,33,2008,all,NA,NA,NA,POL
+Poland,NA,14,NA,32,2009,all,NA,NA,NA,POL
+Poland,NA,7,NA,26,2010,all,NA,NA,NA,POL
+Poland,NA,9,NA,28,2011,all,NA,NA,NA,POL
+Poland,NA,5,NA,29,2012,all,NA,NA,NA,POL
+Poland,NA,19,NA,44,2013,all,NA,NA,NA,POL
+Poland,NA,18,NA,40,2014,all,NA,NA,NA,POL
+Poland,NA,6,NA,42,2015,all,NA,NA,NA,POL
+Portugal,NA,10,NA,43,2006,all,NA,NA,NA,PRT
+Portugal,NA,7,NA,45,2007,all,NA,NA,NA,PRT
+Portugal,NA,5,NA,47,2008,all,NA,NA,NA,PRT
+Portugal,NA,14,NA,47,2009,all,NA,NA,NA,PRT
+Portugal,NA,17,NA,41,2010,all,NA,NA,NA,PRT
+Portugal,NA,15,NA,42,2011,all,NA,NA,NA,PRT
+Portugal,NA,17,NA,47,2012,all,NA,NA,NA,PRT
+Portugal,NA,6,NA,27,2013,all,NA,NA,NA,PRT
+Portugal,NA,11,NA,27,2014,all,NA,NA,NA,PRT
+Portugal,NA,11,NA,31,2015,all,NA,NA,NA,PRT
+Slovak Republic,NA,0,NA,1,2006,all,NA,NA,NA,SVK
+Slovak Republic,NA,0,NA,4,2007,all,NA,NA,NA,SVK
+Slovak Republic,NA,1,NA,5,2008,all,NA,NA,NA,SVK
+Slovak Republic,NA,1,NA,6,2009,all,NA,NA,NA,SVK
+Slovak Republic,NA,3,NA,7,2010,all,NA,NA,NA,SVK
+Slovak Republic,NA,4,NA,9,2011,all,NA,NA,NA,SVK
+Slovak Republic,NA,1,NA,9,2012,all,NA,NA,NA,SVK
+Slovak Republic,NA,2,NA,15,2013,all,NA,NA,NA,SVK
+Slovak Republic,NA,2,NA,14,2014,all,NA,NA,NA,SVK
+Slovak Republic,NA,3,NA,21,2015,all,NA,NA,NA,SVK
+Slovenia,NA,0,NA,0,2006,all,NA,NA,NA,SVN
+Slovenia,NA,0,NA,0,2007,all,NA,NA,NA,SVN
+Slovenia,NA,3,NA,3,2008,all,NA,NA,NA,SVN
+Slovenia,NA,0,NA,1,2009,all,NA,NA,NA,SVN
+Slovenia,NA,2,NA,2,2010,all,NA,NA,NA,SVN
+Slovenia,NA,2,NA,4,2011,all,NA,NA,NA,SVN
+Slovenia,NA,3,NA,4,2012,all,NA,NA,NA,SVN
+Slovenia,NA,6,NA,10,2013,all,NA,NA,NA,SVN
+Slovenia,NA,11,NA,16,2014,all,NA,NA,NA,SVN
+Slovenia,NA,5,NA,12,2015,all,NA,NA,NA,SVN
+Spain,NA,18,NA,55,2006,all,NA,NA,NA,ESP
+Spain,NA,67,NA,109,2007,all,NA,NA,NA,ESP
+Spain,NA,24,NA,66,2008,all,NA,NA,NA,ESP
+Spain,NA,24,NA,76,2009,all,NA,NA,NA,ESP
+Spain,NA,24,NA,84,2010,all,NA,NA,NA,ESP
+Spain,NA,18,NA,87,2011,all,NA,NA,NA,ESP
+Spain,NA,36,NA,82,2012,all,NA,NA,NA,ESP
+Spain,NA,25,NA,79,2013,all,NA,NA,NA,ESP
+Spain,NA,33,NA,78,2014,all,NA,NA,NA,ESP
+Spain,NA,30,NA,93,2015,all,NA,NA,NA,ESP
+Sweden,NA,72,NA,94,2006,all,NA,NA,NA,SWE
+Sweden,NA,61,NA,100,2007,all,NA,NA,NA,SWE
+Sweden,NA,104,NA,125,2008,all,NA,NA,NA,SWE
+Sweden,NA,64,NA,103,2009,all,NA,NA,NA,SWE
+Sweden,NA,104,NA,134,2010,all,NA,NA,NA,SWE
+Sweden,NA,111,NA,163,2011,all,NA,NA,NA,SWE
+Sweden,NA,100,NA,198,2012,all,NA,NA,NA,SWE
+Sweden,NA,65,NA,183,2013,all,NA,NA,NA,SWE
+Sweden,NA,91,NA,186,2014,all,NA,NA,NA,SWE
+Sweden,NA,92,NA,192,2015,all,NA,NA,NA,SWE
+Switzerland,NA,0,NA,33,2006,all,NA,NA,NA,CHE
+Switzerland,NA,45,NA,33,2007,all,NA,NA,NA,CHE
+Switzerland,NA,99,NA,88,2008,all,NA,NA,NA,CHE
+Switzerland,NA,119,NA,143,2009,all,NA,NA,NA,CHE
+Switzerland,NA,65,NA,142,2010,all,NA,NA,NA,CHE
+Switzerland,NA,112,NA,187,2011,all,NA,NA,NA,CHE
+Switzerland,NA,120,NA,231,2012,all,NA,NA,NA,CHE
+Switzerland,NA,131,NA,256,2013,all,NA,NA,NA,CHE
+Switzerland,NA,109,NA,271,2014,all,NA,NA,NA,CHE
+Switzerland,NA,148,NA,328,2015,all,NA,NA,NA,CHE
+Turkey,NA,0,NA,2,2006,all,NA,NA,NA,TUR
+Turkey,NA,2,NA,3,2007,all,NA,NA,NA,TUR
+Turkey,NA,1,NA,2,2008,all,NA,NA,NA,TUR
+Turkey,NA,3,NA,4,2009,all,NA,NA,NA,TUR
+Turkey,NA,4,NA,8,2010,all,NA,NA,NA,TUR
+Turkey,NA,0,NA,4,2011,all,NA,NA,NA,TUR
+Turkey,NA,0,NA,2,2012,all,NA,NA,NA,TUR
+Turkey,NA,2,NA,4,2013,all,NA,NA,NA,TUR
+Turkey,NA,2,NA,4,2014,all,NA,NA,NA,TUR
+Turkey,NA,2,NA,5,2015,all,NA,NA,NA,TUR
+United Kingdom,NA,0,NA,84,2006,all,NA,NA,NA,GBR
+United Kingdom,NA,55,NA,109,2007,all,NA,NA,NA,GBR
+United Kingdom,NA,44,NA,126,2008,all,NA,NA,NA,GBR
+United Kingdom,NA,56,NA,120,2009,all,NA,NA,NA,GBR
+United Kingdom,NA,68,NA,131,2010,all,NA,NA,NA,GBR
+United Kingdom,NA,54,NA,133,2011,all,NA,NA,NA,GBR
+United Kingdom,NA,69,NA,143,2012,all,NA,NA,NA,GBR
+United Kingdom,NA,79,NA,160,2013,all,NA,NA,NA,GBR
+United Kingdom,NA,117,NA,190,2014,all,NA,NA,NA,GBR
+United Kingdom,NA,115,NA,229,2015,all,NA,NA,NA,GBR
+United States,NA,240,NA,430,2006,all,NA,NA,NA,USA
+United States,NA,257,NA,500,2007,all,NA,NA,NA,USA
+United States,NA,308,NA,578,2008,all,NA,NA,NA,USA
+United States,NA,326,NA,724,2009,all,NA,NA,NA,USA
+United States,NA,252,NA,705,2010,all,NA,NA,NA,USA
+United States,NA,279,NA,686,2011,all,NA,NA,NA,USA
+United States,NA,236,NA,573,2012,all,NA,NA,NA,USA
+United States,NA,403,NA,732,2013,all,NA,NA,NA,USA
+United States,NA,354,NA,956,2014,all,NA,NA,NA,USA
+United States,NA,289,NA,998,2015,all,NA,NA,NA,USA
+Argentina,NA,0,NA,0,2006,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,0,2007,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,2,2008,all,NA,NA,NA,ARG
+Argentina,NA,1,NA,3,2009,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,3,2010,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,NA,2011,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,NA,2012,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,NA,2013,all,NA,NA,NA,ARG
+Argentina,NA,0,NA,NA,2014,all,NA,NA,NA,ARG
+Argentina,NA,1,NA,6,2015,all,NA,NA,NA,ARG
+China†,NA,23,NA,43,2013,all,NA,NA,NA,CHN
+China†,NA,29,NA,55,2014,all,NA,NA,NA,CHN
+China†,NA,25,NA,99,2015,all,NA,NA,NA,CHN
+Costa Rica‡,NA,1,NA,1,2014,all,NA,NA,NA,CRI
+Costa Rica‡,NA,0,NA,0,2015,all,NA,NA,NA,CRI
+Lithuania††,NA,0,NA,2,2015,all,NA,NA,NA,LTU
+South Africa,NA,0,NA,0,2006,all,NA,NA,NA,ZAF
+South Africa,NA,0,NA,0,2007,all,NA,NA,NA,ZAF
+South Africa,NA,4,NA,0,2008,all,NA,NA,NA,ZAF
+South Africa,NA,1,NA,1,2009,all,NA,NA,NA,ZAF
+South Africa,NA,5,NA,4,2010,all,NA,NA,NA,ZAF
+South Africa,NA,5,NA,6,2011,all,NA,NA,NA,ZAF
+South Africa,NA,3,NA,6,2012,all,NA,NA,NA,ZAF
+South Africa,NA,2,NA,6,2013,all,NA,NA,NA,ZAF
+South Africa,NA,4,NA,8,2014,all,NA,NA,NA,ZAF
+South Africa,NA,13,NA,18,2015,all,NA,NA,NA,ZAF

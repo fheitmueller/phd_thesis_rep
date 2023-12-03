@@ -1,0 +1,195 @@
+---
+title: "Potential conduits"
+author:
+  name: "Frederik Heitmüller"
+  affiliation: "Leiden University, Department for Tax Law"
+  email: "f.heitmuller@law.leidenuniv.nl"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
+bibliography: zotero.bib
+---
+
+```{r setup, echo=FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+if (!require('gluedown')) install.packages('gluedown'); library('gluedown') 
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('ggplot2')) install.packages('ggplot2'); library('ggplot2') 
+if (!require('ggpubr')) install.packages('ggpubr'); library('ggpubr') 
+if (!require('haven')) install.packages('haven'); library('haven') 
+if (!require('readxl')) install.packages('readxl'); library('readxl') 
+
+devtools::load_all()
+
+all_years <- c(2004:2021)
+```
+
+# Introduction
+
+This paper develops a methodology to identify jurisdictions that can be used as potential conduit countries. Ideally, one would dispose of tax treaty data including all treaties signed by all countries, which I do not have at the moment, though. 
+Here I identify as potential conduit a country that imposes either 
+- no corporate tax at all (pure tax havens)
+- no withholding tax on any payment, or one of the three types of payment
+- participation exemption for dividend income (for interest and royalty may not be so important since income is matched by cost [@lejourImmeasurableTaxGains2021])
+- has a specific holding company tax regime under which no withholding taxes are due and participation exemptions apply. 
+
+It would be worthwhile to think about whether certain jurisdictions can only be used for certain types of payments.
+
+I compare this with research that has empirically assessed conduit jurisdictions based on MNE network data [@garcia-bernardoUncoveringOffshoreFinancial2017]. 
+```{r empirically identified}
+garcia_bernardo_sink <- c("British Virgin Islands", "Marshall Islands", "Belize", "Taiwan", "Malta", "Gibraltar", "Jersey", "Mauritius", "Anguilla", "Bermuda", "Luxembourg", "Liberia", "Cayman Islands", "Nauru", "St. Vincent & Grenadines", "Samoa", "Cyprus", "Guyana", "Liechtenstein", "Seychelles", "Hong Kong", "Curaçao", "Bahamas", "Monaco")
+garcia_bernardo_conduit <- c("Netherlands", "United Kingdom", "Switzerland", "Singapore", "Ireland") 
+
+garcia_bernardo_sink_conduit <- data.frame(country = c(garcia_bernardo_sink, garcia_bernardo_conduit))
+garcia_bernardo_sink_conduit %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+```
+
+
+
+A widely used list in the literature (for example by[@hebousYourServiceRole2021]) is the one described by James Hines in his 2010 paper "Treasure Islands" [@hinesjrTreasureIslands2010].
+The list includes the following countries and territories:
+
+```{r hines list}
+hines_list <- data.frame(c("Andorra", "Guernsey", "Nauru", "Anguilla", "Hong Kong", "Netherlands Antilles", "Antigua and Barbuda", "Ireland", "Niue", "Aruba", "Isle of Man", "Panama", "Bahamas", "Jersey", "Samoa", "Bahrain", "Jordan", "San Marino", "Barbados", "Lebanon", "Seychelles", "Belize", "Liberia", "Singapore", "Bermuda", "Liechtenstein", "St. Kitts and Nevis", "British Virgin Islands", "Luxembourg", "St. Lucia", "Cayman Islands", "Macao", "St. Martin", "Cook Islands", "Maldives", "St. Vincent and the Grenadines", "Costa Rica", "Malta", "Switzerland", "Cyprus", "Marshall Islands", "Tonga", "Djibouti", "Mauritius", "Turks and Caicos Islands", "Dominica", "Micronesia", "Vanuatu", "Gibraltar", "Monaco", "Grenada", "Montserrat"))
+names(hines_list) <- "country"
+hines_list %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+hines_list$iso3c[6] <- "ANT"
+hines_list$iso3c[33] <- "MAF"
+hines_list$iso3c[47] <- "FSM"
+
+```
+
+Another frequently used list is the one assembled by the OECD in 2000 [@oecdGlobalTaxCooperation2000]:
+Bolwijn et al. [@bolwijnFDIdrivenApproachMeasuring2018]) build on this list, for example but extend it by a few countries.
+
+```{r standard tax haven list used in literature}
+
+oecd_2000 <- data.frame(c("Andorra", "Anguilla", "Antigua and Barbuda", "Aruba", "The Bahamas", "Bahrain", "Barbados", "Belize", "British Virgin Islands", "Cook Islands", "Dominica", "Gibraltar", "Grenada", "Guernsey", "Isle of Man", "Jersey", "Liberia", "Liechtenstein", "Maldives", "Marshall Islands", "Monaco", "Montserrat", "Nauru", "Netherlands Antilles", "Niue", "Panama", "Samoa", "Seychelles", "St Lucia", "St. Kitts & Nevis", "St. Vincent and the Grenadines", "Tonga", "Turks & Caicos", "US Virgin Islands", "Vanuatu"))
+names(oecd_2000) <- "country"
+oecd_2000 %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+oecd_2000$iso3c[24] <- "ANT"
+
+bolwijn_et_al <- data.frame(c("Andorra", "Anguilla", "Antigua and Barbuda", "Aruba", "The Bahamas", "Bahrain", "Belize", "Bermuda", "British Virgin Islands", "Cayman Islands", "Cook Islands", "Cyprus", "Dominica", "Gibraltar", "Grenada", "Guernsey", "Isle of Man", "Jersey", "Liberia", "Liechtenstein", "Malta", "Marshall Islands", "Mauritius", "Monaco","Montserrat", "Nauru", "Netherlands Antilles", "Niue", "Panama", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Seychelles", "Turks and Caicos Islands", "United States Virgin Islands", "Vanuatu"))
+names(bolwijn_et_al) <- "country"
+bolwijn_et_al %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+bolwijn_et_al$iso3c[26] <- "ANT"
+write_csv(bolwijn_et_al, here("data-created/taxhavens.csv"))
+
+
+
+```
+
+Hines' list is larger. It includes the following countries not included in the OECD list:
+```{r comparison hines oecd}
+
+hines_list %>% filter(!iso3c %in% oecd_2000$iso3c) %>% pull(country) %>% print
+```
+
+
+Maybe I need to take the second highest withholding rate, since the highest may only apply to certain payments, e.g., to tax havens etc.
+
+```{r constructing conduits year by year}
+
+
+conduits <- read_csv("https://pkgstore.datahub.io/core/country-list/data_csv/data/d7c9d7cfb42cb69f4422dec222dbbaa8/data_csv.csv", na = "no data") ##the NA argument to avoid reading Namibia as no data
+conduits$iso3c <- countrycode(conduits$Code, origin = "iso2c", destination = "iso3c")
+conduits %<>% add_row(Name = "Netherlands Antilles", iso3c = "ANT")
+
+conduits %<>%
+  slice(rep(1:n(), each = length(all_years))) %>%
+  add_column(year = rep(all_years, times = nrow(conduits)))
+  
+stat_rates <- read_csv(here("data-created/statutory_rates.csv"))
+stat_rates %<>% filter(year %in% all_years)
+conduits %<>% full_join(stat_rates[c("iso3c", "year", "comb_rate")])
+
+domestic_law <- read_csv(here("data-created/all_withholding.csv"))
+domestic_law %<>% select(c("year", "rate_appl", "iso3c", "category"))
+domestic_law %<>% filter(!category %in% c("statutory_rate", "shares_indirect", "land_rich", "land_rich_indirect"))
+
+domestic_law %<>% pivot_wider(id_cols = c("iso3c", "year"), names_from = "category", values_from = "rate_appl")
+domestic_law %<>% rename("div_wth" = "dividends_subst", "int_wth" = "interest_general", "roy_wth" = "royalties_general", "cap_wth" = "shares", "ser_wth" = "technical_services")
+
+conduits %<>% left_join(domestic_law)
+conduits %<>% mutate(across(6:13, as.double))
+
+part_ex <- read_csv(here("data-created/participation_exemptions.csv"))
+conduits %<>% left_join(part_ex[c("iso3c", "year", "div_rec", "cap_rec", "roy_rec", "int_rec", "ser_rec")])
+special_regimes <- read_csv(here("data-created/special_regimes.csv"))
+
+
+httr::GET("https://web.pdx.edu/~ito/kaopen_2021.xls", httr::write_disk(tf <- tempfile(fileext = ".xls")))
+kaopen <- read_excel(tf)
+kaopen %<>% filter(year %in% all_years)
+
+conduits %<>% left_join(kaopen[c("ccode", "year", "ka_open")], by = c("year", "iso3c" = "ccode"))
+conduits %<>% group_by(iso3c) %>% fill(ka_open, .direction = "down")
+
+identify_conduits <- function(conduits, special_regimes){
+  
+  conduit_list <- conduits %>% mutate(dividend_cond = ifelse(ka_open > 0.4 & (comb_rate == 0 | ((div_rec == 0 ) & (div_wth == 0 | int_wth == 0))), 1, NA),
+                     cap_cond = ifelse(ka_open > 0.4 & (comb_rate == 0 | ((cap_rec == 0 ) & (div_wth == 0 | cap_wth == 0 | int_wth == 0))), 1, NA),
+                     interest_cond = ifelse(ka_open > 0.4 & (comb_rate == 0 | (int_wth == 0 | (int_rec == 0 & div_wth == 0 ))), 1, NA),
+                     royalty_cond = ifelse(ka_open > 0.4 & (comb_rate == 0 | (int_wth == 0 | roy_wth == 0 | (roy_rec == 0 & div_wth == 0 ))), 1, NA),
+                     services_cond = ifelse(ka_open > 0.4 & (comb_rate == 0 | (ser_wth == 0 | (ser_rec == 0 & div_wth == 0))), 1, NA))
+
+
+  special_regimes %<>% coalesce_join(conduits[c("iso3c", "year", "div_wth", "int_wth", "roy_wth", "ser_wth", "cap_wth", "div_rec", "int_rec", "roy_rec", "ser_rec", "cap_rec")], by = c("iso3c", "year"))
+
+
+special_regimes %<>% mutate(dividend_cond = ifelse((div_rec == 0 ) & (div_wth == 0 | int_wth == 0), 1, NA),
+                     cap_cond = ifelse((cap_rec == 0 ) & (div_wth == 0 | int_wth == 0), 1, NA),
+                     interest_cond = ifelse(int_wth == 0 | (int_rec == 0 & div_wth == 0), 1, NA),
+                     royalty_cond = ifelse(int_wth == 0 | roy_wth == 0 | (roy_rec == 0 & is.na(nexus) & div_wth == 0), 1, NA),
+                     services_cond = ifelse(ser_wth == 0 | (ser_rec == 0 & div_wth == 0), 1, NA))
+
+coalesce_all_columns <- function(df) {
+  return(coalesce(!!! as.list(df)))
+}
+
+special_regimes %<>% 
+  group_by(iso3c, year) %>%
+  fill(ends_with("cond"), .direction = "up") %>%
+  slice_head(n = 1)
+
+
+conduit_list %<>% coalesce_join(special_regimes[c("iso3c", "year", "dividend_cond", "cap_cond", "interest_cond", "royalty_cond", "services_cond")], by = c("iso3c", "year"))
+
+conduit_list %<>% distinct()
+
+conduit_list %<>% select(iso3c, year, dividend_cond, cap_cond, interest_cond, royalty_cond, services_cond)
+conduit_list %<>% rename("dividends_subst" = "dividend_cond", 
+                         "interest_general" = "interest_cond",
+                        "royalties_general" = "royalty_cond",
+                        "technical_services" = "services_cond",
+                        "shares" = "cap_cond")
+conduit_list %<>% mutate(land_rich = shares)
+conduit_list %<>% pivot_longer(cols = c("dividends_subst", "interest_general", "royalties_general", "technical_services", "shares", "land_rich"), names_to = "category", values_to = "conduit")
+
+  
+  return(conduit_list)
+}
+
+
+
+conduit_list <- identify_conduits(conduits, special_regimes)
+
+
+write_csv(conduit_list, here("data-created/conduits.csv"))
+
+```
+
+To-do: 
+Deal with complete territorial regimes
+

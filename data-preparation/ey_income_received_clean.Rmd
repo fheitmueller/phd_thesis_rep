@@ -1,0 +1,468 @@
+---
+title: "income_reveived.Rmd"
+author: "Frederik Heitmüller"
+date: "2022-10-10"
+output: html_document
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+if (!require('here')) install.packages('here'); library('here') 
+if (!require('tidyverse')) install.packages('tidyverse'); library('tidyverse') 
+if (!require('magrittr')) install.packages('magrittr'); library('magrittr') 
+if (!require('countrycode')) install.packages('countrycode'); library('countrycode') 
+if (!require('purrr')) install.packages('purrr'); library('purrr') 
+if (!require('stringr')) install.packages('stringr'); library('stringr') 
+
+devtools::load_all()
+
+# defining for which data years the script should run
+years <- c(2004:2021)
+
+```
+
+
+# Other tables based on paragraphs
+
+
+## Treatment of income received from abroad
+```{r income received from abroad}
+
+all_paras <- read_csv(here("data-created/all_paras_ey.csv"))
+all_paras %<>% mutate(heading = tolower(heading))
+all_paras %<>% filter(!str_detect(heading, "%"))
+all_paras$heading %<>% str_replace("\\.", "") 
+all_paras$heading %<>% trimws()
+ #maybe eliminate characters of "- " preceded by a letter
+all_paras$text %<>% str_replace_all("(?<=[:alpha:])- ", "")
+
+
+general_paragraphs <- c("corporate income tax", "corporate profit tax", "corporate profits tax", "corporate tax", "corporation tax", "business income tax", "profit tax", "profits tax", "income tax", "company tax", "enterprise income tax", "tax on profit", "tax on income")
+
+tax_relief_paragraphs <- c("credit for foreign taxes", "double tax relief", "foreign tax credit", "foreign tax relief")
+
+general_system <- all_paras %>% filter(heading %in% c(general_paragraphs, tax_relief_paragraphs))
+general_system %<>% mutate(para_group = case_when(
+  heading %in% general_paragraphs ~ "general",
+  heading %in% tax_relief_paragraphs ~ "tax_relief"
+))
+general_system %<>% select(-heading) %>% pivot_wider(names_from = para_group, values_from = text)
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+
+general_system <- left_join(all_tocs, general_system, by = c("iso3c", "year"))
+stat_rates <- read_csv(here("data-created/ey_stat_rates.csv"))
+general_system %<>% left_join(stat_rates[c("iso3c", "year", "rate")])
+general_system %<>% mutate(regime = case_when(
+  str_detect(general, "world|from all sources") | str_detect(tax_relief, "world|from all sources|profits derived from abroad") ~ "worldwide",
+  is.na(general) & rate == 0 ~ "zero_tax",
+  TRUE ~ "territorial"))
+
+
+territorial_countries <- general_system %>% filter(regime == "territorial")
+
+
+general_system %<>% group_by(iso3c) %>% arrange(year, .by_group = TRUE)
+general_system$general %<>% trimws()
+general_system$general %<>% replace_na("blank")
+general_system %<>% mutate(text_same = NA)
+for (i in 2:nrow(general_system)) {
+  if (general_system$general[i] == general_system$general[i - 1]) {
+    general_system$text_same[i] <- "same" 
+  } else {
+    general_system$text_same[i] <- "change" 
+  }
+}
+
+
+
+```
+
+For those countries that apply a territorial regime, it is necessary to further analyze whether this only excludes dividends received and profits made by permanent establishments from the tax base or whether it also excludes income from interest, royalties and services fees. 
+The concept of "source" is complicated in so far as both the location of productive factors (e.g., labor, capital, land) and the location of the costumer might be considered as source. E.g., is the source of income from technical service fees rendered from one country to another in the former or in the latter?  Most territorial countries seem to consider income from payments (e.g., services, royalties, interest) made to foreigners as income from domestic sources and accordingly levy withholding taxes on such payments. But it is ambiguous whether income received from abroad with respect to services rendered from the country or with respect to capital made available from the country (e.g., interest and royalty income) are considered as foreign source (like in the model convention) or domestic source. After analysis of the regimes of a few countries that are declared as "territorial", such as Botswana, France, Uruguay, it seems that passive income obtained from abroad is considered as "from domestic source" and thus taxable.
+
+In some countries, potentially important changes have occurred but seem not to be captured in the Corporate Tax Guides. This is the case of Costa Rica, where foreign investment income has been made taxable through a 2019 tax reform.
+
+It is probably necessary to differentiate between full territorial countries (such as Uruguay, Costa Rica), which do not tax any income from foreign source, also including interest and royalty payments from foreign companies, as opposed to limited territorial countries (such as France, and former French colonies) which do not tax the profits of foreign business activities, e.g., of PEs abroad, but would tax income flows paid directly to the French company. 
+What about services rendered from France to companies abroad? Most likely these would be taxed in France.
+
+## Participation exemption 
+
+The threshold for participation is not coded, since in treaty shopping arrangements by MNEs, one can suppose that subsidiaries are under a significant degree of control. In practice thresholds vary between 10% and 25%.
+
+It is coded what percentage of dividends and capital gains received from subsidiaries is exempt from tax. 0 thereby implies that nothing is exempt, and 100 implies that the payment is fully exempt.
+
+Sometimes additional conditions are attached to the participation exemption, for example that the participation must be subject to a corporate tax. These are not coded, since they are unlikely to pose problems for the MNE in treaty shopping scenarios. Some countries apply a monetary threshold for the participation exemption to apply, e.g. 500,000 USD in the case of Curacao, or 2.5 Million in the case of Belgium. These are also disregarded, since the primary interest is in large companies which are likely to meet these requirements. Requirements with respect to holding periods, such as for example longer than 2 years, were disregarded. However, in one case exemption was only available for holdings of more than 25 years. This was not coded as effective exemption. Requirements that the subsidiary should be subject to tax, not situated in a tax haven, and/or engaged in active trade/business, were disregarded since they are likely to be met by the company.
+If capital gains are only exempt from shares traded on a stock exchange or similar (such as for example in Bulgaria), this is not coded as exemption, since this may often not be the case for subsidiaries of MNE groups.
+If a participation exemption only applies to a limited number of countries (e.g., a regional bloc, such as in the case of Cameroon for example or in the case of some EU countries), this is not coded for now. However, if the exemption applies only to countries that that country concluded a tax treaty with (such as in the Czech Republic since 2009), the exemption will be coded as available since this is important for the purposes of treaty shopping.
+Provisions which (partially) exempt capital gains from tax if the proceeds are reinvested are not coded as exemption, either, since the main interest is in whether the country can be used as conduit. So we suppose that the proceeds would be passed on rather than reinvested.
+When a change is made retroactively, then the year in which the law went into effect was coded. If a law comes into effect after 30 June it is coded as effective from the following year onwards.
+
+```{r treatment of dividends received from subsidiaries}
+
+dividends_rec <- all_paras %>% filter(str_detect(heading, "participation|dividend|capital gain|foreign affiliate|foreign subsidiar"))
+
+
+dividends_rec %<>% filter(!str_detect(heading, "withholding"))
+dividends_rec %<>% filter(heading != "dividends paid")
+
+dividends_rec %<>% mutate(para_group = case_when(
+  str_detect(heading, "dividend") ~ "dividend",
+  str_detect(heading, "capital gain") ~ "capital_gain",
+  TRUE ~ "participation"
+))
+
+dividends_rec %<>% select(-heading) %>% pivot_wider(names_from = para_group, values_from = text)
+
+all_tocs <- readRDS(here("data-created/tocs.rds"))
+
+dividends_rec <- left_join(all_tocs, dividends_rec, by = c("iso3c", "year"))
+stat_rates <- read_csv(here("data-created/ey_stat_rates.csv"))
+dividends_rec %<>% left_join(stat_rates[c("iso3c", "year", "rate")])
+cap_gains_tax_rates <- read_csv(here("data-created/cap_gains_rates.csv"))
+dividends_rec %<>% left_join(cap_gains_tax_rates[c("iso3c", "year", "appl_rate")], by = c("iso3c", "year"))
+dividends_rec %<>% mutate(appl_rate = coalesce(appl_rate, rate))
+
+
+dividends_rec %<>% group_by(iso3c) %>% arrange(year, .by_group = TRUE)
+
+dividends_rec$capital_gain %<>% trimws()
+dividends_rec$capital_gain %<>% replace_na("blank")
+dividends_rec %<>% mutate(cap_same = NA)
+for (i in 2:nrow(dividends_rec)) {
+  if (dividends_rec$capital_gain[i] == dividends_rec$capital_gain[i - 1]) {
+    dividends_rec$cap_same[i] <- "same" 
+  } else {
+    dividends_rec$cap_same[i] <- "change" 
+  }
+}
+
+dividends_rec$dividend %<>% trimws()
+dividends_rec$dividend %<>% replace_na("blank")
+dividends_rec %<>% mutate(dividend_same = NA)
+for (i in 2:nrow(dividends_rec)) {
+  if (dividends_rec$dividend[i] == dividends_rec$dividend[i - 1]) {
+    dividends_rec$dividend_same[i] <- "same" 
+  } else {
+    dividends_rec$dividend_same[i] <- "change" 
+  }
+}
+
+dividends_rec$participation %<>% trimws()
+dividends_rec$participation %<>% replace_na("blank")
+dividends_rec %<>% mutate(participation_same = NA)
+for (i in 2:nrow(dividends_rec)) {
+  if (dividends_rec$participation[i] == dividends_rec$participation[i - 1]) {
+    dividends_rec$participation_same[i] <- "same" 
+  } else {
+    dividends_rec$participation_same[i] <- "change" 
+  }
+}
+
+
+
+```
+
+```{r hand-coding participation exemption}
+
+dividends_rec %<>% mutate(div_ex = NA, div_val = NA, cap_ex = NA, cap_val = NA)
+
+add_man <- function(dividends_rec, iso3c, years, value, type = "both", expressed_in = "percentage"){
+  rows <- which(dividends_rec$iso3c %in% iso3c & dividends_rec$year %in% years)
+  if (type == "both") {
+  dividends_rec$div_ex[rows] <- value
+  dividends_rec$cap_ex[rows] <- value
+  dividends_rec$div_val[rows] <- expressed_in
+  dividends_rec$cap_val[rows] <- expressed_in
+  }
+      if (type == "div") {
+  dividends_rec$div_ex[rows] <- value
+  dividends_rec$div_val[rows] <- expressed_in
+  }  
+   if (type == "cap") {
+  dividends_rec$cap_ex[rows] <- value
+  dividends_rec$cap_val[rows] <- expressed_in
+   } 
+  
+   return(dividends_rec)
+}
+
+
+# for those not specifically coded, a 0 is assumed, unless the regime is 0 tax or territorial, then 100 is assumed
+
+dividends_rec %<>% add_man("ABW", years, 100)
+
+dividends_rec %<>% add_man("ALB", c(2010:2021), 100, "div")
+dividends_rec %<>% add_man("ANT", c(2004:2008), 95)
+dividends_rec %<>% add_man("ANT", c(2009:2010), 100)
+dividends_rec %<>% add_man("ARM", years, 100, "div")
+dividends_rec %<>% add_man("AUS", years, 100, "cap")
+dividends_rec %<>% add_man("AUS", c(2006:2021), 100, "div") # foreign conduit income
+dividends_rec %<>% add_man("AUT", years, 100) 
+dividends_rec %<>% add_man("BEL", c(2004:2017), 95, "div")
+dividends_rec %<>% add_man("BEL", c(2004:2012), 100, "cap")
+dividends_rec %<>% add_man("BEL", c(2013:2017), 0.412, "cap", "rate") # A rate of 0.412 percent applies, which corresponds roughly to a situation where 1% of the capital gains would be taxed at the full rate of 33%
+dividends_rec %<>% add_man("BEL", c(2018:2021), 100)
+
+dividends_rec %<>% add_man("BOL", c(2004:2005), 100, "cap")
+
+
+dividends_rec %<>% add_man("BRB", years, 100, "cap")
+dividends_rec %<>% add_man("BRB", c(2007:2021), 100, "div")
+
+dividends_rec %<>% add_man("BRN", years, 100, "cap") # some uncertainty whether dividends are also exempt since only taxable if "received in Brunei", but for now left as subject to tax
+
+dividends_rec %<>% add_man("BWA", c(2004), 50, "cap")
+dividends_rec %<>% add_man("BWA", c(2005:2021), 75, "cap")
+
+dividends_rec %<>% add_man("CAN", years, 50, "cap")
+dividends_rec %<>% add_man("CAN", years, 100, "div")
+
+dividends_rec %<>% add_man("CHE", years, 100)
+
+dividends_rec %<>% add_man("CIV", years, 95, "div")
+dividends_rec %<>% add_man("CIV", years, 100, "cap") # regime of holding companies
+
+dividends_rec %<>% add_man("COG", years, 100, "div")
+
+dividends_rec %<>% add_man("CPV", years, 100)
+
+dividends_rec %<>% add_man("CUW", c(2007:2021), 100)
+
+dividends_rec %<>% add_man("CYP", years, 100) # This information is not included in EY, but IBFD confirms it, as well as older sources https://www.totalserve.eu/Assets/Images/uploadedContent/CMS/documentsImages/informationsheetno201460442756.pdf
+
+dividends_rec %<>% add_man("CZE", c(2009:2021), 100)
+
+dividends_rec %<>% add_man("DEU", years, 95)
+
+dividends_rec %<>% add_man("DNK", years, 100)
+
+dividends_rec %<>% add_man("ECU", c(2004:2009), 100, "cap") # but check again the rules for foreign income treatment
+
+dividends_rec %<>% add_man("EGY", c(2015:2021), 100, "div") # exemption for parent and holding companies is mentioned
+
+dividends_rec %<>% add_man("ESP", c(2004:2020), 100) # even though not in EY, according to one source the exemption already applied since 1996 https://www.accountinginspain.com/participation-exemption-spain/ 
+dividends_rec %<>% add_man("ESP", c(2021), 95)
+
+dividends_rec %<>% add_man("EST", years, 100)
+
+dividends_rec %<>% add_man("FIN", years, 100, "cap")
+dividends_rec %<>% add_man("FIN", c(2004), 100, "div")
+dividends_rec %<>% add_man("FIN", c(2005:2013), 25, "div")
+
+dividends_rec %<>% add_man("FJI", c(2004:2010), 100, "cap")
+
+dividends_rec %<>% add_man("FRA", c(2006:2021), 95, "div")
+dividends_rec %<>% add_man("FRA", c(2006:2011), 95, "cap")
+dividends_rec %<>% add_man("FRA", c(2012), 90, "cap")
+dividends_rec %<>% add_man("FRA", c(2013:2021), 88, "cap")
+
+dividends_rec %<>% add_man("GBR", c(2010:2021), 100)
+
+dividends_rec %<>% add_man("GEO", c(2017:2021), 100, "cap") # Distribution regime
+dividends_rec %<>% add_man("GEO", c(2006:2021), 100, "div") 
+
+dividends_rec %<>% add_man("GGY", years, 100)
+
+dividends_rec %<>% add_man("GHA", c(2007:2008), 8, "div", "rate")
+
+dividends_rec %<>% add_man("GIB", years, 100, "cap")
+dividends_rec %<>% add_man("GIB", c(2014:2021), 100, "div")
+
+dividends_rec %<>% add_man("GNQ", c(2008:2021), 90, "div")
+
+dividends_rec %<>% add_man("HKG", years, 100)
+
+dividends_rec %<>% add_man("HND", years, 10, "cap", "rate")
+dividends_rec %<>% add_man("HND", c(2013:2016), 100, "cap")
+
+dividends_rec %<>% add_man("HUN", c(2007:2021), 100, "cap")
+dividends_rec %<>% add_man("HUN", c(2004:2021), 100, "div") # in description not clear, but 2004 report already makes reference to the participation exemption regime
+
+dividends_rec %<>% add_man("IDN", c(2004:2021), 100, "div")
+
+dividends_rec %<>% add_man("IMN", years, 100, "cap")
+
+dividends_rec %<>% add_man("IRQ", years, 100)
+
+dividends_rec %<>% add_man("ISL", years, 100, "div")
+
+dividends_rec %<>% add_man("ITA", c(2004:2005), 100, "cap")
+dividends_rec %<>% add_man("ITA", c(2006), 91, "cap")
+dividends_rec %<>% add_man("ITA", c(2007:2008), 84, "cap")
+dividends_rec %<>% add_man("ITA", c(2009:2021), 95, "cap")
+dividends_rec %<>% add_man("ITA", c(2004:2021), 95, "div")
+
+dividends_rec %<>% add_man("JAM", years, 100, "cap") #potentially dividends as well, check
+
+dividends_rec %<>% add_man("JEY", years, 100) #capital gains are exempt for sure, and probably dividends as well, in particular if received by a company not registered as financial services company
+
+dividends_rec %<>% add_man("JOR", c(2004), 75, "cap")
+dividends_rec %<>% add_man("JOR", c(2016:2021), 100, "cap")
+dividends_rec %<>% add_man("JOR", c(2006:2021), 100, "div")
+
+dividends_rec %<>% add_man("JPN", c(2009:2021), 95, "div")
+
+dividends_rec %<>% add_man("KAZ", c(2014:2021), 100, "div")
+
+dividends_rec %<>% add_man("KEN", years, 100, "cap")
+
+dividends_rec %<>% add_man("KSV", years, 100, "div")
+
+#Kuwait probably no exemption since conduit company might be considered as foreign company and hence subject to tax
+
+dividends_rec %<>% add_man("LAO", c(2009:2019), 10, "cap", "rate")
+dividends_rec %<>% add_man("LAO", c(2020:2021), 2, "cap", "rate")
+
+# Lebanon special regime
+
+dividends_rec %<>% add_man("LKA", c(2004:2017), 100, "cap")
+dividends_rec %<>% add_man("LKA", years, 100, "div") #In the first years, dividends were taxed at the rate of the treaty, meaning that tax would be effectively zero since credit would be given for tax abroad
+
+dividends_rec %<>% add_man("LSO", years, 100, "div")
+
+dividends_rec %<>% add_man("LTU", c(2007:2021), 100, "cap")
+dividends_rec %<>% add_man("LTU", years, 100, "div")
+
+dividends_rec %<>% add_man("LUX", years, 100)
+
+dividends_rec %<>% add_man("LVA", c(2013:2021), 100, "cap")
+dividends_rec %<>% add_man("LVA", c(2005:2021), 100, "div")
+
+dividends_rec %<>% add_man("LBY", years, 100, "div")
+
+dividends_rec %<>% add_man("LCA", years, 100)
+
+dividends_rec %<>% add_man("LIE", c(2011:2021), 100)
+
+dividends_rec %<>% add_man("MAC", c(2004:2011), 100, "cap")
+
+dividends_rec %<>% add_man("MAF", years, 100, "cap")
+dividends_rec %<>% add_man("MAF", years, 95, "div")
+
+dividends_rec %<>% add_man("MAR", years, 50, "cap") # different exemptions apply to different holding periods, 50 is for longer than 4 years
+
+dividends_rec %<>% add_man("MAR", c(2008:2021), 100, "div") 
+
+dividends_rec %<>% add_man("MCO", years, 100, "div") 
+
+dividends_rec %<>% add_man("MDG", c(2015:2021), 95, "div") 
+
+dividends_rec %<>% add_man("MLT", years, 100) # before 2007, only the full imputation system, which however would have a similar effect as participation exemption
+
+dividends_rec %<>% add_man("MKD", c(2010:2014), 100) # tax payable on distribution only 
+
+dividends_rec %<>% add_man("MUS", years, 100)
+
+dividends_rec %<>% add_man("MYS", c(2008:2021), 100, "div")
+dividends_rec %<>% add_man("MYS", years, 100, "cap")
+
+dividends_rec %<>% add_man("NAM", years, 100)
+
+dividends_rec %<>% add_man("NGA", c(2004:2021), 100, "cap")
+
+dividends_rec %<>% add_man("NLD", years, 100)
+
+dividends_rec %<>% add_man("NOR", c(2006:2009), 100)
+dividends_rec %<>% add_man("NOR", c(2010:2011), 97)
+dividends_rec %<>% add_man("NOR", c(2012:2021), 100)
+
+dividends_rec %<>% add_man("NPL", c(2006), 100, "cap")
+
+dividends_rec %<>% add_man("NZL", years, 100)
+
+dividends_rec %<>% add_man("OMN", c(2004:2006), 100, "div")
+
+dividends_rec %<>% add_man("PAN", years, 100)
+
+dividends_rec %<>% add_man("PNG", years, 100, "cap")
+
+dividends_rec %<>% add_man("PRT", c(2014:2021), 100, "div") #already before available to European and lusophone countries
+dividends_rec %<>% add_man("PRT", years, 100, "cap") # before exemption regime already holding company regime
+
+dividends_rec %<>% add_man("PSE", c(2004:2012), 100, "cap")
+dividends_rec %<>% add_man("PSE", c(2013:2014), 25, "cap")
+dividends_rec %<>% add_man("PSE", c(2015:2021), 100, "cap")
+
+dividends_rec %<>% add_man("QAT", c(2017:2021), 100, "cap")
+dividends_rec %<>% add_man("QAT", c(2004:2012), 100, "div")
+
+dividends_rec %<>% add_man("ROU", c(2014:2021), 100)
+
+dividends_rec %<>% add_man("RUS", c(2008:2021), 100, "div") #applicable to strategic shareholdings
+
+dividends_rec %<>% add_man("RWA", c(2019:2021), 5, "cap", "rate") 
+
+dividends_rec %<>% add_man("SAU", c(2018:2021), 100, "div")
+
+dividends_rec %<>% add_man("SDN", c(2004:2006), 100)
+
+dividends_rec %<>% add_man("SGP", years, 100)
+
+dividends_rec %<>% add_man("SEN", c(2004:2013), 100, "div")
+dividends_rec %<>% add_man("SEN", c(2014:2021), 95, "div")
+dividends_rec %<>% add_man("SEN", c(2004:2006), 100, "cap")
+
+
+dividends_rec %<>% add_man("SUR", years, 100, "div")
+
+dividends_rec %<>% add_man("SVK", c(2018:2021), 100, "cap") # but some substance requirements apply
+dividends_rec %<>% add_man("SVK", years, 100, "div")
+
+dividends_rec %<>% add_man("SVN", c(2006:2021), 100, "div")
+
+dividends_rec %<>% add_man("SWE", years, 100)
+
+dividends_rec %<>% add_man("SWZ", years, 100) # seems to be full territorial regime
+
+dividends_rec %<>% add_man("SXM", years, 100)
+
+dividends_rec %<>% add_man("SYC", years, 100)
+
+dividends_rec %<>% add_man("SYR", c(2005:2010), 100, "cap")
+
+dividends_rec %<>% add_man("THA", c(2007:2021), 100, "div")
+
+dividends_rec %<>% add_man("TTO", years, 100, "cap")
+
+dividends_rec %<>% add_man("TUR", c(2005:2021), 100, "div")
+dividends_rec %<>% add_man("TUR", c(2009:2021), 75, "cap")
+
+dividends_rec %<>% add_man("UKR", c(2011:2021), 100, "div")
+
+dividends_rec %<>% add_man(c("USA", "GUM", "MNP", "VIR"), c(2018:2021), 100, "div")
+
+dividends_rec %<>% add_man("VGB", years, 100, "cap")
+
+dividends_rec %<>% add_man("ZAF", c(2005:2021), 100, "div")
+dividends_rec %<>% add_man("ZAF", c(2006:2021), 100, "cap")
+
+dividends_rec %<>% add_man("ZMB", years, 100, "cap")
+dividends_rec %<>% add_man("ZMB", c(2004:2015), 100, "div")
+
+dividends_rec %<>% add_man("ZWE", years, 20, "div", "rate")
+
+```
+
+```{r calculating rates on income received}
+
+dividends_rec %<>% mutate(div_rec = case_when(div_val == "rate" ~ div_ex,
+                                               div_val == "percentage" ~ rate * ((100 - div_ex)/100),
+                                               TRUE ~ rate),
+                          cap_rec = case_when(cap_val == "rate" ~ cap_ex,
+                                               cap_val == "percentage" ~ appl_rate * ((100 - cap_ex)/100),
+                                               TRUE ~ appl_rate))
+dividends_rec %<>% select(-c(cap_same, dividend_same, participation_same, div_val, cap_val))
+dividends_rec %<>% mutate(roy_rec = rate, int_rec = rate, ser_rec = rate)
+  
+write_csv(dividends_rec, here("data-created/participation_exemptions.csv"))
+
+```
+
+

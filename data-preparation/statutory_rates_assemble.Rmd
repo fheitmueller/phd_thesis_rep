@@ -1,0 +1,198 @@
+---
+title: "Statutory_rates"
+author: "Frederik Heitmüller"
+date: "14 3 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(magrittr)
+library(tidyverse)
+library(countrycode)
+library(ggpubr)
+library(readxl)
+
+years <- c(1950:2022)
+
+```
+
+
+```{r OECD rates}
+
+oecd_rates <- read_csv(here("data-raw/statutory_rates/oecd_rates.csv"))
+oecd_rates %<>% rename("year" = "Time")
+
+```
+
+
+```{r taxfoundation}
+
+taxf_rates <- read_excel(here("data-raw/statutory_rates/1980-2021-Corporate-Tax-Rates-Around-the-World.xlsx"))
+taxf_rates$rate %<>% as.numeric()
+
+```
+
+KPMG rates: https://home.kpmg/xx/en/home/services/tax/tax-tools-and-resources/tax-rates-online/corporate-tax-rates-table.html , accessed 14 March 2022
+
+```{r KPMG}
+
+kpmg_rates <- read_excel(here("data-raw/statutory_rates/kpmg_corporate_tax_rates.xlsx"), col_names = FALSE)
+names(kpmg_rates) <- c("country", 2011:2021)
+kpmg_rates %<>% filter(!is.na(country))
+kpmg_rates %<>% mutate(across(2:12, as.numeric))
+kpmg_rates %<>% pivot_longer(cols = 2:12, names_to = "year")
+kpmg_rates$year %<>% as.numeric()
+kpmg_rates %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+
+```
+
+
+```{r EY rates}
+
+ey_rates <- read_csv(here("data-created/ey_stat_rates.csv"))
+```
+
+
+```{r ciat rates}
+
+ciat_maximum <- read_excel(here("data-raw/statutory_rates/IRPJ_Alicuotas_Maximas.xlsx"), skip = 2)
+ciat_maximum %<>% filter(!is.na(`1980`))
+ciat_maximum %<>% mutate(across(2:40, as.numeric))
+ciat_maximum %<>% pivot_longer(2:40, names_to = "year", values_to = "rate")
+ciat_maximum$year %<>% as.integer()
+ciat_maximum %<>% mutate(iso3c = coalesce(countrycode(countryname(`...1`), "country.name", "iso3c"), 
+                                          countrycode(`...1`, "country.name", "iso3c", custom_match = c("Brasil 2/" = "BRA",
+                                                                                                        "Perú" = "PER",
+                                                                                                        "Rep. Dominicana" = "DOM"))))
+
+```
+# EU Commission
+Data on corporate tax rates of EU countries is available here: https://ec.europa.eu/taxation_customs/document/download/6e2a5960-f13c-4aef-b115-60e3ba232966_en?filename=statutory_rates_2022.xlsx 
+
+```{r eu commission}
+
+eu <- read_excel(here("data-raw/statutory_rates/eu_statutory_rates.xlsx"), sheet = 3, skip = 3)
+eu %<>% slice(1:30)
+eu %<>% mutate(across(.cols = c(2:ncol(eu)), as.numeric))
+eu %<>% pivot_longer(cols = c(2:ncol(eu)), names_to = "year")
+names(eu) <- c("country", "year", "rate")
+eu %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+eu %<>% mutate(year = as.numeric(year))
+
+```
+
+
+# World Tax Database
+
+The World Tax Database was a project by the University of Michigan. Data can be accessed here: https://www.bus.umich.edu/otpr/otpr/default.asp  
+The data downloaded is for the indicator "Corporate Tax Rate : Top Tax Rate".
+
+```{r wtdb}
+files <- list.files(here("data-raw/statutory_rates"))
+files <- files[which(str_detect(files, "michigan"))]
+paths <- here(str_glue("data-raw/statutory_rates/{files}"))
+wtdb <- map(paths, read_excel, skip = 2)
+
+clean_wtdb <- function(df){
+  row <- which(str_detect(df$`...1`, "Footnote"))
+  df %<>% slice(1:row - 1)
+  df %<>% pivot_longer(cols = c(2:ncol(df)), names_to = "year")
+  names(df) <- c("country", "year", "rate")
+  return(df)
+}
+wtdb %<>% map(clean_wtdb)
+wtdb %<>% reduce(rbind)
+wtdb$country %<>% str_remove_all("Channel Islands,")
+wtdb %<>% mutate(iso3c = countrycode(countryname(country), "country.name", "iso3c"))
+wtdb$iso3c[which(wtdb$country == "Netherlands Antilles")] <- "ANT"
+wtdb %<>% filter(!is.na(iso3c))
+wtdb %<>% mutate(year = as.numeric(year))
+
+
+```
+
+
+
+
+
+```{r visusalising data availability}
+
+baseline <- read_rds(here("data-created/groupings.rds"))
+baseline %<>% select(iso3c)
+
+tables <- list(kpmg_rates, ey_rates, filter(oecd_rates, indicator == "CIT_RATE"), wtdb)
+names_of_tables <- c("KPMG", "EY", "OECD", "WTDB")
+names(tables) <- names_of_tables
+variables_names <- c("value", "rate", "ObsValue", "rate")
+
+availability_plot <- function(baseline, years, tables, names_of_tables, variable_names){
+baseline <- baseline %>% slice(rep(1:n(), each = length(years))) %>% mutate(year = rep(years, times = nrow(baseline))) 
+baseline %<>% slice(rep(1:n(), each = length(tables))) %>% mutate(source = rep(names_of_tables, times = nrow(baseline)))
+tables %<>% map2(variables_names, select, "iso3c", "year")
+tables %<>% map2(variables_names, function(x, y, z){rename(x, "value" = y)})
+tables %<>% map2(names_of_tables, function(x, y){mutate(x, source = y)})
+tables %<>% reduce(rbind)
+baseline %<>% left_join(tables, by = c("iso3c", "year", "source"))
+baseline %<>% mutate(value = ifelse(!is.na(value), 1, 0))
+baseline %<>% group_by(iso3c) %>% mutate(availability = sum(value))
+baseline %<>% arrange(desc(availability))
+
+plot <- baseline %>% 
+ggplot() + 
+  geom_jitter(aes(x = year, y = reorder(iso3c, availability), colour = source, alpha = value), height = 0, width = 0.2, size = 0.05) +
+  theme(axis.text.y = element_text(size = 1))
+return(plot)
+}
+
+plot <- availability_plot(baseline, years, tables, names_of_tables, variable_names)
+
+ggsave(filename = here("output.png"), width = 5, height = 5, device = 'png', dpi = 700)
+
+```
+
+
+```{r complete table}
+
+complete_table <- baseline %>% slice(rep(1:n(), each = length(years))) %>% mutate(year = rep(years, times = nrow(baseline))) 
+complete_table %<>% left_join(ciat_maximum[c("iso3c", "year", "rate")], by = c("iso3c", "year"))
+complete_table %<>% rename("ciat_rate" = "rate")
+
+oecd_rates %<>% filter(indicator == "COMB_CIT_RATE")
+complete_table %<>% left_join(oecd_rates[c("iso3c", "year", "ObsValue")], by = c("iso3c", "year"))
+complete_table %<>% rename("oecd_comb_rate" = "ObsValue")
+
+complete_table %<>% left_join(ey_rates[c("iso3c", "year", "rate")], by = c("iso3c", "year"))
+complete_table %<>% rename("ey_rate" = "rate")
+
+complete_table %<>% left_join(kpmg_rates[c("iso3c", "year", "value")], by = c("iso3c", "year"))
+complete_table %<>% rename("kpmg_rate" = "value")
+
+complete_table %<>% left_join(taxf_rates[c("iso_3", "year", "rate")], by = c("iso3c" = "iso_3", "year"))
+complete_table %<>% rename("taxf_rate" = "rate")
+
+complete_table %<>% left_join(eu[c("iso3c", "year", "rate")], by = c("iso3c", "year"))
+complete_table %<>% rename("eu_rate" = "rate")
+
+complete_table %<>% left_join(wtdb[c("iso3c", "year", "rate")], by = c("iso3c", "year"))
+complete_table %<>% rename("wtdb_rate" = "rate")
+
+complete_table %<>% mutate(comb_rate = coalesce(oecd_comb_rate, eu_rate, ciat_rate, ey_rate, kpmg_rate, taxf_rate, wtdb_rate))
+
+complete_table %>% write_csv(here("data-created/statutory_rates.csv"))
+```
+
+
+```{r low tax jurisdictions}
+
+complete_table <- read_csv(here("data-created/statutory_rates.csv"))
+
+low_tax <- complete_table %>%  filter(year > 2012, comb_rate <= 5) %>% distinct(iso3c) %>% pull(iso3c)
+
+low_tax %>% write_rds(here("data-created/low_tax_jurisdictions.rds"))
+```
+
+
+
+

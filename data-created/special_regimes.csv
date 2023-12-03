@@ -1,0 +1,633 @@
+year,iso3c,div_wth,int_wth,roy_wth,ser_wth,cap_wth,div_rec,int_rec,roy_rec,ser_rec,cap_rec,regime,nexus
+2011,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2012,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2013,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2014,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2015,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2016,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2017,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2018,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2019,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2020,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2021,ABW,0,NA,NA,NA,NA,0,0,0,0,0,special tax regimes for certain companies,NA
+2018,ALB,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,tax incentives,NA
+2019,ALB,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,tax incentives,NA
+2020,ALB,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,tax incentives,NA
+2021,ALB,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,tax incentives,NA
+2004,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2005,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2006,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2007,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2008,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2009,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2010,ANT,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2006,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2007,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2008,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2009,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2010,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2011,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2012,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2013,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2014,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2015,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2016,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2017,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2018,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2019,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2020,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2021,AUS,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,foreign conduit income,NA
+2008,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2009,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2010,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2011,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2012,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2013,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2014,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2015,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2016,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2017,BEL,NA,NA,NA,NA,NA,NA,NA,6.798000000000001,NA,NA,patent box,NA
+2018,BEL,NA,NA,NA,NA,NA,NA,NA,5.916,NA,NA,patent box,NA
+2019,BEL,NA,NA,NA,NA,NA,NA,NA,5.916,NA,NA,patent box,NA
+2020,BEL,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,patent box,NA
+2021,BEL,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,patent box,NA
+2016,BEL,NA,NA,NA,NA,NA,NA,NA,5.0985000000000005,NA,NA,innovation deduction,nexus
+2017,BEL,NA,NA,NA,NA,NA,NA,NA,5.0985000000000005,NA,NA,innovation deduction,nexus
+2018,BEL,NA,NA,NA,NA,NA,NA,NA,4.436999999999999,NA,NA,innovation deduction,nexus
+2019,BEL,NA,NA,NA,NA,NA,NA,NA,4.436999999999999,NA,NA,innovation deduction,nexus
+2020,BEL,NA,NA,NA,NA,NA,NA,NA,3.75,NA,NA,innovation deduction,nexus
+2021,BEL,NA,NA,NA,NA,NA,NA,NA,3.75,NA,NA,innovation deduction,nexus
+2019,BGD,NA,NA,NA,NA,NA,NA,NA,0,0,NA,tax incentives,NA
+2020,BGD,NA,NA,NA,NA,NA,NA,NA,0,0,NA,tax incentives,NA
+2021,BGD,NA,NA,NA,NA,NA,NA,NA,0,0,NA,tax incentives,NA
+2009,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2010,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2011,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2012,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2013,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2014,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2015,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2016,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2017,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2018,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2019,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2020,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2021,BLR,NA,NA,NA,NA,NA,NA,NA,0,NA,NA,special tax regimes,NA
+2004,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2005,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2006,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2007,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2008,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2009,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2010,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2011,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2012,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2013,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2014,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2015,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2016,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2017,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2018,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2019,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2020,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2021,BRB,NA,NA,NA,NA,NA,1,1,1,1,1,international business,NA
+2004,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2005,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2006,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2007,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2008,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2009,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2010,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2011,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2012,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2013,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2014,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2015,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2016,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2017,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2018,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2019,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2020,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2021,BRB,0,0,0,0,0,NA,NA,NA,NA,NA,international business,NA
+2004,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2005,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2006,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2007,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2008,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2009,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2010,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2011,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2012,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2013,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2014,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2015,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2016,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2017,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2018,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2019,CHE,NA,NA,NA,NA,NA,0,NA,NA,NA,0,holding companies,NA
+2004,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2005,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2006,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2007,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2008,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2009,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2010,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2011,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2012,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2013,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2014,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2015,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2016,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2017,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2018,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2019,CHE,NA,NA,NA,NA,NA,NA,7.8,7.8,NA,NA,holding companies,NA
+2004,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2005,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2006,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2007,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2008,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2009,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2010,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2011,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2012,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2013,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2014,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2015,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2016,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2017,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2018,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2019,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2020,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2021,CHL,0,NA,NA,NA,0,0,0,0,0,0,chilean holding company regime,NA
+2010,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2011,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2012,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2013,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2014,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2015,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2016,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2017,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2018,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2019,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2020,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2021,CHN,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,tax incentives,rate
+2019,COL,0,NA,NA,NA,0,0,NA,NA,NA,0,colombian holding company regime,NA
+2020,COL,0,NA,NA,NA,0,0,NA,NA,NA,0,colombian holding company regime,NA
+2021,COL,0,NA,NA,NA,0,0,NA,NA,NA,0,colombian holding company regime,NA
+2016,CPV,NA,NA,NA,NA,NA,NA,NA,NA,2.5,NA,international business center,NA
+2017,CPV,NA,NA,NA,NA,NA,NA,NA,NA,2.5,NA,international business center,NA
+2018,CPV,NA,NA,NA,NA,NA,NA,NA,NA,2.5,NA,international business center,NA
+2019,CPV,NA,NA,NA,NA,NA,NA,NA,NA,2.5,NA,international business center,NA
+2020,CPV,NA,NA,NA,NA,NA,NA,NA,NA,2.5,NA,international business center,NA
+2021,CPV,NA,NA,NA,NA,NA,NA,NA,NA,2.5,NA,international business center,NA
+2016,CPV,0,NA,NA,NA,0,NA,NA,NA,NA,NA,international business center,NA
+2017,CPV,0,NA,NA,NA,0,NA,NA,NA,NA,NA,international business center,NA
+2018,CPV,0,NA,NA,NA,0,NA,NA,NA,NA,NA,international business center,NA
+2019,CPV,0,NA,NA,NA,0,NA,NA,NA,NA,NA,international business center,NA
+2020,CPV,0,NA,NA,NA,0,NA,NA,NA,NA,NA,international business center,NA
+2021,CPV,0,NA,NA,NA,0,NA,NA,NA,NA,NA,international business center,NA
+2004,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2005,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2006,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2007,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2008,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2009,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2010,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2011,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2012,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2013,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2014,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2015,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2016,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2017,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2018,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2019,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,NA
+2020,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,nexus
+2021,CRI,NA,NA,NA,NA,NA,0,0,0,0,0,free trade zone regime,nexus
+2011,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2012,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2013,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2014,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2015,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2016,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2017,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2018,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2019,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2020,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2021,CUW,NA,NA,NA,NA,NA,2,2,2,2,2,tax incentives,NA
+2004,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2005,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2006,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2007,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2008,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2009,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2010,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2011,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2012,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2013,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2014,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2015,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2016,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2017,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2018,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2019,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2020,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2021,ESP,0,NA,NA,NA,0,NA,NA,NA,NA,NA,foreign portfolio holding company regime,NA
+2016,ESP,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2017,ESP,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2018,ESP,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2019,ESP,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2020,ESP,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2021,ESP,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2013,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2014,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2015,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2016,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,nexus
+2017,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,nexus
+2018,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,nexus
+2019,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,nexus
+2020,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,nexus
+2021,GBR,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,nexus
+2004,GGY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2005,GGY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2006,GGY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2007,GGY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2004,GIB,0,0,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2005,GIB,0,0,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2006,GIB,0,0,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2004,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2005,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2006,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2007,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2008,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2009,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2010,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2011,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2012,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2013,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2014,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2015,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2016,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2017,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2018,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2019,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2020,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2021,HKG,NA,NA,NA,NA,NA,0,0,0,0,0,territorial regime,NA
+2004,HUN,NA,NA,NA,NA,NA,3,3,3,3,3,tax incentives,NA
+2005,HUN,NA,NA,NA,NA,NA,3,3,3,3,3,tax incentives,NA
+2004,HUN,NA,NA,NA,NA,NA,NA,8,8,NA,NA,tax incentives,NA
+2005,HUN,NA,NA,NA,NA,NA,NA,8,8,NA,NA,tax incentives,NA
+2006,HUN,NA,NA,NA,NA,NA,NA,8.665,8.665,NA,NA,tax incentives,NA
+2007,HUN,NA,NA,NA,NA,NA,NA,10,10,NA,NA,tax incentives,NA
+2008,HUN,NA,NA,NA,NA,NA,NA,10,10,NA,NA,tax incentives,NA
+2009,HUN,NA,NA,NA,NA,NA,NA,10,10,NA,NA,tax incentives,NA
+2010,HUN,NA,NA,NA,NA,NA,NA,NA,9.5,NA,NA,tax incentives,NA
+2011,HUN,NA,NA,NA,NA,NA,NA,NA,9.5,NA,NA,tax incentives,NA
+2012,HUN,NA,NA,NA,NA,NA,NA,NA,9.5,NA,NA,tax incentives,NA
+2013,HUN,NA,NA,NA,NA,NA,NA,NA,9.5,NA,NA,tax incentives,NA
+2014,HUN,NA,NA,NA,NA,NA,NA,NA,9.5,NA,NA,tax incentives,NA
+2015,HUN,NA,NA,NA,NA,NA,NA,NA,9.5,NA,NA,tax incentives,NA
+2010,HUN,NA,NA,NA,NA,NA,NA,4.75,NA,NA,NA,foreign-source interest income exclusion,NA
+2016,HUN,NA,NA,NA,NA,NA,NA,9.5,9.5,NA,NA,tax incentives,nexus
+2017,HUN,NA,NA,NA,NA,NA,NA,4.5,4.5,NA,NA,tax incentives,nexus
+2018,HUN,NA,NA,NA,NA,NA,NA,4.5,4.5,NA,NA,tax incentives,nexus
+2019,HUN,NA,NA,NA,NA,NA,NA,4.5,4.5,NA,NA,tax incentives,nexus
+2020,HUN,NA,NA,NA,NA,NA,NA,4.5,4.5,NA,NA,tax incentives,nexus
+2021,HUN,NA,NA,NA,NA,NA,NA,4.5,4.5,NA,NA,tax incentives,nexus
+2004,HUN,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2005,HUN,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2006,HUN,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2004,IMN,0,0,0,0,0,0,0,0,0,0,exempt companies,NA
+2005,IMN,0,0,0,0,0,0,0,0,0,0,exempt companies,NA
+2006,IMN,0,0,0,0,0,0,0,0,0,0,exempt companies,NA
+2017,IND,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2018,IND,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2019,IND,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2020,IND,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2021,IND,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box regime,nexus
+2016,IRL,NA,NA,NA,NA,NA,NA,NA,6.25,NA,NA,knowledge development box,nexus
+2017,IRL,NA,NA,NA,NA,NA,NA,NA,6.25,NA,NA,knowledge development box,nexus
+2018,IRL,NA,NA,NA,NA,NA,NA,NA,6.25,NA,NA,knowledge development box,nexus
+2019,IRL,NA,NA,NA,NA,NA,NA,NA,6.25,NA,NA,knowledge development box,nexus
+2020,IRL,NA,NA,NA,NA,NA,NA,NA,6.25,NA,NA,knowledge development box,nexus
+2021,IRL,NA,NA,NA,NA,NA,NA,NA,6.25,NA,NA,knowledge development box,nexus
+2004,ISL,NA,NA,NA,NA,NA,5,5,5,5,5,international trading companies,NA
+2005,ISL,NA,NA,NA,NA,NA,5,5,5,5,5,international trading companies,NA
+2006,ISL,NA,NA,NA,NA,NA,5,5,5,5,5,international trading companies,NA
+2007,ISL,NA,NA,NA,NA,NA,5,5,5,5,5,international trading companies,NA
+2015,ITA,NA,NA,NA,NA,NA,NA,NA,15.6465,NA,NA,patent box regime,nexus
+2016,ITA,NA,NA,NA,NA,NA,NA,NA,15.6465,NA,NA,patent box regime,nexus
+2017,ITA,NA,NA,NA,NA,NA,NA,NA,13.903,NA,NA,patent box regime,nexus
+2018,ITA,NA,NA,NA,NA,NA,NA,NA,13.903,NA,NA,patent box regime,nexus
+2019,ITA,NA,NA,NA,NA,NA,NA,NA,13.903,NA,NA,patent box regime,nexus
+2020,ITA,NA,NA,NA,NA,NA,NA,NA,13.905,NA,NA,patent box regime,nexus
+2021,ITA,NA,NA,NA,NA,NA,NA,NA,13.905,NA,NA,patent box regime,nexus
+2004,JEY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2005,JEY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2006,JEY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2007,JEY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2008,JEY,NA,NA,NA,NA,NA,0,0,0,0,0,exempt companies,NA
+2004,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2005,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2006,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2007,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2008,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2009,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2010,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2011,JEY,NA,NA,NA,NA,NA,2,2,2,2,2,international business companies,NA
+2004,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2005,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2006,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2007,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2008,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2009,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2010,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2011,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2012,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2013,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2014,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2015,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2016,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2017,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2018,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2019,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2020,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2021,LBN,0,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2014,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2015,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2016,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2017,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2018,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2019,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2020,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2021,LCA,0,0,0,0,0,0,0,0,0,0,international business companies,NA
+2011,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2012,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2013,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2014,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2015,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2016,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2017,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2018,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2019,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2020,LIE,NA,NA,NA,NA,NA,NA,NA,2.5,NA,NA,patent box regime for intellectual property companies,NA
+2008,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2009,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2010,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2011,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2012,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2013,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2014,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2015,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2016,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2017,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2018,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2019,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2020,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2021,LKA,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2011,LUX,NA,NA,NA,NA,NA,NA,NA,5.760000000000001,NA,4.2,intellectual property,NA
+2012,LUX,NA,NA,NA,NA,NA,NA,NA,5.760000000000001,NA,4.2,intellectual property,NA
+2013,LUX,NA,NA,NA,NA,NA,NA,NA,5.844,NA,4.2,intellectual property,NA
+2014,LUX,NA,NA,NA,NA,NA,NA,NA,5.844,NA,4.2,intellectual property,NA
+2015,LUX,NA,NA,NA,NA,NA,NA,NA,5.844,NA,4.2,intellectual property,NA
+2016,LUX,NA,NA,NA,NA,NA,NA,NA,5.844,NA,4.2,intellectual property,NA
+2017,LUX,NA,NA,NA,NA,NA,NA,NA,5.416,NA,3.8000000000000003,intellectual property,NA
+2018,LUX,NA,NA,NA,NA,NA,NA,NA,5.202000000000001,NA,3.6,intellectual property,NA
+2019,LUX,NA,NA,NA,NA,NA,NA,NA,4.988,NA,3.4000000000000004,intellectual property,NA
+2020,LUX,NA,NA,NA,NA,NA,NA,NA,4.988,NA,3.4000000000000004,intellectual property,NA
+2021,LUX,NA,NA,NA,NA,NA,NA,NA,4.988,NA,3.4000000000000004,intellectual property,NA
+2004,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2005,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2006,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2007,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2008,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2009,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2010,LUX,NA,NA,NA,NA,NA,0,0,0,0,0,holding company,NA
+2004,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2005,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2006,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2007,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2008,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2009,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2010,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2011,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2012,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2013,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2014,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2015,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2016,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2017,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2018,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2019,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2020,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2021,LUX,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,dividend distribution,NA
+2004,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2005,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2006,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2007,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2008,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2009,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2010,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2011,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2012,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2013,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2014,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2015,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2016,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2017,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2018,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2019,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2020,MAC,NA,NA,NA,NA,NA,0,0,0,0,0,offshore companies,NA
+2004,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2005,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2006,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2007,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2008,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2009,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2010,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2011,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2012,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2013,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2014,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2015,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2016,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2017,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2018,MAR,NA,NA,NA,NA,NA,0,0,0,0,0,tax incentives,NA
+2019,MLT,NA,NA,NA,NA,NA,NA,NA,1.75,NA,NA,tax incentives,nexus
+2020,MLT,NA,NA,NA,NA,NA,NA,NA,1.75,NA,NA,tax incentives,nexus
+2021,MLT,NA,NA,NA,NA,NA,NA,NA,1.75,NA,NA,tax incentives,nexus
+2019,MUS,NA,NA,NA,NA,NA,3,3,NA,NA,NA,partial exemption,NA
+2020,MUS,NA,NA,NA,NA,NA,3,3,NA,NA,NA,partial exemption,NA
+2021,MUS,NA,NA,NA,NA,NA,3,3,NA,NA,NA,partial exemption,NA
+2004,MUS,NA,NA,NA,NA,NA,5,5,5,5,0,Global Business Licence 1,NA
+2005,MUS,NA,NA,NA,NA,NA,4.5,4.5,4.5,4.5,0,Global Business Licence 1,NA
+2006,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2007,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2008,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2009,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2010,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2011,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2012,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2013,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2014,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2015,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2016,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2017,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2018,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2019,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2020,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2021,MUS,NA,NA,NA,NA,NA,3,3,3,3,0,Global Business Licence 1,NA
+2004,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2005,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2006,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2007,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2008,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2009,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2010,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2011,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2012,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2013,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2014,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2015,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2016,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2017,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2018,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2019,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2020,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2021,MUS,0,0,0,0,0,NA,NA,NA,NA,NA,Global Business Licence 1,NA
+2004,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2005,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2006,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2007,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2008,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2009,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2010,MYS,0,0,0,0,0,0,0,0,0,0,offshore financial center,NA
+2011,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2012,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2013,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2014,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2015,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2016,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2017,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2018,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2019,MYS,0,0,0,0,0,0,0,0,0,0,labuan international business and financial center,NA
+2019,MYS,0,0,0,0,0,0,0,NA,NA,0,labuan international business and financial center,NA
+2020,MYS,0,0,0,0,0,0,0,NA,NA,0,labuan international business and financial center,NA
+2021,MYS,0,0,0,0,0,0,0,NA,NA,0,labuan international business and financial center,NA
+2019,MYS,NA,NA,NA,NA,NA,NA,NA,3,3,NA,labuan international business and financial center,NA
+2020,MYS,NA,NA,NA,NA,NA,NA,NA,3,3,NA,labuan international business and financial center,NA
+2021,MYS,NA,NA,NA,NA,NA,NA,NA,3,3,NA,labuan international business and financial center,NA
+2007,NLD,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2008,NLD,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2009,NLD,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2010,NLD,NA,NA,NA,NA,NA,NA,NA,10,NA,NA,patent box,NA
+2010,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2011,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2012,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2013,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2014,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2015,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2016,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2017,NLD,NA,NA,NA,NA,NA,NA,NA,5,NA,NA,innovation box,NA
+2018,NLD,NA,NA,NA,NA,NA,NA,NA,7,NA,NA,innovation box,nexus
+2019,NLD,NA,NA,NA,NA,NA,NA,NA,7,NA,NA,innovation box,nexus
+2020,NLD,NA,NA,NA,NA,NA,NA,NA,7,NA,NA,innovation box,nexus
+2021,NLD,NA,NA,NA,NA,NA,NA,NA,9,NA,NA,innovation box,nexus
+2008,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2009,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2010,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2011,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2012,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2013,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2014,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2015,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2016,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2017,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2018,PAN,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,headquarters law,NA
+2019,PAN,NA,NA,NA,NA,NA,NA,NA,NA,5,NA,headquarters law,NA
+2020,PAN,NA,NA,NA,NA,NA,NA,NA,NA,5,NA,headquarters law,NA
+2021,PAN,NA,NA,NA,NA,NA,NA,NA,NA,5,NA,headquarters law,NA
+2008,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2009,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2010,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2011,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2012,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2013,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2014,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2015,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2016,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2017,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2018,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2019,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2020,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2021,QAT,NA,NA,NA,NA,NA,NA,NA,NA,0,NA,tax incentives,NA
+2004,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2005,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2006,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2007,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2008,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2009,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2010,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2011,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2012,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2013,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2014,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2015,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2016,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2017,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2018,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2019,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2020,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2021,SGP,NA,NA,0,0,NA,0,0,0,0,0,tax incentives,NA
+2018,SVK,NA,NA,NA,NA,NA,NA,NA,10.5,NA,NA,patent box,nexus
+2019,SVK,NA,NA,NA,NA,NA,NA,NA,10.5,NA,NA,patent box,nexus
+2020,SVK,NA,NA,NA,NA,NA,NA,NA,10.5,NA,NA,patent box,nexus
+2021,SVK,NA,NA,NA,NA,NA,NA,NA,10.5,NA,NA,patent box,nexus
+2011,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2012,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2013,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2014,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2015,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2016,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2017,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2018,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2019,SXM,NA,NA,NA,NA,NA,3,3,3,3,3,offshore companies,NA
+2016,THA,NA,NA,NA,NA,NA,NA,0,0,0,NA,tax incentives,NA
+2017,THA,NA,NA,NA,NA,NA,NA,0,0,0,NA,tax incentives,NA
+2018,THA,NA,NA,NA,NA,NA,NA,0,0,0,NA,tax incentives,NA
+2019,THA,0,0,NA,NA,NA,0,NA,NA,NA,NA,tax incentives,NA
+2020,THA,0,0,NA,NA,NA,0,NA,NA,NA,NA,tax incentives,NA
+2021,THA,0,0,NA,NA,NA,0,NA,NA,NA,NA,tax incentives,NA
+2019,THA,NA,NA,NA,NA,NA,NA,3,3,3,NA,tax incentives,NA
+2020,THA,NA,NA,NA,NA,NA,NA,3,3,3,NA,tax incentives,NA
+2021,THA,NA,NA,NA,NA,NA,NA,3,3,3,NA,tax incentives,NA
+2005,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2006,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2007,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2008,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2009,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2010,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2011,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2012,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2013,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2014,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2015,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2016,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2017,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2018,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2019,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2020,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2021,TUR,NA,NA,NA,NA,NA,NA,NA,NA,NA,0,international holding companies,NA
+2004,VGB,NA,NA,NA,NA,NA,0,0,0,0,0,international business companies,NA
+2005,VGB,NA,NA,NA,NA,NA,0,0,0,0,0,international business companies,NA
+2011,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2012,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2013,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2014,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2015,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2016,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2017,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2018,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2019,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2020,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA
+2021,ZAF,0,NA,NA,NA,NA,NA,NA,NA,NA,NA,headquarter companies,NA

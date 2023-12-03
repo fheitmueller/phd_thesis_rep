@@ -1,0 +1,287 @@
+---
+title: "Dispute_resolution"
+author: "Frederik Heitmüller"
+date: "2022-08-05"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+
+options(knitr.kable.NA = '')
+
+library(tidyverse)
+library(here)
+library(modelsummary)
+library(kableExtra)
+library(countrycode)
+library(readxl)
+
+devtools::load_all()
+
+ggplot2::theme_set(theme_pubclean())
+
+```
+
+
+```{r load datasets}
+
+groupings <- read_rds(here("data-created/groupings.rds"))
+
+tables <- read_rds(here("data-created/map_profiles_edited.rds"))
+
+map_stats <- read_csv(here("data-created/map_stats_clean.csv"), show_col_types = FALSE)
+
+map_reviews <- read_csv(here("data-created/map_reviews.csv"), show_col_types = FALSE)
+
+stat_rates <- read_csv(here("data-created/statutory_rates.csv"), show_col_types = FALSE)
+
+number_treaties <- read_csv(here("data-created/number_treaties_in_force.csv"), show_col_types = FALSE)
+
+inc_frame <- read_rds(here("data-created/inc_frame.rds"))
+
+```
+
+```{r add info}
+tables %<>% left_join(stat_rates[c("iso3c", "year", "comb_rate")], by = c("iso3c", "year"))
+tables %<>% left_join(number_treaties, by = "iso3c")
+
+```
+
+
+#MAP Statistics
+
+
+```{r analysis MAP statistics}
+map_stats %<>% left_join(groupings, by = "iso3c")
+
+averages <- map_stats %>% 
+  filter(type == "all") %>% 
+  filter(year > 2017) %>% 
+  group_by(iso3c) %>% 
+  summarise(total_cases = sum(cases_started),
+            cases_started = mean(cases_started, na.rm = TRUE),
+            cases_closed = mean(cases_closed, na.rm = TRUE), 
+            months = mean(as.double(months), na.rm = TRUE))
+
+averages %<>% left_join(groupings)
+
+table_map_cases <- averages %>% 
+  group_by(composite_group) %>% 
+  summarise(cases_started_mean = mean(cases_started), 
+            cases_started_median = median(cases_started), 
+            total_cases = sum(total_cases), 
+            no_countries = n_distinct(iso3c), 
+            at_least_one_case = length(iso3c[cases_started > 0])) %>% 
+  kable(digits = 1,
+        col.names = c("Group",	"Mean of cases started per year/country (2018-2020)",	"Median of mean of cases started per year /country",	"Number of cases started (2018-2020)", "Total no. of countries", "No. of countries with at least one MAP case"))
+
+save_kable(table_map_cases, here("fig/Table 6_MAP Statistics across income groups.html"))
+
+
+ggplot(averages) +
+  geom_histogram(aes(x = cases_started), binwidth = 5) + 
+  labs(title = "Distribution of annual number of MAP cases started, mean 2018-2020", 
+       caption = "137 countries, data from OECD MAP Statistics")
+
+ggsave(here("fig/Figure 4_Distribution of annual number of MAP cases started.png"))
+
+
+india <- map_stats %>% filter(iso3c == "IND", type == "all") %>% summarise(no = sum(cases_started)) %>% pull(no)
+print(india)
+
+
+
+```
+
+
+
+# MAP profiles
+
+## Availability
+
+```{r availability per country (MAP profiles)}
+profiles <- tables %>% group_by(iso3c) %>% summarize(no_profiles = n_distinct(date))
+```
+
+
+
+## Overall analysis of taxpayer friendliness
+
+Jurisdictions without corporate income tax as well as jurisdictions without tax treaties are not considered in the analysis, since most answers are not applicable to them. For jurisdictions without tax treaties, only the elements related to bilateral APAs, as well as coverage of foreign taxpayer adjustments could be relevant.
+For other jurisdictions, if an element is not applicable because in practice no MAPs have been concluded, this is also considered as taxpayer friendly answer.
+If an information is missing this is coded as not taxpayer friendly.
+
+
+```{r taxpayer friendliness calculation}
+
+tables$taxpayer_friendliness <- mapply(function(x, y) any(x %in% y), tables$response, tables$taxpayer_friendly_answers)
+
+tables %<>% mutate(taxpayer_friendliness = case_when(
+  taxpayer_friendliness == TRUE ~ 1,
+  taxpayer_friendly_answers == "neutral" ~ NA_real_,
+  response == "partial" ~ 0.5,
+  taxpayer_friendliness == FALSE ~ 0))
+
+write_csv(tables, here("data-created/dispute_resolution_analyzed.csv"))
+
+```
+
+For jurisdictions without a corporate income tax, taxpayer friendliness is not reduced if certain elements are not available. Hence I adjust their scores. This is in line with the OECD peer review reports, which for example do not mention issues for improvement in the case of Bermuda, although formally not all elements are complied with.
+
+- All elements related to bilateral APA (APA programs are not relevant if there is no tax to be imposed in the first place)
+- Access in audit settlement cases
+- Suspension of tax collection (since no tax would be collected in the first place)
+- Interest and penalties (since no penalties would normally be levied)
+- TP corresponding adjustments (no adjustment possible since no tax is levied)
+- Additional tax time frame info
+- Refund time frame info
+
+```{r adjustment for jurisdictions without income tax}
+tables %<>% mutate(taxpayer_friendliness = case_when(
+  comb_rate == 0 &
+    new_row %in% c(2:7) ~ 1,
+  TRUE ~ taxpayer_friendliness))
+```
+
+If a jurisdiction submitted two MAP Profiles in one year, only the more recent one will be considered.
+
+```{r only consider most recent in year}
+distinct_rows <- tables %>% group_by(iso3c, date) %>% add_tally() %>% ungroup() %>% select(n) %>% slice(1) %>% pull(n)
+tables %<>% group_by(iso3c, year) %>% arrange(desc(date)) %>% slice(1:distinct_rows) %>% ungroup()
+```
+
+
+```{r min_std score}
+
+min_std_score <- tables %>% filter(action_14 %in% c("min_std", "min_std_mod")) %>%  group_by(iso3c, year) %>% summarize(min_std_score = sum(taxpayer_friendliness, na.rm = TRUE))
+
+bp_score <- tables %>% filter(action_14 == "bp") %>%  group_by(iso3c, year) %>% summarize(bp_score = sum(taxpayer_friendliness, na.rm = TRUE))
+
+overall_score <- tables %>% filter(!new_row %in% c(40:42)) %>%  group_by(iso3c, year) %>% summarize(overall_score = sum(taxpayer_friendliness, na.rm = TRUE))
+
+overall_score_categories <- tables %>% filter(!new_row %in% c(40:42)) %>%  group_by(iso3c, category, year) %>% summarize(score = sum(taxpayer_friendliness, na.rm = TRUE)) %>% pivot_wider(names_from = "category", values_from = "score")
+
+scores <- min_std_score %>% left_join(bp_score) %>% left_join(overall_score) %>% left_join(overall_score_categories)
+
+scores %<>% left_join(groupings[c("iso3c", "composite_group")])
+
+write_csv(scores, here("data-created/dispute_resolution_scores.csv"))
+
+```
+
+## Arbitration
+
+```{r audit settlement}
+arbitration <- filter(tables, new_row %in% c(28:30))
+
+arbitration %<>% select(iso3c, year, response, short_codes) %>% pivot_wider(names_from = "short_codes", values_from = "response")
+arbitration %<>% left_join(groupings[c("iso3c", "composite_group")])
+arbitration %<>% mutate(introduced_or_willing = ifelse(arbitration_any_treaty == "yes" | arbitration_treaty_policy == "yes", "yes", "no"))
+
+arbitration_table <- arbitration %>% 
+  pivot_longer(cols = c("introduced_or_willing"), names_to = "category", values_to = "response") %>% 
+  group_by(iso3c) %>% 
+  arrange(desc(year)) %>%  
+  slice(1) %>% 
+  group_by(composite_group, response) %>% 
+  summarize(n = n()) %>% 
+  pivot_wider(names_from = "response", values_from = "n") %>% 
+  kable(col.names = c("Country group", "No", "Yes", "No information"))
+save_kable(arbitration_table, here("fig/Table 5_Countries with arbitration clause.html"))
+
+arbitration %>%   group_by(iso3c) %>% 
+  arrange(desc(year)) %>%  
+  slice(1) %>%  filter(introduced_or_willing == "yes" & composite_group %in% c("Lower income"))
+```
+
+
+```{r create compliance matrix}
+dispute_resolution <- groupings
+dispute_resolution %<>% mutate(map_profile_available = ifelse(iso3c %in% tables$iso3c, "yes", "no"))
+dispute_resolution %<>% left_join(min_std_score) %>% left_join(bp_score) %>% left_join(overall_score) %>% left_join(overall_score_categories)
+
+dispute_resolution %<>% mutate(action_14_score = min_std_score + bp_score)
+
+# add information on number of peer reviews
+
+oecd_action_14 <- read_excel(here("data-raw/oecd_compare_action_14.xlsx"))
+oecd_action_14 %<>% mutate(iso3c = countrycode(countryname(Country), "country.name", "iso3c"))
+oecd_action_14 %<>% filter(!is.na(iso3c))
+
+dispute_resolution %<>% left_join(oecd_action_14[c("iso3c", "Effective dispute resolution (Action 14), Current status")])
+dispute_resolution %<>% rename("peer_review" = "Effective dispute resolution (Action 14), Current status")
+
+number_tax_treaties <- read_csv(here("data-created/number_treaties_in_force.csv"))
+dispute_resolution %<>% left_join(number_tax_treaties[c("iso3c", "number_treaties")])
+dispute_resolution$number_treaties %<>% replace_na(0)
+write_csv(dispute_resolution, here("data-created/dispute_resolution_scores.csv"))
+
+```
+
+
+
+```{r peer review stage}
+
+dispute_resolution %<>% mutate(deferral = ifelse(peer_review == "review to be scheduled/deferred", "yes", "no"))
+
+# last available
+max_scores_cat <- tables %>% filter(!is.na(taxpayer_friendliness) & !new_row %in% c(40:42)) %>% select(new_row, category) %>% distinct() %>% group_by(category) %>% summarise(value = n()) %>% pivot_wider(names_from = "category")
+
+min_std_max <- tables %>% filter(!is.na(taxpayer_friendliness) & action_14 %in% c("min_std", "min_std_mod")) %>% distinct(new_row, action_14) %>% nrow()
+
+bp_max <- tables %>% filter(!is.na(taxpayer_friendliness) & action_14 %in% c("bp", "bp_mod")) %>% distinct(new_row, action_14) %>% nrow()
+
+max_overall <- tables %>% filter(!is.na(taxpayer_friendliness) & !new_row %in% c(40:42)) %>% select(new_row) %>% distinct() %>%  nrow()
+
+max_scores <- data.frame(group = "maximum score",
+                         year = NA,
+                         min_std_score = min_std_max,
+                         bp_score = bp_max,
+                         overall_score = max_overall)
+max_scores %<>% bind_cols(max_scores_cat)
+max_scores %<>% mutate(n = n_distinct(scores$iso3c))
+
+average_scores <- scores %>% 
+  group_by(iso3c) %>% 
+  arrange(desc(year)) %>%  
+  slice(1) %>% 
+  group_by(composite_group) %>% 
+  summarize(across(2:9, ~ mean(.x)), n = n()) %>% 
+  rename("group" = "composite_group")
+
+
+
+by_deferral <- dispute_resolution %>% 
+  group_by(iso3c) %>% 
+  filter(!is.na(year)) %>% 
+  arrange(desc(year)) %>%  
+  slice(1) %>% 
+  group_by(deferral) %>% 
+  summarize(across(12:19, ~ mean(.x)), n = n()) %>% 
+  rename("group" = "deferral") %>% 
+  mutate(group = recode(group, no = "Review not deferred", yes = "Review deferred"))
+
+
+scores_table <- rbind(max_scores, by_deferral, average_scores) %>% 
+  mutate(group = recode(group, "maximum score" = "Out of...")) %>% 
+  mutate(year = round(year)) %>% 
+  select(group, year, min_std_score, bp_score, overall_score, n) %>% 
+  kable(digits = 1, col.names = c("Group", "Mean year in which latest profile was published", "Mean minimum standard elements implemented",	"Mean best practices implemented", "Mean amount of taxpayer friendly practices (all elements contained in MAP profile)",	"Number countries"))
+
+save_kable(scores_table, here("fig/Table 7_Compliance with Action 14.html")) 
+
+
+
+
+```
+
+
+
+
+

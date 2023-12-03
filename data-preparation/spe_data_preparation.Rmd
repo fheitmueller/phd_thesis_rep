@@ -1,0 +1,183 @@
+---
+title: "Data Preparation SPE investments"
+author: "Frederik Heitmüller"
+date: "15 February 2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(tidyverse)
+library(readxl)
+library(magrittr)
+library(countrycode)
+library(ggpubr)
+library(lubridate)
+devtools::load_all()
+```
+
+Here a comprehensive dataset of outward SPE statistics from various jurisdictions is created. 
+
+Data on Spanish FDI abroad separated by ETVE-status of companies was downloaded from the website of the [Spanish Ministry of Commerce](http://datainvex.comercio.es/) on 18 February 2022. Data was available up to for the period 2006 to 2019 on that date. 
+
+The data by the Spanish Ministry of Commerce is expressed in Thousand Euros. Therefore, it is converted to Million USD using annual average exchange rate data from the OECD.
+
+```{r Spanish data}
+
+
+customcodes <- c("Antartida" = "ATA",
+  "Antillas Neerlandesas" = "ANT",
+  "Arabia Saudi" = "SAU",
+  "Azerbaiyan" = "AZE",
+  "Corea Del Norte" = "PRK",
+  "Corea Del Sur" = "KOR",
+  "Costa De Marfil" = "CIV",
+  "Emiratos Arabes Unidos" = "ARE",
+  "Fiyi" = "FJI",
+  "Georgia Del Sur E Islas Sandwich Del Sur" = "SGS",
+  "Guayana" = "GUY",
+  "Isla De Man" = "IMN",
+  "Isla Navidad" = "CXR",
+  "Islas Caiman" = "CYM",
+  "Islas Menores Alejadas De Ee.uu." = "UMI",
+  "Islas Salomon" = "SLB",
+  "Islas Turcas Y Caicos" = "TCA",
+  "Islas Virgenes Britanicas" = "VGB",
+  "Islas Virgenes De Los Estados Unidos" = "VIR",
+  "Kazajstan" = "KAZ",
+  "Kirguistan" = "KGZ",
+  "Micronesia" = "FSM",
+  "Paises Bajos" = "NLD",
+   "Republica Centroafricana" = "CAF",
+   "San Cristobal Y Nieves" = "KNA",
+   "San Martin" = "MAF",
+   "San Vicente Y Las Granadinas" = "VCT",
+    "Santo Tome Y Principe" = "STP",
+    "Tayikistan" = "TJK",
+    "Territorio Britanico Del Oceano Indico" = "IOT",
+    "Tunez" = "TUN"
+)
+
+exchangeratetable <- read_delim(here("data-raw/exchangerates.csv"), delim=",", col_names = TRUE)
+exchangeratetable %<>% filter(LOCATION=="ESP")
+exchangeratetable %<>% mutate_at(6, as.character)
+exchangeratetable %<>% rename(exchangerate = Value)
+
+
+span_stock <- read_excel(here("data-raw/fdi_data/consulta_datainvex.xls"), skip =1)
+
+span_clean <- function(df, exchangeratetable, customcodes){
+  df <- df[-1, -c(2, 3)]
+  df %<>% pivot_longer(cols = c(2:ncol(df)), names_to = "year")
+  df %<>% rename("country" = "Elemento")
+  df$country = sapply(df$country, str_to_title)
+  df %<>% mutate(iso3c = countrycode(coalesce(countryname(country), country), "country.name", "iso3c", custom_match = customcodes))
+  df %<>% filter(year %in% c(2007:2019))
+  #convert to USD
+
+  df %<>% left_join(exchangeratetable[c("TIME", "exchangerate")], by=c("year"="TIME"))
+  df %<>% mutate(value = as.numeric(value)/exchangerate) ##converting to US dollars
+  df %<>% select(-exchangerate)
+
+  #convert to million
+  df %<>% mutate(value = value/1000)
+
+  return(df)
+}
+
+
+span_stock <- span_clean(span_stock, exchangeratetable, customcodes)
+
+
+
+span_spe <- span_stock %>% 
+  filter(iso3c %in% host_country_data_available$iso3c) %>% 
+  select(-country) %>% 
+  rename("host" = "iso3c") %>% 
+  add_column(type_fdi = "total", home = "ESP", indicator = "million_USD")
+
+span_spe$year %<>% as.numeric
+write_csv(span_spe, here("data-created/span_spe.csv"))
+
+
+```
+
+Data on the investments by Mauritian Global Business Companies 1 (GBC 1) was downloaded from the [Mauritius Financial Services Commission](https://www.fscmauritius.org/media/119927/value-of-investment-2012_2021i.xlsx) on 17 February 2022.I assume that all GBC 1 companies are special purpose entities.
+Data still lists the Netherlands Antilles, which were separated into different entities in 2010. For the analysis, they are disregarded anyways since they .
+
+```{r Mauritius data}
+
+mauritius_spe <- read_excel(here("data-raw/fdi_data/value-of-investment-2012_2021i.xlsx"), sheet = 3, col_names = FALSE)
+mauritius_spe[1, 1] <- "date"
+mauritius_spe[1, which(is.na(mauritius_spe[1, ]))] <- mauritius_spe[1, which(is.na(mauritius_spe[1, ]))-1]
+names(mauritius_spe)[4:ncol(mauritius_spe)] <- paste(mauritius_spe[2, 4:ncol(mauritius_spe)],
+                                 mauritius_spe[1, 4:ncol(mauritius_spe)],
+                                 sep = "_")
+names(mauritius_spe)[1:3] <- mauritius_spe[2, 1:3]
+mauritius_spe %<>% slice(-c(1:2))
+mauritius_spe %<>% select(-1)
+mauritius_spe %<>% filter(!is.na(Countries))
+mauritius_spe %<>% pivot_longer(3:ncol(mauritius_spe))
+mauritius_spe %<>% separate(name, into = c("indicator", "date"), sep = "_")
+mauritius_spe %<>% mutate(year = year(as_date(as.numeric(date))),
+                          month = month(as_date(as.numeric(date))))
+mauritius_spe %<>% filter(month == 12)
+mauritius_spe %<>% mutate(year = as.numeric(year)-70)
+mauritius_spe %<>% mutate(host = countrycode(Code, "iso2c", "iso3c"))
+
+mauritius_spe %<>% 
+  select(indicator, value, year, host) %>%
+  add_column(home = "MUS", type_fdi = "total")
+mauritius_spe$value %<>% as.numeric
+mauritius_spe$indicator %<>% recode("Direct Investment - Outward (USD Millions)" = "million_USD", "No. of GBC1s Involved" = "number_entities")
+write_csv(mauritius_spe, here("data-created/mauritius_spe.csv"))
+
+
+```
+
+
+Eurostat data was downloaded from the table "bop_fdi6_pos". Data is in Million EUR, it therefore needs to be converted to USD dollar as well, in order to be compared and used together with data from other sources.
+
+```{r eurostat and OECD data}
+
+eurostat_spe_fdi <- read_csv(here("data-raw/fdi_data/eurostat_spe_fdi.csv"))
+eurostat_spe_fdi$year %<>% as.numeric
+
+eurostat_spe_fdi$type_fdi %<>% recode("DO__D__F" = "total") 
+
+# eurostat needs to be converted to USD
+exchangeratetable <- read_delim(here("data-raw/exchangerates.csv"), delim=",", col_names = TRUE)
+exchangeratetable %<>% filter(LOCATION == "EA19")
+eurostat_spe_fdi %<>% left_join(exchangeratetable[c("TIME", "Value")], by=c("year"="TIME"))
+eurostat_spe_fdi %<>% mutate(value = value/Value) 
+eurostat_spe_fdi %<>% select(-Value)
+eurostat_spe_fdi$indicator %<>% recode("MIO_EUR" = "million_USD")
+
+oecd_spe_fdi <- read_csv(here("data-raw/fdi_data/oecd_spe_fdi.csv"))
+oecd_spe_fdi$type_fdi %<>% recode("LE_FA_F" = "total", "LE_FA_FL" = "debt", "LE_FA_F5" = "equity")
+
+spe_fdi <- full_join(eurostat_spe_fdi, oecd_spe_fdi, by = c("home", "host", "type_fdi", "year", "indicator"))
+spe_fdi %<>% rename("value_eurostat" = "value.x", "value_oecd" = "value.y")
+
+# add Spanish data 
+span_spe <- read_csv(here("data-created/span_spe.csv"))
+
+spe_fdi %<>% full_join(span_spe, by = c("home", "host", "type_fdi", "year", "indicator"))
+spe_fdi %<>% rename("value_spain" = "value")
+
+#add Mauritius data
+mauritius_spe <- read_csv(here("data-created/mauritius_spe.csv"))
+spe_fdi %<>% full_join(mauritius_spe, by = c("home", "host", "type_fdi", "year", "indicator"))
+spe_fdi %<>% rename("value_mauritius" = "value")
+
+write_csv(spe_fdi, here("data-created/spe_fdi.csv"))
+```
+
+```{r make comparisons between different data values}
+
+spe_fdi %<>% mutate(discrepancy = value_oecd/value_eurostat)
+
+
+```
+
